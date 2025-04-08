@@ -77,55 +77,100 @@
 
       <div class="app-content">
         <div class="container-fluid">
-          <div class="row">
-            <div class="col-lg-6">
-              <div class="card mb-4">
-                <div class="card-header border-0">
-                  <h3 class="card-title">Products</h3>
-                </div>
-                <div class="card-body table-responsive p-0">
-                  <table class="table table-striped align-middle">
-                    <thead>
-                      <tr>
-                        <th>Product</th>
-                        <th>Price</th>
-                        <th>Sales</th>
-                        <th>More</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      <tr>
-                        <td><img src="../../dist/assets/img/default-150x150.png" alt="Product" class="rounded-circle img-size-32 me-2"/> Some Product</td>
-                        <td>$13 USD</td>
-                        <td><small class="text-success me-1"><i class="bi bi-arrow-up"></i> 12%</small>12,000 Sold</td>
-                        <td><a href="#" class="text-secondary"><i class="bi bi-search"></i></a></td>
-                      </tr>
-                      <tr>
-                        <td><img src="../../dist/assets/img/default-150x150.png" alt="Product" class="rounded-circle img-size-32 me-2"/> Another Product</td>
-                        <td>$29 USD</td>
-                        <td><small class="text-info me-1"><i class="bi bi-arrow-down"></i> 0.5%</small>123,234 Sold</td>
-                        <td><a href="#" class="text-secondary"><i class="bi bi-search"></i></a></td>
-                      </tr>
-                      <tr>
-                        <td><img src="../../dist/assets/img/default-150x150.png" alt="Product" class="rounded-circle img-size-32 me-2"/> Amazing Product</td>
-                        <td>$1,230 USD</td>
-                        <td><small class="text-danger me-1"><i class="bi bi-arrow-down"></i> 3%</small>198 Sold</td>
-                        <td><a href="#" class="text-secondary"><i class="bi bi-search"></i></a></td>
-                      </tr>
-                      <tr>
-                        <td><img src="../../dist/assets/img/default-150x150.png" alt="Product" class="rounded-circle img-size-32 me-2"/> Perfect Item <span class="badge text-bg-danger">NEW</span></td>
-                        <td>$199 USD</td>
-                        <td><small class="text-success me-1"><i class="bi bi-arrow-up"></i> 63%</small>87 Sold</td>
-                        <td><a href="#" class="text-secondary"><i class="bi bi-search"></i></a></td>
-                      </tr>
-                    </tbody>
-                  </table>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
+        <div class="row">
+  <!-- TABEL ITEMS -->
+  <div class="col-lg-12">
+    <div class="card mb-4">
+      <div class="card-header border-0">
+        <h3 class="card-title">Items</h3>
       </div>
+      <div class="card-body table-responsive p-0">
+        <table class="table table-striped align-middle">
+          <thead>
+            <tr>
+              <th>REF_NO</th>
+              <th>NAME</th>
+              <th>PRICE</th>
+              <th>ACTION</th>
+            </tr>
+          </thead>
+          <tbody>
+            <!-- Contoh baris -->
+            <tr>
+              <td>ITEM001</td>
+              <td>Sample Item</td>
+              <td>$100</td>
+              <td>
+                <a href="edit_item.php?id=1" class="btn btn-sm btn-warning me-1">Edit</a>
+                <a href="delete_item.php?id=1" class="btn btn-sm btn-danger" onclick="return confirm('Are you sure?')">Delete</a>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <!-- TABEL CUSTOMERS -->
+  <div class="col-lg-12">
+    <div class="card mb-4">
+      <div class="card-header border-0">
+        <h3 class="card-title">Customers</h3>
+      </div>
+      <div class="card-body table-responsive p-0">
+        <table class="table table-striped align-middle">
+          <thead>
+            <tr>
+              <th>REF_NO</th>
+              <th>NAME</th>
+              <th>ACTION</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>CUST001</td>
+              <td>John Doe</td>
+              <td>
+                <a href="edit_customer.php?id=1" class="btn btn-sm btn-warning me-1">Edit</a>
+                <a href="delete_customer.php?id=1" class="btn btn-sm btn-danger" onclick="return confirm('Are you sure?')">Delete</a>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <!-- TABEL SUPPLIERS -->
+  <div class="col-lg-12">
+    <div class="card mb-4">
+      <div class="card-header border-0">
+        <h3 class="card-title">Suppliers</h3>
+      </div>
+      <div class="card-body table-responsive p-0">
+        <table class="table table-striped align-middle">
+          <thead>
+            <tr>
+              <th>REF_NO</th>
+              <th>NAME</th>
+              <th>ACTION</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>SUP001</td>
+              <td>Supplier Co.</td>
+              <td>
+                <a href="edit_supplier.php?id=1" class="btn btn-sm btn-warning me-1">Edit</a>
+                <a href="delete_supplier.php?id=1" class="btn btn-sm btn-danger" onclick="return confirm('Are you sure?')">Delete</a>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
     </main>
 
     <!-- Footer -->
