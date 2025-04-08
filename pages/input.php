@@ -126,138 +126,75 @@
         <div class="app-content-header">
           <!--begin::Container-->
           <div class="container-fluid">
-            <!--begin::Row-->
-            <div class="row">
-              <div class="col-sm-6"><h3 class="mb-0">Input</h3></div>
-            </div>
-            <!--end::Row-->
+          <div class="row g-4">
+  <div class="col-md-12">
+    
+    <!-- Form Item -->
+    <div class="card card-info card-outline mb-4">
+      <div class="card-header"><div class="card-title">Input Item</div></div>
+      <form action="../controllers/itemsController.php?action=store" method="POST">
+        <div class="card-body row g-3">
+          <div class="col-md-4">
+            <label for="item_ref_no" class="form-label">REF NO</label>
+            <input type="text" name="ref_no" class="form-control" id="item_ref_no" required>
           </div>
-          <!--end::Container-->
+          <div class="col-md-4">
+            <label for="item_name" class="form-label">Name</label>
+            <input type="text" name="name" class="form-control" id="item_name" required>
+          </div>
+          <div class="col-md-4">
+            <label for="item_price" class="form-label">Price</label>
+            <input type="number" name="price" class="form-control" id="item_price" required>
+          </div>
         </div>
-        <!--end::App Content Header-->
-        <!--begin::App Content-->
-        <div class="app-content">
-          <!--begin::Container-->
-          <div class="container-fluid">
-            <!--begin::Row-->
-            <div class="row g-4">
-              <!--begin::Col-->
-              <div class="col-md-6">
-                <!--begin::Form Validation-->
-                <div class="card card-info card-outline mb-4">
-                  <!--begin::Header-->
-                  <div class="card-header"><div class="card-title">Form Validation</div></div>
-                  <!--end::Header-->
-                  <!--begin::Form-->
-                  <form class="needs-validation" novalidate>
-                    <!--begin::Body-->
-                    <div class="card-body">
-                      <!--begin::Row-->
-                      <div class="row g-3">
-                        <!--begin::Col-->
-                        <div class="col-md-6">
-                          <label for="validationCustom01" class="form-label">First name</label>
-                          <input
-                            type="text"
-                            class="form-control"
-                            id="validationCustom01"
-                            value="Mark"
-                            required
-                          />
-                          <div class="valid-feedback">Looks good!</div>
-                        </div>
-                        <!--end::Col-->
-                        <!--begin::Col-->
-                        <div class="col-md-6">
-                          <label for="validationCustom02" class="form-label">Last name</label>
-                          <input
-                            type="text"
-                            class="form-control"
-                            id="validationCustom02"
-                            value="Otto"
-                            required
-                          />
-                          <div class="valid-feedback">Looks good!</div>
-                        </div>
-                        <!--end::Col-->
-                        <!--begin::Col-->
-                        <div class="col-md-6">
-                          <label for="validationCustomUsername" class="form-label">Username</label>
-                          <div class="input-group has-validation">
-                            <span class="input-group-text" id="inputGroupPrepend">@</span>
-                            <input
-                              type="text"
-                              class="form-control"
-                              id="validationCustomUsername"
-                              aria-describedby="inputGroupPrepend"
-                              required
-                            />
-                            <div class="invalid-feedback">Please choose a username.</div>
-                          </div>
-                        </div>
-                        <!--end::Col-->
-                        <!--begin::Col-->
-                        <div class="col-md-6">
-                          <label for="validationCustom03" class="form-label">City</label>
-                          <input
-                            type="text"
-                            class="form-control"
-                            id="validationCustom03"
-                            required
-                          />
-                          <div class="invalid-feedback">Please provide a valid city.</div>
-                        </div>
-                        <!--end::Col-->
-                        <!--begin::Col-->
-                        <div class="col-md-6">
-                          <label for="validationCustom04" class="form-label">State</label>
-                          <select class="form-select" id="validationCustom04" required>
-                            <option selected disabled value="">Choose...</option>
-                            <option>...</option>
-                          </select>
-                          <div class="invalid-feedback">Please select a valid state.</div>
-                        </div>
-                        <!--end::Col-->
-                        <!--begin::Col-->
-                        <div class="col-md-6">
-                          <label for="validationCustom05" class="form-label">Zip</label>
-                          <input
-                            type="text"
-                            class="form-control"
-                            id="validationCustom05"
-                            required
-                          />
-                          <div class="invalid-feedback">Please provide a valid zip.</div>
-                        </div>
-                        <!--end::Col-->
-                        <!--begin::Col-->
-                        <div class="col-12">
-                          <div class="form-check">
-                            <input
-                              class="form-check-input"
-                              type="checkbox"
-                              value=""
-                              id="invalidCheck"
-                              required
-                            />
-                            <label class="form-check-label" for="invalidCheck">
-                              Agree to terms and conditions
-                            </label>
-                            <div class="invalid-feedback">You must agree before submitting.</div>
-                          </div>
-                        </div>
-                        <!--end::Col-->
-                      </div>
-                      <!--end::Row-->
-                    </div>
-                    <!--end::Body-->
-                    <!--begin::Footer-->
-                    <div class="card-footer">
-                      <button class="btn btn-info" type="submit">Submit form</button>
-                    </div>
-                    <!--end::Footer-->
-                  </form>
-                  <!--end::Form-->
+        <div class="card-footer">
+          <button type="submit" class="btn btn-info">Save Item</button>
+        </div>
+      </form>
+    </div>
+
+    <!-- Form Customer -->
+    <div class="card card-success card-outline mb-4">
+      <div class="card-header"><div class="card-title">Input Customer</div></div>
+      <form action="../controllers/costumersController.php?action=store" method="POST">
+        <div class="card-body row g-3">
+          <div class="col-md-6">
+            <label for="customer_ref_no" class="form-label">REF NO</label>
+            <input type="text" name="ref_no" class="form-control" id="customer_ref_no" required>
+          </div>
+          <div class="col-md-6">
+            <label for="customer_name" class="form-label">Name</label>
+            <input type="text" name="name" class="form-control" id="customer_name" required>
+          </div>
+        </div>
+        <div class="card-footer">
+          <button type="submit" class="btn btn-success">Save Customer</button>
+        </div>
+      </form>
+    </div>
+
+    <!-- Form Supplier -->
+    <div class="card card-warning card-outline mb-4">
+      <div class="card-header"><div class="card-title">Input Supplier</div></div>
+      <form action="../controller/SupplierController.php?action=store" method="POST">
+        <div class="card-body row g-3">
+          <div class="col-md-6">
+            <label for="supplier_ref_no" class="form-label">REF NO</label>
+            <input type="text" name="ref_no" class="form-control" id="supplier_ref_no" required>
+          </div>
+          <div class="col-md-6">
+            <label for="supplier_name" class="form-label">Name</label>
+            <input type="text" name="name" class="form-control" id="supplier_name" required>
+          </div>
+        </div>
+        <div class="card-footer">
+          <button type="submit" class="btn btn-warning">Save Supplier</button>
+        </div>
+      </form>
+    </div>
+
+  </div>
+</div>
                   <!--begin::JavaScript-->
                   <script>
                     // Example starter JavaScript for disabling form submissions if there are invalid fields
