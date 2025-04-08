@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>AdminLTE | Read Produk</title>
+
+  <!-- Font & Icons -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" />
+  <!-- AdminLTE & Bootstrap -->
+  <link rel="stylesheet" href="../src/css/adminlte.css" />
+  <!-- Scrollbars -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/overlayscrollbars@2.10.1/styles/overlayscrollbars.min.css" />
+</head>
+<body class="layout-fixed sidebar-expand-lg bg-body-tertiary">
+  <div class="app-wrapper">
+
+    <!-- Header -->
+    <nav class="app-header navbar navbar-expand bg-body">
+      <div class="container-fluid">
+        <!-- Isi header opsional -->
+      </div>
+    </nav>
+
+    <aside class="app-sidebar bg-body-secondary shadow" data-bs-theme="dark">
+  <div class="sidebar-brand">
+    <a href="../index.html" class="brand-link">
+      <img src="../../../dist/assets/img/AdminLTELogo.png" alt="AdminLTE Logo" class="brand-image opacity-75 shadow"/>
+      <span class="brand-text fw-light">AdminLTE 4</span>
+    </a>
+  </div>
+
+  <div class="sidebar-wrapper">
+    <nav class="mt-2">
+      <ul class="nav sidebar-menu flex-column" data-lte-toggle="treeview" role="menu">
+        
+        <!-- Tables Menu -->
+        <li class="nav-item has-treeview">
+          <a href="#" class="nav-link">
+            <i class="nav-icon bi bi-table"></i>
+            <p>
+              Tables
+              <i class="nav-arrow bi bi-chevron-right"></i>
+            </p>
+          </a>
+          <ul class="nav nav-treeview ps-3">
+            <li class="nav-item">
+              <a href="input.php" class="nav-link">
+                <i class="bi bi-plus-circle nav-icon me-2"></i>
+                <p>Input</p>
+              </a>
+            </li>
+            <li class="nav-item">
+              <a href="read.php" class="nav-link">
+                <i class="bi bi-eye nav-icon me-2"></i>
+                <p>Read</p>
+              </a>
+            </li>
+          </ul>
+        </li>
+
+      </ul>
+    </nav>
+  </div>
+</aside>
+
+
+    <!-- Main -->
+    <main class="app-main">
+      <div class="app-content-header">
+        <div class="container-fluid">
+          <div class="row">
+            <div class="col-sm-6"><h3 class="mb-0">Read</h3></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="app-content">
+        <div class="container-fluid">
+          <div class="row">
+            <div class="col-lg-6">
+              <div class="card mb-4">
+                <div class="card-header border-0">
+                  <h3 class="card-title">Products</h3>
+                </div>
+                <div class="card-body table-responsive p-0">
+                  <table class="table table-striped align-middle">
+                    <thead>
+                      <tr>
+                        <th>Product</th>
+                        <th>Price</th>
+                        <th>Sales</th>
+                        <th>More</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr>
+                        <td><img src="../../dist/assets/img/default-150x150.png" alt="Product" class="rounded-circle img-size-32 me-2"/> Some Product</td>
+                        <td>$13 USD</td>
+                        <td><small class="text-success me-1"><i class="bi bi-arrow-up"></i> 12%</small>12,000 Sold</td>
+                        <td><a href="#" class="text-secondary"><i class="bi bi-search"></i></a></td>
+                      </tr>
+                      <tr>
+                        <td><img src="../../dist/assets/img/default-150x150.png" alt="Product" class="rounded-circle img-size-32 me-2"/> Another Product</td>
+                        <td>$29 USD</td>
+                        <td><small class="text-info me-1"><i class="bi bi-arrow-down"></i> 0.5%</small>123,234 Sold</td>
+                        <td><a href="#" class="text-secondary"><i class="bi bi-search"></i></a></td>
+                      </tr>
+                      <tr>
+                        <td><img src="../../dist/assets/img/default-150x150.png" alt="Product" class="rounded-circle img-size-32 me-2"/> Amazing Product</td>
+                        <td>$1,230 USD</td>
+                        <td><small class="text-danger me-1"><i class="bi bi-arrow-down"></i> 3%</small>198 Sold</td>
+                        <td><a href="#" class="text-secondary"><i class="bi bi-search"></i></a></td>
+                      </tr>
+                      <tr>
+                        <td><img src="../../dist/assets/img/default-150x150.png" alt="Product" class="rounded-circle img-size-32 me-2"/> Perfect Item <span class="badge text-bg-danger">NEW</span></td>
+                        <td>$199 USD</td>
+                        <td><small class="text-success me-1"><i class="bi bi-arrow-up"></i> 63%</small>87 Sold</td>
+                        <td><a href="#" class="text-secondary"><i class="bi bi-search"></i></a></td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="app-footer">
+      <div class="float-end d-none d-sm-inline">Anything you want</div>
+      <strong>&copy; 2014-2024 <a href="https://adminlte.io" class="text-decoration-none">AdminLTE.io</a>.</strong> All rights reserved.
+    </footer>
+
+  </div>
+
+  <!-- Scripts -->
+  <script src="https://cdn.jsdelivr.net/npm/overlayscrollbars@2.10.1/browser/overlayscrollbars.browser.es6.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/admin-lte@4.0.0-beta3/dist/js/adminlte.min.js"></script>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', function () {
+      const sidebarWrapper = document.querySelector('.sidebar-wrapper');
+      if (sidebarWrapper && typeof OverlayScrollbarsGlobal?.OverlayScrollbars !== 'undefined') {
+        OverlayScrollbarsGlobal.OverlayScrollbars(sidebarWrapper, {
+          scrollbars: {
+            theme: 'os-theme-light',
+            autoHide: 'leave',
+            clickScroll: true
+          },
+        });
+      }
+    });
+  </script>
+</body>
+</html>
