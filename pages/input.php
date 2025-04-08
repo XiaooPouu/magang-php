@@ -132,7 +132,7 @@
     <!-- Form Item -->
     <div class="card card-info card-outline mb-4">
       <div class="card-header"><div class="card-title">Input Item</div></div>
-      <form action="../controllers/itemsController.php?action=store" method="POST">
+      <form action="../controllers/itemsController.php" method="POST">
         <div class="card-body row g-3">
           <div class="col-md-4">
             <label for="item_ref_no" class="form-label">REF NO</label>
@@ -148,7 +148,7 @@
           </div>
         </div>
         <div class="card-footer">
-          <button type="submit" class="btn btn-info">Save Item</button>
+          <button type="submit" name="add_item" class="btn btn-info">Save Item</button>
         </div>
       </form>
     </div>
@@ -156,7 +156,7 @@
     <!-- Form Customer -->
     <div class="card card-success card-outline mb-4">
       <div class="card-header"><div class="card-title">Input Customer</div></div>
-      <form action="../controllers/costumersController.php?action=store" method="POST">
+      <form action="../controllers/costumersController.php" method="POST">
         <div class="card-body row g-3">
           <div class="col-md-6">
             <label for="customer_ref_no" class="form-label">REF NO</label>
@@ -168,7 +168,7 @@
           </div>
         </div>
         <div class="card-footer">
-          <button type="submit" class="btn btn-success">Save Customer</button>
+          <button type="submit" name="add_costumer" class="btn btn-success">Save Customer</button>
         </div>
       </form>
     </div>
@@ -176,7 +176,7 @@
     <!-- Form Supplier -->
     <div class="card card-warning card-outline mb-4">
       <div class="card-header"><div class="card-title">Input Supplier</div></div>
-      <form action="../controller/SupplierController.php?action=store" method="POST">
+      <form action="../controllers/suppliersController.php" method="POST">
         <div class="card-body row g-3">
           <div class="col-md-6">
             <label for="supplier_ref_no" class="form-label">REF NO</label>
@@ -188,7 +188,7 @@
           </div>
         </div>
         <div class="card-footer">
-          <button type="submit" class="btn btn-warning">Save Supplier</button>
+          <button type="submit" name="add_supplier" class="btn btn-warning">Save Supplier</button>
         </div>
       </form>
     </div>

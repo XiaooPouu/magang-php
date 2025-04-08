@@ -1,3 +1,25 @@
+<?php
+
+require_once __DIR__ . '/../config/database.php';
+include '../models/items.php';
+include '../models/costumer.php';
+include '../models/suppliers.php';
+
+// Buat koneksi dari class Database
+$database = new Database();
+$db = $database->getConnection();
+
+$itemModel = new Item($db);
+$customerModel = new Costumer($db);
+$supplierModel = new Supplier($db);
+
+$items = $itemModel->getAll();
+$customers = $customerModel->getAll();
+$suppliers = $supplierModel->getAll();
+?>
+
+
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -95,16 +117,17 @@
             </tr>
           </thead>
           <tbody>
-            <!-- Contoh baris -->
+            <?php foreach ($items as $item): ?>
             <tr>
-              <td>ITEM001</td>
-              <td>Sample Item</td>
-              <td>$100</td>
+              <td><?= htmlspecialchars($item['ref_no'])?></td>
+              <td><?= htmlspecialchars($item['name'])?></td>
+              <td><?= htmlspecialchars($item['price'])?></td>
               <td>
                 <a href="edit_item.php?id=1" class="btn btn-sm btn-warning me-1">Edit</a>
                 <a href="delete_item.php?id=1" class="btn btn-sm btn-danger" onclick="return confirm('Are you sure?')">Delete</a>
               </td>
             </tr>
+            <?php endforeach; ?>
           </tbody>
         </table>
       </div>
@@ -127,14 +150,16 @@
             </tr>
           </thead>
           <tbody>
+            <?php foreach ($customers as $cs): ?>
             <tr>
-              <td>CUST001</td>
-              <td>John Doe</td>
+              <td><?= htmlspecialchars($cs['ref_no'])?></td>
+              <td><?= htmlspecialchars($cs['name'])?></td>
               <td>
                 <a href="edit_customer.php?id=1" class="btn btn-sm btn-warning me-1">Edit</a>
                 <a href="delete_customer.php?id=1" class="btn btn-sm btn-danger" onclick="return confirm('Are you sure?')">Delete</a>
               </td>
             </tr>
+            <?php endforeach; ?>
           </tbody>
         </table>
       </div>
@@ -157,14 +182,16 @@
             </tr>
           </thead>
           <tbody>
+            <?php foreach($suppliers as $sp): ?>
             <tr>
-              <td>SUP001</td>
-              <td>Supplier Co.</td>
+              <td><?= htmlspecialchars($sp['ref_no'])?></td>
+              <td><?= htmlspecialchars($sp['name'])?></td>
               <td>
                 <a href="edit_supplier.php?id=1" class="btn btn-sm btn-warning me-1">Edit</a>
                 <a href="delete_supplier.php?id=1" class="btn btn-sm btn-danger" onclick="return confirm('Are you sure?')">Delete</a>
               </td>
             </tr>
+            <?php endforeach; ?>
           </tbody>
         </table>
       </div>
