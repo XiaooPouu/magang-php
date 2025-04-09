@@ -29,6 +29,14 @@ class Item {
         return $result->fetch_assoc();
     }
 
+    public function getByRefNo($ref_no) {
+        $stmt = $this->conn->prepare("SELECT * FROM items WHERE ref_no = ?");
+    $stmt->bind_param("s", $ref_no);
+    $stmt->execute();
+    $result = $stmt->get_result();
+    return $result->fetch_assoc(); // Kembalikan 1 baris data
+    }
+
     public function update($id, $ref_no, $name, $price) {
         $query = "UPDATE items SET ref_no = ?, name = ?, price = ? WHERE id = ?";
         $stmt = $this->conn->prepare($query);

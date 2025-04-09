@@ -5,6 +5,7 @@ require_once __DIR__ . '/../config/database.php';
 
 $db = (new Database())->getConnection();
 $supplierModel = new Supplier($db);
+$existingSupplier = $supplierModel->getByRefNo($ref_no);
 
 // Tambah supplier
 if (isset($_POST['add_supplier'])) {
@@ -13,13 +14,22 @@ if (isset($_POST['add_supplier'])) {
 
     $supplierModel->insert($ref_no, $name);
 
-    // Simpan alert ke session
-    $_SESSION['alert'] = [
-        'type' => 'success',
-        'message' => 'Supplier berhasil ditambahkan!'
-    ];
+    // cek apakah ref no sudah ada
+    if($existingSupplier){
+        // jika sudah ada maka notif error muncul
+        $_SESSION['alert'] = [
+            'type' => 'danger',
+            'massage' => 'Ref No sudah ada, silahkan coba lagi!'
+        ];
+    } else {
+        // Simpan alert ke session
+        $_SESSION['alert'] = [
+            'type' => 'success',
+            'message' => 'Supplier berhasil ditambahkan!'
+        ];
+    }
 
-    header("Location: ../pages/read.php");
+    header("Location: ../pages/dataSuppliers.php");
     exit();
 }
 
@@ -30,7 +40,23 @@ if (isset($_POST['update_supplier'])) {
     $name = $_POST['name'];
 
     $supplierModel->update($id, $ref_no, $name);
-    header("Location: ../pages/read.php");
+
+    // cek apakah ref no sudah ada
+    if($existingSupplier){
+        // jika sudah ada maka notif error muncul
+        $_SESSION['alert_update'] = [
+            'type' => 'danger',
+            'massage' => 'Ref No sudah ada, silahkan coba lagi!'
+        ];
+    } else {
+        // Simpan alert ke session
+        $_SESSION['alert_update'] = [
+            'type' => 'success',
+            'message' => 'Supplier berhasil diupdate!'
+        ];
+}
+
+    header("Location: ../pages/dataSuppliers.php");
     exit();
 }
 
@@ -50,6 +76,6 @@ if (isset($_GET['delete_supplier'])) {
             'type' => 'success',
             'message' => 'Supplier berhasil dihapus!'
         ];
-    header("Location: ../pages/read.php");
+    header("Location: ../pages/dataSuppliers.php");
     exit();
 }

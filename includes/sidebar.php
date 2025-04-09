@@ -44,21 +44,21 @@
                 </a>
                 <ul class="nav nav-treeview">
                   <li class="nav-item">
-                      <a href="input.php" class="nav-link">
-                         <i class="nav-icon bi bi-plus-circle"></i>
-                      <p>Input</p>
+                      <a href="../pages/dataItems.php" class="nav-link">
+                         <i class="nav-icon bi bi-circle"></i>
+                      <p>Data Items</p>
                       </a>
                 </li>
               <li class="nav-item">
-                <a href="read.php" class="nav-link">
-                 <i class="nav-icon bi bi-eye"></i>
-               <p>Read</p>
+                <a href="../pages/dataCostumer.php" class="nav-link">
+                 <i class="nav-icon bi bi-circle"></i>
+               <p>Data Costumers</p>
                  </a>
              </li>
              <li class="nav-item">
-                <a href="read.php" class="nav-link">
-                 <i class="nav-icon bi bi-eye"></i>
-               <p>Read</p>
+                <a href="../pages/dataSuppliers.php" class="nav-link">
+                 <i class="nav-icon bi bi-circle"></i>
+               <p>Data Suppliers</p>
                  </a>
              </li>
                 </ul>

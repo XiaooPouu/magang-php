@@ -1,9 +1,12 @@
 <?php
+session_start();
 require_once __DIR__ . '/../models/items.php';
 require_once __DIR__ . '/../config/database.php';
 
 $db = (new Database())->getConnection();
 $itemModel = new Item($db);
+
+$existingItem = $itemModel->getByRefNo($ref_no);
 
 // Tambah item
 if (isset($_POST['add_item'])) {
@@ -12,7 +15,23 @@ if (isset($_POST['add_item'])) {
     $price = $_POST['price'];
 
     $itemModel->insert($ref_no, $name, $price);
-    header("Location: ../pages/read.php");
+
+// cek apakah ref_no sudah ada
+    if($existingItem){
+        // jika sudah ada maka notif error muncul
+        $_SESSION['alert'] = [
+            'type' => 'danger',
+            'massage' => 'Ref No sudah ada, silahkan coba lagi!'
+        ];
+    } else {
+        // Simpan alert ke session
+        $_SESSION['alert'] = [
+            'type' => 'success',
+            'message' => 'Item berhasil ditambahkan!'
+        ];
+    }
+    
+    header("Location: ../pages/dataItems.php");
     exit();
 }
 
@@ -24,7 +43,22 @@ if (isset($_POST['update_item'])) {
     $price = $_POST['price'];
 
     $itemModel->update($id, $ref_no, $name, $price);
-    header("Location: ../pages/read.php");
+
+//    cek apakah ref_no sudah ada
+    if($existingItem){
+        // jika sudah ada maka notif error muncul
+        $_SESSION['alert'] = [
+            'type' => 'danger',
+            'massage' => 'Ref No sudah ada, silahkan coba lagi!'
+        ];
+    } else {
+        // Simpan alert ke session
+        $_SESSION['alert_update'] = [
+            'type' => 'success',
+            'message' => 'Item berhasil diupdate!'
+        ];
+    }
+    header("Location: ../pages/dataItems.php");
     exit();
 }
 
@@ -38,6 +72,12 @@ if (isset($_GET['detail_item'])) {
 if (isset($_GET['delete_item'])) {
     $id = $_GET['delete_item'];
     $itemModel->delete($id);
-    header("Location: ../pages/read.php");
+
+    // Simpan alert_delete ke session
+    $_SESSION['alert_delete'] = [
+        'type' => 'success',
+        'message' => 'Item berhasil dihapus!'
+    ];
+    header("Location: ../pages/dataItems.php");
     exit();
 }

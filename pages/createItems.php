@@ -67,10 +67,9 @@
           <!--begin::Container-->
           <div class="container-fluid">
           <div class="row g-4">
-  <div class="col-md-12">
-    
-    <!-- Form Item -->
-    <div class="card card-info card-outline mb-4">
+      <div class="col-md-12">
+<!-- Form Item -->
+<div class="card card-info card-outline mb-4">
       <div class="card-header"><div class="card-title">Input Item</div></div>
       <form action="../controllers/itemsController.php" method="POST">
         <div class="card-body row g-3">
@@ -92,48 +91,7 @@
         </div>
       </form>
     </div>
-
-    <!-- Form Customer -->
-    <div class="card card-success card-outline mb-4">
-      <div class="card-header"><div class="card-title">Input Customer</div></div>
-      <form action="../controllers/costumersController.php" method="POST">
-        <div class="card-body row g-3">
-          <div class="col-md-6">
-            <label for="customer_ref_no" class="form-label">REF NO</label>
-            <input type="text" name="ref_no" class="form-control" id="customer_ref_no" required>
-          </div>
-          <div class="col-md-6">
-            <label for="customer_name" class="form-label">Name</label>
-            <input type="text" name="name" class="form-control" id="customer_name" required>
-          </div>
-        </div>
-        <div class="card-footer">
-          <button type="submit" name="add_costumer" class="btn btn-success">Save Customer</button>
-        </div>
-      </form>
-    </div>
-
-    <!-- Form Supplier -->
-    <div class="card card-warning card-outline mb-4">
-      <div class="card-header"><div class="card-title">Input Supplier</div></div>
-      <form action="../controllers/suppliersController.php" method="POST">
-        <div class="card-body row g-3">
-          <div class="col-md-6">
-            <label for="supplier_ref_no" class="form-label">REF NO</label>
-            <input type="text" name="ref_no" class="form-control" id="supplier_ref_no" required>
-          </div>
-          <div class="col-md-6">
-            <label for="supplier_name" class="form-label">Name</label>
-            <input type="text" name="name" class="form-control" id="supplier_name" required>
-          </div>
-        </div>
-        <div class="card-footer">
-          <button type="submit" name="add_supplier" class="btn btn-warning">Save Supplier</button>
-        </div>
-      </form>
-    </div>
-
-  </div>
+    <!-- end form item -->
 </div>
                   <!-- begin::JavaScript-->
                   <!-- <script>

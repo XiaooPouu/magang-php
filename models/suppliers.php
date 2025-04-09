@@ -20,6 +20,16 @@ class Supplier {
         return $result;
     }
 
+    public function getByRefNo($ref_no) {
+        $query = "SELECT * FROM suppliers WHERE ref_no = ?";
+        $stmt = $this->conn->prepare($query);
+        $stmt->bind_param("s", $ref_no);
+        $stmt->execute();
+        $result = $stmt->get_result();
+
+        return $result->fetch_assoc();
+    }
+
     public function getById($id){
         $query = "SELECT * FROM suppliers WHERE id = ?";
         $stmt = $this->conn->prepare($query);
