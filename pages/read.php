@@ -1,9 +1,34 @@
 <?php
-
+session_start();
 require_once __DIR__ . '/../config/database.php';
 include '../models/items.php';
 include '../models/costumer.php';
 include '../models/suppliers.php';
+
+if (isset($_SESSION['alert'])) {
+  $type = $_SESSION['alert']['type']; // success, warning, dll
+  $message = $_SESSION['alert']['message'];
+
+  echo "<div class='alert alert-{$type} alert-dismissible fade show' role='alert'>
+          {$message}
+          <button type='button' class='btn-close' data-bs-dismiss='alert' aria-label='Close'></button>
+        </div>";
+  
+  unset($_SESSION['alert']); // agar hanya tampil sekali
+}
+
+if (isset($_SESSION['alert_delete'])) {
+  $type = $_SESSION['alert_delete']['type']; // success, warning, dll
+  $message = $_SESSION['alert_delete']['message'];
+
+  echo "<div class='alert alert-{$type} alert-dismissible fade show' role='alert'>
+          {$message}
+          <button type='button' class='btn-close' data-bs-dismiss='alert' aria-label='Close'></button>
+        </div>";
+  
+  unset($_SESSION['alert_delete']); // agar hanya tampil sekali
+}
+
 
 // Buat koneksi dari class Database
 $database = new Database();

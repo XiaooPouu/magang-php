@@ -1,4 +1,5 @@
 <?php
+session_start();
 require_once __DIR__ . '/../models/suppliers.php';
 require_once __DIR__ . '/../config/database.php';
 
@@ -11,6 +12,13 @@ if (isset($_POST['add_supplier'])) {
     $name = $_POST['name'];
 
     $supplierModel->insert($ref_no, $name);
+
+    // Simpan alert ke session
+    $_SESSION['alert'] = [
+        'type' => 'success',
+        'message' => 'Supplier berhasil ditambahkan!'
+    ];
+
     header("Location: ../pages/read.php");
     exit();
 }
@@ -36,6 +44,12 @@ if(isset($_GET['detail_supplier'])){
 if (isset($_GET['delete_supplier'])) {
     $id = $_GET['delete_supplier'];
     $supplierModel->delete($id);
+
+        //  Notif Hapus
+        $_SESSION['alert_delete'] = [
+            'type' => 'success',
+            'message' => 'Supplier berhasil dihapus!'
+        ];
     header("Location: ../pages/read.php");
     exit();
 }
