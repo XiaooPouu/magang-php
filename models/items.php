@@ -20,6 +20,15 @@ class Item {
         return $result;
     }
 
+    public function getById($id) {
+        $query = "SELECT * FROM items WHERE id = ?";
+        $stmt = $this->conn->prepare($query);
+        $stmt->bind_param("i", $id);
+        $stmt->execute();
+        $result = $stmt->get_result();
+        return $result->fetch_assoc();
+    }
+
     public function update($id, $ref_no, $name, $price) {
         $query = "UPDATE items SET ref_no = ?, name = ?, price = ? WHERE id = ?";
         $stmt = $this->conn->prepare($query);
