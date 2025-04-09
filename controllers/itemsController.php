@@ -28,6 +28,12 @@ if (isset($_POST['update_item'])) {
     exit();
 }
 
+// Detail item
+if (isset($_GET['detail_item'])) {
+    $id = $_GET['detail_item'];
+    $item = $itemModel->getById($id);
+}
+
 // Hapus item
 if (isset($_GET['delete_item'])) {
     $id = $_GET['delete_item'];

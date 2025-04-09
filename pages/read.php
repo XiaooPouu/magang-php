@@ -123,7 +123,7 @@ $suppliers = $supplierModel->getAll();
               <td><?= htmlspecialchars($item['name'])?></td>
               <td><?= htmlspecialchars($item['price'])?></td>
               <td>
-                <a href="edit_item.php?id=1" class="btn btn-sm btn-warning me-1">Edit</a>
+                <a href="editItems.php?id=<?= $item['id']?>" class="btn btn-sm btn-warning me-1">Edit</a>
                 <a href="../controllers/itemsController.php?delete_item=<?= $item['id']?>" class="btn btn-sm btn-danger" onclick="return confirm('Are you sure?')">Delete</a>
               </td>
             </tr>
@@ -155,7 +155,7 @@ $suppliers = $supplierModel->getAll();
               <td><?= htmlspecialchars($cs['ref_no'])?></td>
               <td><?= htmlspecialchars($cs['name'])?></td>
               <td>
-                <a href="edit_customer.php?id=1" class="btn btn-sm btn-warning me-1">Edit</a>
+                <a href="editCostumer.php?id=<?=$cs['id']?>" class="btn btn-sm btn-warning me-1">Edit</a>
                 <a href="../controllers/costumersController.php?delete_costumer=<?= $cs['id']?>" class="btn btn-sm btn-danger" onclick="return confirm('Are you sure?')">Delete</a>
               </td>
             </tr>
@@ -187,7 +187,7 @@ $suppliers = $supplierModel->getAll();
               <td><?= htmlspecialchars($sp['ref_no'])?></td>
               <td><?= htmlspecialchars($sp['name'])?></td>
               <td>
-                <a href="edit_supplier.php?id=1" class="btn btn-sm btn-warning me-1">Edit</a>
+                <a href="editSupplier.php?id=<?=$sp['id']?>" class="btn btn-sm btn-warning me-1">Edit</a>
                 <a href="../controllers/suppliersController.php?delete_supplier=<?= $sp['id']?>" class="btn btn-sm btn-danger" onclick="return confirm('Are you sure?')">Delete</a>
               </td>
             </tr>

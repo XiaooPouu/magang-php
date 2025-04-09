@@ -26,6 +26,12 @@ if (isset($_POST['update_costumer'])) {
     exit();
 }
 
+//  Detail costumer
+if (isset($_GET['detail_costumer'])) {
+    $id = $_GET['detail_costumer'];
+    $costumer = $costumerModel->getById($id);
+}
+
 // Hapus costumer
 if (isset($_GET['delete_costumer'])) {
     $id = $_GET['delete_costumer'];

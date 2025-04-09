@@ -26,6 +26,12 @@ if (isset($_POST['update_supplier'])) {
     exit();
 }
 
+// Detail supplier
+if(isset($_GET['detail_supplier'])){
+    $id = $_GET['detail_supplier'];
+    $suppliers = $supplierModel->getById($id);
+}
+
 // Hapus supplier
 if (isset($_GET['delete_supplier'])) {
     $id = $_GET['delete_supplier'];

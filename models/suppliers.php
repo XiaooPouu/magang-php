@@ -20,6 +20,15 @@ class Supplier {
         return $result;
     }
 
+    public function getById($id){
+        $query = "SELECT * FROM suppliers WHERE id = ?";
+        $stmt = $this->conn->prepare($query);
+        $stmt->bind_param("i", $id);
+        $stmt->execute();
+        $result = $stmt->get_result();
+        return $result->fetch_assoc();
+    }
+
     public function update($id, $ref_no, $name) {
         $query = "UPDATE suppliers SET ref_no = ?, name = ? WHERE id = ?";
         $stmt = $this->conn->prepare($query);
