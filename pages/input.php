@@ -59,72 +59,7 @@
           <!--end::Container-->
         </nav>
         <!--end::Header-->
-<!--begin::Sidebar-->
-<aside class="app-sidebar bg-body-secondary shadow" data-bs-theme="dark">
-        <!--begin::Sidebar Brand-->
-        <div class="sidebar-brand">
-          <!--begin::Brand Link-->
-          <a href="../index.html" class="brand-link">
-            <!--begin::Brand Image-->
-            <img
-              src="../../../dist/assets/img/AdminLTELogo.png"
-              alt="AdminLTE Logo"
-              class="brand-image opacity-75 shadow"
-            />
-            <!--end::Brand Image-->
-            <!--begin::Brand Text-->
-            <span class="brand-text fw-light">AdminLTE 4</span>
-            <!--end::Brand Text-->
-          </a>
-          <!--end::Brand Link-->
-        </div>
-        <!--end::Sidebar Brand-->
-        <!--begin::Sidebar Wrapper-->
-        <div class="sidebar-wrapper">
-          <nav class="mt-2">
-            <!--begin::Sidebar Menu-->
-            <ul
-              class="nav sidebar-menu flex-column"
-              data-lte-toggle="treeview"
-              role="menu"
-              data-accordion="false"
-            >
-            <li class="nav-item">
-                <a href="../index.php" class="nav-link">
-                  <i class="nav-icon bi bi-speedometer"></i>
-                  <p>Dashboard</p>
-                </a>
-              </li>
-              <li class="nav-item">
-                <a href="#" class="nav-link">
-                  <i class="nav-icon bi bi-table"></i>
-                  <p>
-                    Tables
-                    <i class="nav-arrow bi bi-chevron-right"></i>
-                  </p>
-                </a>
-                <ul class="nav nav-treeview">
-                  <li class="nav-item">
-                      <a href="input.php" class="nav-link">
-                         <i class="nav-icon bi bi-plus-circle"></i>
-                      <p>Input</p>
-                      </a>
-                </li>
-              <li class="nav-item">
-                <a href="read.php" class="nav-link">
-                 <i class="nav-icon bi bi-eye"></i>
-               <p>Read</p>
-                 </a>
-             </li>
-                </ul>
-              </li>
-            </ul>
-            <!--end::Sidebar Menu-->
-          </nav>
-        </div>
-        <!--end::Sidebar Wrapper-->
-      </aside>
-      <!--end::Sidebar-->
+          <?php  include '../includes/sidebar.php'  ?>
             <!--begin::App Main-->
       <main class="app-main">
         <!--begin::App Content Header-->
@@ -200,8 +135,8 @@
 
   </div>
 </div>
-                  <!--begin::JavaScript-->
-                  <script>
+                  <!-- begin::JavaScript-->
+                  <!-- <script>
                     // Example starter JavaScript for disabling form submissions if there are invalid fields
                     (() => {
                       'use strict';
@@ -225,8 +160,8 @@
                         );
                       });
                     })();
-                  </script>
-                  <!--end::JavaScript-->
+                  </script> -->
+                  <!--end::JavaScript -->
                 </div>
                 <!--end::Form Validation-->
               </div>
@@ -239,20 +174,7 @@
         <!--end::App Content-->
       </main>
       <!--end::App Main-->
-      <!--begin::Footer-->
-      <footer class="app-footer">
-        <!--begin::To the end-->
-        <div class="float-end d-none d-sm-inline">Anything you want</div>
-        <!--end::To the end-->
-        <!--begin::Copyright-->
-        <strong>
-          Copyright &copy; 2014-2024&nbsp;
-          <a href="https://adminlte.io" class="text-decoration-none">AdminLTE.io</a>.
-        </strong>
-        All rights reserved.
-        <!--end::Copyright-->
-      </footer>
-      <!--end::Footer-->
+      <?php include '../includes/footer.php'?>
     </div>
     <!--end::App Wrapper-->
     <!--begin::Script-->

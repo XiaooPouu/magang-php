@@ -69,53 +69,7 @@ $suppliers = $supplierModel->getAll();
       </div>
     </nav>
 
-    <aside class="app-sidebar bg-body-secondary shadow" data-bs-theme="dark">
-  <div class="sidebar-brand">
-    <a href="../index.html" class="brand-link">
-      <img src="../../../dist/assets/img/AdminLTELogo.png" alt="AdminLTE Logo" class="brand-image opacity-75 shadow"/>
-      <span class="brand-text fw-light">AdminLTE 4</span>
-    </a>
-  </div>
-
-  <div class="sidebar-wrapper">
-    <nav class="mt-2">
-      <ul class="nav sidebar-menu flex-column" data-lte-toggle="treeview" role="menu">
-      <li class="nav-item">
-                <a href="../index.php" class="nav-link">
-                  <i class="nav-icon bi bi-speedometer"></i>
-                  <p>Dashboard</p>
-                </a>
-              </li>
-        <!-- Tables Menu -->
-        <li class="nav-item has-treeview">
-          <a href="#" class="nav-link">
-            <i class="nav-icon bi bi-table"></i>
-            <p>
-              Tables
-              <i class="nav-arrow bi bi-chevron-right"></i>
-            </p>
-          </a>
-          <ul class="nav nav-treeview ps-3">
-            <li class="nav-item">
-              <a href="input.php" class="nav-link">
-                <i class="bi bi-plus-circle nav-icon me-2"></i>
-                <p>Input</p>
-              </a>
-            </li>
-            <li class="nav-item">
-              <a href="read.php" class="nav-link">
-                <i class="bi bi-eye nav-icon me-2"></i>
-                <p>Read</p>
-              </a>
-            </li>
-          </ul>
-        </li>
-
-      </ul>
-    </nav>
-  </div>
-</aside>
-
+<?php include '../includes/sidebar.php'  ?>
 
     <!-- Main -->
     <main class="app-main">
@@ -230,12 +184,7 @@ $suppliers = $supplierModel->getAll();
 </div>
     </main>
 
-    <!-- Footer -->
-    <footer class="app-footer">
-      <div class="float-end d-none d-sm-inline">Anything you want</div>
-      <strong>&copy; 2014-2024 <a href="https://adminlte.io" class="text-decoration-none">AdminLTE.io</a>.</strong> All rights reserved.
-    </footer>
-
+      <?php include '../includes/footer.php' ?>
   </div>
 
   <!-- Scripts -->
