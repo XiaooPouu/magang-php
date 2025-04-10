@@ -31,7 +31,7 @@ if(isset($_SESSION['alert_delete'])) {
     unset($_SESSION['alert_delete']); // agar hanya tampil sekali
 }
 
-if(isset($_SESSION['alertupdate'])) {
+if(isset($_SESSION['alert_update'])) {
     $type = $_SESSION['alert_update']['type'];
     $message = $_SESSION['alert_update']['message'];
     echo "<div class='alert alert-{$type} alert-dismissible fade show' role='alert'>

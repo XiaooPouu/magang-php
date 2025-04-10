@@ -5,24 +5,24 @@ require_once __DIR__ . '/../config/database.php';
 
 $db = (new Database())->getConnection();
 $costumerModel = new Costumer($db);
-$existingCostumer = $costumerModel->getByRefNo($ref_no);
 
 // Tambah costumer
 if (isset($_POST['add_costumer'])) {
     $ref_no = $_POST['ref_no'];
     $name = $_POST['name'];
 
-    $costumerModel->insert($ref_no, $name);
+    $existingCostumer = $costumerModel->getByRefNo($ref_no);
 
     // cek apakah ref_no sudah ada
     if($existingCostumer){
         // jika sudah ada maka notif error muncul
         $_SESSION['alert'] = [
             'type' => 'danger',
-            'massage' => 'Ref No sudah ada, silahkan coba lagi!'
+            'message' => 'Ref No sudah ada, silahkan coba lagi!'
         ];
     } else {
         // Simpan alert ke session
+        $costumerModel->insert($ref_no, $name);
         $_SESSION['alert'] = [
             'type' => 'success',
             'message' => 'Costumer berhasil ditambahkan!'
@@ -39,17 +39,17 @@ if (isset($_POST['update_costumer'])) {
     $ref_no = $_POST['ref_no'];
     $name = $_POST['name'];
 
-    $costumerModel->update($id, $ref_no, $name);
-
+    $existingCostumer = $costumerModel->getByRefNo($ref_no);
     // cek apakah ref_no sudah ada
     if($existingCostumer){
         // jika sudah ada maka notif error muncul
         $_SESSION['alert_update'] = [
             'type' => 'danger',
-            'massage' => 'Ref No sudah ada, silahkan coba lagi!'
+            'message' => 'Ref No sudah ada, silahkan coba lagi!'
         ];
     } else {
         // Simpan alert ke session
+        $costumerModel->update($id, $ref_no, $name);
         $_SESSION['alert_update'] = [
             'type' => 'success',
             'message' => 'Costumer berhasil diupdate!'

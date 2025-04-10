@@ -6,7 +6,7 @@ require_once __DIR__ . '/../config/database.php';
 $db = (new Database())->getConnection();
 $itemModel = new Item($db);
 
-$existingItem = $itemModel->getByRefNo($ref_no);
+
 
 // Tambah item
 if (isset($_POST['add_item'])) {
@@ -14,17 +14,17 @@ if (isset($_POST['add_item'])) {
     $name = $_POST['name'];
     $price = $_POST['price'];
 
-    $itemModel->insert($ref_no, $name, $price);
-
+    $existingItem = $itemModel->getByRefNo($ref_no);
 // cek apakah ref_no sudah ada
     if($existingItem){
         // jika sudah ada maka notif error muncul
         $_SESSION['alert'] = [
             'type' => 'danger',
-            'massage' => 'Ref No sudah ada, silahkan coba lagi!'
+            'message' => 'Ref No sudah ada, silahkan coba lagi!'
         ];
     } else {
         // Simpan alert ke session
+        $itemModel->insert($ref_no, $name, $price);
         $_SESSION['alert'] = [
             'type' => 'success',
             'message' => 'Item berhasil ditambahkan!'
@@ -42,17 +42,17 @@ if (isset($_POST['update_item'])) {
     $name = $_POST['name'];
     $price = $_POST['price'];
 
-    $itemModel->update($id, $ref_no, $name, $price);
-
+    $existingItem = $itemModel->getByRefNo($ref_no);
 //    cek apakah ref_no sudah ada
     if($existingItem){
         // jika sudah ada maka notif error muncul
         $_SESSION['alert'] = [
             'type' => 'danger',
-            'massage' => 'Ref No sudah ada, silahkan coba lagi!'
+            'message' => 'Ref No sudah ada, silahkan coba lagi!'
         ];
     } else {
         // Simpan alert ke session
+        $itemModel->update($id, $ref_no, $name, $price);
         $_SESSION['alert_update'] = [
             'type' => 'success',
             'message' => 'Item berhasil diupdate!'
