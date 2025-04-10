@@ -1,5 +1,4 @@
-CREATE DATABASE magang_php;
-USE magang_php;
+
 --
 -- Database: `magang_php`
 --

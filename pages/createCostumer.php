@@ -1,3 +1,6 @@
+<?php include '../includes/header.php' ?>
+
+
 <!doctype html>
 <html lang="en">
   <!--begin::Head-->

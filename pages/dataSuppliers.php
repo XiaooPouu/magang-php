@@ -1,5 +1,6 @@
 <?php
 session_start();
+include '../includes/header.php';
 require_once __DIR__. '/../config/database.php';
 include '../models/suppliers.php';
 
