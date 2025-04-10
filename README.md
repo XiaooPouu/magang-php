@@ -26,9 +26,8 @@ cd /c/xampp/htdocs/
 ```
 
 ### 3. Import file SQL 
-``` buka phpMyAdmin dan pilih menu Import
-- Import file dari folder sql yang telah ada
-```
+- buka phpMyAdmin dan pilih menu Import
+- Import file dari folder sql yang telah ada `sql/magang_php.sql`
 
 ### 4. Konfigurasi koneksi Database
 Buka file `config/database.php`, lalu sesuaikan konfigurasi database
