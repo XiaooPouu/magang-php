@@ -1,4 +1,8 @@
 <?php
+ini_set('display_errors', 1);
+ini_set('display_startup_errors', 1);
+error_reporting(E_ALL);
+
 // BASE_PATH: Path absolut ke root project di server
 define('BASE_PATH', realpath(__DIR__ . '/../') . '/');
 
