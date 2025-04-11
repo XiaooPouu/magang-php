@@ -1,7 +1,6 @@
 <?php 
-
-include 'includes/header.php';
-require_once __DIR__. '/config/database.php';
+require_once __DIR__ . '/config/config.php';
+require_once BASE_PATH . 'config/database.php';
 $database = new Database();
 $db = $database->getConnection();
 
@@ -18,11 +17,6 @@ $rowCustomers = $resultCustomers->fetch_assoc();
 $totalCustomers = $rowCustomers['total'];
 
 ?>
-
-
-
-
-
 <!doctype html>
 <html lang="en">
   <!--begin::Head-->
@@ -67,7 +61,7 @@ $totalCustomers = $rowCustomers['total'];
     />
     <!--end::Third Party Plugin(Bootstrap Icons)-->
     <!--begin::Required Plugin(AdminLTE)-->
-    <link rel="stylesheet" href="src/css/adminlte.css" />
+    <link rel="stylesheet" href="<?= BASE_URL?>src/css/adminlte.css" />
     <!--end::Required Plugin(AdminLTE)-->
   </head>
   <!--end::Head-->
@@ -75,7 +69,7 @@ $totalCustomers = $rowCustomers['total'];
   <body class="layout-fixed sidebar-expand-lg bg-body-tertiary">
     <!--begin::App Wrapper-->
     <div class="app-wrapper">
-      <?php include 'includes/sidebar.php' ?>
+      <?php include BASE_PATH . 'includes/sidebar.php' ?>
       <!--begin::App Main-->
       <main class="app-main">
         <!--begin::App Content Header-->
@@ -103,7 +97,7 @@ $totalCustomers = $rowCustomers['total'];
                     ></path>
                   </svg>
                   <a
-                    href="pages/dataItems.php"
+                    href="<?= BASE_URL?>pages/dataItems.php"
                     class="small-box-footer link-light link-underline-opacity-0 link-underline-opacity-50-hover"
                   >
                     More info <i class="bi bi-link-45deg"></i>
@@ -130,7 +124,7 @@ $totalCustomers = $rowCustomers['total'];
                     ></path>
                   </svg>
                   <a
-                    href="pages/dataCostumer.php"
+                    href="<?= BASE_URL?>pages/dataCostumer.php"
                     class="small-box-footer link-light link-underline-opacity-0 link-underline-opacity-50-hover"
                   >
                     More info <i class="bi bi-link-45deg"></i>
@@ -157,7 +151,7 @@ $totalCustomers = $rowCustomers['total'];
                     ></path>
                   </svg>
                   <a
-                    href="pages/dataSuppliers.php"
+                    href="<?= BASE_URL?>pages/dataSuppliers.php"
                     class="small-box-footer link-dark link-underline-opacity-0 link-underline-opacity-50-hover"
                   >
                     More info <i class="bi bi-link-45deg"></i>
@@ -208,7 +202,7 @@ $totalCustomers = $rowCustomers['total'];
       </main>
       <!--end::App Main-->
       <!--begin::Footer-->
-<?php include 'includes/footer.php' ?>
+<?php include BASE_PATH . 'includes/footer.php' ?>
     </div>
     <!--end::App Wrapper-->
     <!--begin::Script-->

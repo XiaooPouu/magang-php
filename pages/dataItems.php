@@ -1,8 +1,8 @@
 <?php
 session_start();
-include '../includes/header.php';
-require_once __DIR__. '/../config/database.php';
-include '../models/items.php';
+require_once __DIR__ . '/../config/config.php';
+require_once BASE_PATH . 'config/database.php';
+include BASE_PATH . 'models/items.php';
 
 $database = new Database();
 $db = $database->getConnection();
@@ -19,30 +19,29 @@ if(isset($_SESSION['alert'])) {
       </div>";
   
   unset($_SESSION['alert']); // agar hanya tampil sekali
-
-  if(isset($_SESSION['alert_delete'])) {
-    $type = $_SESSION['alert_delete']['type'];
-    $message = $_SESSION['alert_delete']['message'];
-    echo "<div class='alert alert-{$type} alert-dismissible fade show' role='alert'>
-            {$message}
-            <button type='button' class='btn-close' data-bs-dismiss='alert' aria-label='Close'></button>
-          </div>";
-    
-    unset($_SESSION['alert_delete']); // agar hanya tampil sekali
-  }
-
-  if(isset($_SESSION['alert_update'])) {
-    $type = $_SESSION['alert_update']['type'];
-    $message = $_SESSION['alert_update']['message'];
-    echo "<div class='alert alert-{$type} alert-dismissible fade show' role='alert'>
-            {$message}
-            <button type='button' class='btn-close' data-bs-dismiss='alert' aria-label='Close'></button>
-          </div>";
-    
-    unset($_SESSION['alert_update']); // agar hanya tampil sekali
-  }
 }
 
+if(isset($_SESSION['alert_delete'])) {
+  $type = $_SESSION['alert_delete']['type'];
+  $message = $_SESSION['alert_delete']['message'];
+  echo "<div class='alert alert-{$type} alert-dismissible fade show' role='alert'>
+          {$message}
+          <button type='button' class='btn-close' data-bs-dismiss='alert' aria-label='Close'></button>
+        </div>";
+  
+  unset($_SESSION['alert_delete']); // agar hanya tampil sekali
+}
+
+if(isset($_SESSION['alert_update'])) {
+  $type = $_SESSION['alert_update']['type'];
+  $message = $_SESSION['alert_update']['message'];
+  echo "<div class='alert alert-{$type} alert-dismissible fade show' role='alert'>
+          {$message}
+          <button type='button' class='btn-close' data-bs-dismiss='alert' aria-label='Close'></button>
+        </div>";
+  
+  unset($_SESSION['alert_update']); // agar hanya tampil sekali
+}
 ?>
 
 
@@ -91,7 +90,7 @@ if(isset($_SESSION['alert'])) {
     />
     <!--end::Third Party Plugin(Bootstrap Icons)-->
     <!--begin::Required Plugin(AdminLTE)-->
-    <link rel="stylesheet" href="../src/css/adminlte.css" />
+    <link rel="stylesheet" href="<?= BASE_URL?>src/css/adminlte.css" />
     <!--end::Required Plugin(AdminLTE)-->
   </head>
   <!--end::Head-->
@@ -108,7 +107,7 @@ if(isset($_SESSION['alert'])) {
           <!--end::Container-->
         </nav>
         <!--end::Header-->
-          <?php  include '../includes/sidebar.php'  ?>
+          <?php  include BASE_PATH . 'includes/sidebar.php'  ?>
             <!--begin::App Main-->
       <main class="app-main">
         <!--begin::App Content Header-->
@@ -123,7 +122,7 @@ if(isset($_SESSION['alert'])) {
   </div>
   <!-- button create -->
   <div class="mt-2">
-    <a href="createItems.php" class="btn btn-primary btn-sm">Create New</a>
+    <a href="<?= BASE_URL ?>pages/createItems.php" class="btn btn-primary btn-sm">Create New</a>
   </div>
   <!-- end button create -->
 
@@ -150,8 +149,8 @@ if(isset($_SESSION['alert'])) {
               <td><?= htmlspecialchars($item['name'])?></td>
               <td><?= htmlspecialchars($item['price'])?></td>
               <td>
-                <a href="editItems.php?id=<?= $item['id']?>" class="btn btn-sm btn-warning me-1">Edit</a>
-                <a href="../controllers/itemsController.php?delete_item=<?= $item['id']?>" class="btn btn-sm btn-danger" onclick="return confirm('Are you sure?')">Delete</a>
+                <a href="<?= BASE_URL?>pages/editItems.php?id=<?= $item['id']?>" class="btn btn-sm btn-warning me-1">Edit</a>
+                <a href="<?= BASE_URL ?>controllers/itemsController.php?delete_item=<?= $item['id']?>" class="btn btn-sm btn-danger" onclick="return confirm('Are you sure?')">Delete</a>
               </td>
             </tr>
             <?php endforeach; ?>
@@ -201,7 +200,7 @@ if(isset($_SESSION['alert'])) {
         <!--end::App Content-->
       </main>
       <!--end::App Main-->
-      <?php include '../includes/footer.php'?>
+      <?php include BASE_PATH . 'includes/footer.php'?>
     </div>
     <!--end::App Wrapper-->
     <!--begin::Script-->
@@ -229,7 +228,7 @@ if(isset($_SESSION['alert'])) {
   crossorigin="anonymous"
 ></script>
     <!--end::Required Plugin(Bootstrap 5)--><!--begin::Required Plugin(AdminLTE)-->
-    <script src="../../../dist/js/adminlte.js"></script>
+    <!-- <script src="../../../dist/js/adminlte.js"></script> -->
     <!--end::Required Plugin(AdminLTE)--><!--begin::OverlayScrollbars Configure-->
     <script>
       const SELECTOR_SIDEBAR_WRAPPER = '.sidebar-wrapper';

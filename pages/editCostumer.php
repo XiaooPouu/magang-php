@@ -1,7 +1,7 @@
 <?php
-    require_once __DIR__ . '/../config/database.php';
-    require_once __DIR__ . '/../models/costumer.php';
-    include '../includes/header.php';
+require_once __DIR__ . '/../config/config.php';
+require_once BASE_PATH . 'config/database.php';
+include BASE_PATH. 'models/costumer.php';
 
     $database = new Database();
     $db = $database->getConnection();
@@ -11,7 +11,7 @@
     $customer = $CostumerModel->getById($id);
 
     if (!$customer) {
-        header("Location: ../pages/read.php");
+        header('Location:' . BASE_URL .'pages/read.php');
         echo "Customer not found!";
         exit();
     }
@@ -64,7 +64,7 @@
     />
     <!--end::Third Party Plugin(Bootstrap Icons)-->
     <!--begin::Required Plugin(AdminLTE)-->
-    <link rel="stylesheet" href="../src/css/adminlte.css" />
+    <link rel="stylesheet" href="<?= BASE_URL?>src/css/adminlte.css" />
     <!--end::Required Plugin(AdminLTE)-->
   </head>
   <!--end::Head-->
@@ -81,7 +81,7 @@
           <!--end::Container-->
         </nav>
         <!--end::Header-->
-          <?php  include '../includes/sidebar.php'  ?>
+          <?php  include BASE_PATH . 'includes/sidebar.php'  ?>
             <!--begin::App Main-->
       <main class="app-main">
         <!--begin::App Content Header-->
@@ -96,14 +96,14 @@
   </div>
   <!-- button create -->
   <div class="mt-2">
-    <a href="createCostumer.php" class="btn btn-primary btn-sm">Create New</a>
+    <a href="<?= BASE_URL?>pages/createCostumer.php" class="btn btn-primary btn-sm">Create New</a>
   </div>
   <!-- end button create -->
 
  <!-- Form Edit Customer -->
 <div class="card card-success card-outline mb-4">
     <div class="card-header"><div class="card-title">Edit Customer</div></div>
-    <form action="../controllers/costumersController.php" method="POST">
+    <form action="<?= BASE_URL?>controllers/costumersController.php" method="POST">
       <input type="hidden" name="id" value="<?= $customer['id'] ?>">
       <div class="card-body row g-3">
         <div class="col-md-6">
@@ -117,7 +117,7 @@
       </div>
       <div class="card-footer">
         <button type="submit" name="update_costumer" class="btn btn-success">Update Customer</button>
-        <a href="dataCostumers.php" class="btn btn-secondary">Cancel</a>
+        <a href="<?= BASE_URL?>pages/dataCostumers.php" class="btn btn-secondary">Cancel</a>
       </div>
     </form>
   </div>
@@ -163,7 +163,7 @@
         <!--end::App Content-->
       </main>
       <!--end::App Main-->
-      <?php include '../includes/footer.php'?>
+      <?php include BASE_PATH . 'includes/footer.php'?>
     </div>
     <!--end::App Wrapper-->
     <!--begin::Script-->
@@ -191,7 +191,7 @@
   crossorigin="anonymous"
 ></script>
     <!--end::Required Plugin(Bootstrap 5)--><!--begin::Required Plugin(AdminLTE)-->
-    <script src="../../../dist/js/adminlte.js"></script>
+    <!-- <script src="../../../dist/js/adminlte.js"></script> -->
     <!--end::Required Plugin(AdminLTE)--><!--begin::OverlayScrollbars Configure-->
     <script>
       const SELECTOR_SIDEBAR_WRAPPER = '.sidebar-wrapper';

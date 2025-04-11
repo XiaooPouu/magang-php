@@ -1,7 +1,7 @@
 <?php
-    require_once __DIR__ . '/../config/database.php';
-    require_once __DIR__ . '/../models/items.php';
-    include '../includes/header.php';
+   require_once __DIR__ . '/../config/config.php';
+   require_once BASE_PATH . 'config/database.php';
+   include BASE_PATH. 'models/items.php';
 
     $database = new Database();
     $db = $database->getConnection();
@@ -11,7 +11,7 @@
     $item = $itemModel->getById($id);
 
     if (!$item) {
-        header("Location: ../pages/read.php");
+        header('Location:'. BASE_URL . 'pages/read.php');
         echo "Items not found!";
         exit();
     }
@@ -64,7 +64,7 @@
     />
     <!--end::Third Party Plugin(Bootstrap Icons)-->
     <!--begin::Required Plugin(AdminLTE)-->
-    <link rel="stylesheet" href="../src/css/adminlte.css" />
+    <link rel="stylesheet" href="<?= BASE_URL?>src/css/adminlte.css" />
     <!--end::Required Plugin(AdminLTE)-->
   </head>
   <!--end::Head-->
@@ -81,7 +81,7 @@
           <!--end::Container-->
         </nav>
         <!--end::Header-->
-          <?php  include '../includes/sidebar.php'  ?>
+          <?php  include  BASE_PATH . 'includes/sidebar.php'  ?>
             <!--begin::App Main-->
       <main class="app-main">
         <!--begin::App Content Header-->
@@ -89,21 +89,11 @@
           <!--begin::Container-->
           <div class="container-fluid">
           <div class="row g-4">
-      <div class="col-md-12">
-      <div class="card-header border-0">
-        <h3 class="card-title">Costumers</h3>
-      </div>
-  </div>
-  <!-- button create -->
-  <div class="mt-2">
-    <a href="createCostumer.php" class="btn btn-primary btn-sm">Create New</a>
-  </div>
-  <!-- end button create -->
 
 <!-- Form Edit Item -->
 <div class="card card-info card-outline mb-4">
     <div class="card-header"><div class="card-title">Edit Item</div></div>
-    <form action="../controllers/itemsController.php" method="POST">
+    <form action="<?= BASE_URL?>controllers/itemsController.php" method="POST">
       <input type="hidden" name="id" value="<?= $item['id'] ?>">
       <div class="card-body row g-3">
         <div class="col-md-4">
@@ -121,7 +111,7 @@
       </div>
       <div class="card-footer">
         <button type="submit" name="update_item" class="btn btn-info">Update Item</button>
-        <a href="dataItems.php" class="btn btn-secondary">Cancel</a>
+        <a href="<?= BASE_URL?>pages/dataItems.php" class="btn btn-secondary">Cancel</a>
       </div>
     </form>
   </div>
@@ -168,7 +158,7 @@
         <!--end::App Content-->
       </main>
       <!--end::App Main-->
-      <?php include '../includes/footer.php'?>
+      <?php include BASE_PATH . 'includes/footer.php'?>
     </div>
     <!--end::App Wrapper-->
     <!--begin::Script-->
@@ -196,7 +186,7 @@
   crossorigin="anonymous"
 ></script>
     <!--end::Required Plugin(Bootstrap 5)--><!--begin::Required Plugin(AdminLTE)-->
-    <script src="../../../dist/js/adminlte.js"></script>
+    <!-- <script src="../../../dist/js/adminlte.js"></script> -->
     <!--end::Required Plugin(AdminLTE)--><!--begin::OverlayScrollbars Configure-->
     <script>
       const SELECTOR_SIDEBAR_WRAPPER = '.sidebar-wrapper';

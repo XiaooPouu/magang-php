@@ -1,7 +1,9 @@
 <?php
 session_start();
-require_once __DIR__ . '/../models/suppliers.php';
-require_once __DIR__ . '/../config/database.php';
+
+require_once __DIR__ . '/../config/config.php';
+require_once BASE_PATH . 'config/database.php';
+require_once BASE_PATH . 'models/suppliers.php';
 
 $db = (new Database())->getConnection();
 $supplierModel = new Supplier($db);
@@ -28,7 +30,7 @@ if (isset($_POST['add_supplier'])) {
         ];
     }
 
-    header("Location: ../pages/dataSuppliers.php");
+    header('Location:' . BASE_URL . 'pages/dataSuppliers.php');
     exit();
 }
 
@@ -55,7 +57,7 @@ if (isset($_POST['update_supplier'])) {
         ];
 }
 
-    header("Location: ../pages/dataSuppliers.php");
+    header('Location:' . BASE_URL . 'pages/dataSuppliers.php');
     exit();
 }
 
@@ -75,6 +77,6 @@ if (isset($_GET['delete_supplier'])) {
             'type' => 'success',
             'message' => 'Supplier berhasil dihapus!'
         ];
-    header("Location: ../pages/dataSuppliers.php");
+    header('Location:' . BASE_URL . 'pages/dataSuppliers.php');
     exit();
 }

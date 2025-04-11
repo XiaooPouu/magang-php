@@ -1,7 +1,8 @@
 <?php
 session_start();
-require_once __DIR__ . '/../models/items.php';
-require_once __DIR__ . '/../config/database.php';
+require_once __DIR__ . '/../config/config.php';
+require_once BASE_PATH . 'config/database.php';
+require_once BASE_PATH . 'models/items.php';
 
 $db = (new Database())->getConnection();
 $itemModel = new Item($db);
@@ -31,7 +32,7 @@ if (isset($_POST['add_item'])) {
         ];
     }
     
-    header("Location: ../pages/dataItems.php");
+    header('Location:' . BASE_URL . 'pages/dataItems.php');
     exit();
 }
 
@@ -46,7 +47,7 @@ if (isset($_POST['update_item'])) {
 //    cek apakah ref_no sudah ada
     if($existingItem){
         // jika sudah ada maka notif error muncul
-        $_SESSION['alert'] = [
+        $_SESSION['alert_update'] = [
             'type' => 'danger',
             'message' => 'Ref No sudah ada, silahkan coba lagi!'
         ];
@@ -58,7 +59,7 @@ if (isset($_POST['update_item'])) {
             'message' => 'Item berhasil diupdate!'
         ];
     }
-    header("Location: ../pages/dataItems.php");
+    header('Location:' . BASE_URL . 'pages/dataItems.php');
     exit();
 }
 
@@ -78,6 +79,6 @@ if (isset($_GET['delete_item'])) {
         'type' => 'success',
         'message' => 'Item berhasil dihapus!'
     ];
-    header("Location: ../pages/dataItems.php");
+    header('Location:' . BASE_URL . 'pages/dataItems.php');
     exit();
 }

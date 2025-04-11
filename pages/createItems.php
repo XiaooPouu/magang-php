@@ -1,6 +1,6 @@
-<?php include '../includes/header.php' ?>
-
-
+<?php
+require_once __DIR__ . '/../config/config.php';
+?>
 
 <!doctype html>
 <html lang="en">
@@ -46,7 +46,7 @@
     />
     <!--end::Third Party Plugin(Bootstrap Icons)-->
     <!--begin::Required Plugin(AdminLTE)-->
-    <link rel="stylesheet" href="../src/css/adminlte.css" />
+    <link rel="stylesheet" href="<?= BASE_URL?>src/css/adminlte.css" />
     <!--end::Required Plugin(AdminLTE)-->
   </head>
   <!--end::Head-->
@@ -63,7 +63,7 @@
           <!--end::Container-->
         </nav>
         <!--end::Header-->
-          <?php  include '../includes/sidebar.php'  ?>
+          <?php  include BASE_PATH . 'includes/sidebar.php'  ?>
             <!--begin::App Main-->
       <main class="app-main">
         <!--begin::App Content Header-->
@@ -75,7 +75,7 @@
 <!-- Form Item -->
 <div class="card card-info card-outline mb-4">
       <div class="card-header"><div class="card-title">Input Item</div></div>
-      <form action="../controllers/itemsController.php" method="POST">
+      <form action="<?= BASE_URL?>controllers/itemsController.php" method="POST">
         <div class="card-body row g-3">
           <div class="col-md-4">
             <label for="item_ref_no" class="form-label">REF NO</label>
@@ -136,7 +136,7 @@
         <!--end::App Content-->
       </main>
       <!--end::App Main-->
-      <?php include '../includes/footer.php'?>
+      <?php include BASE_PATH . 'includes/footer.php'?>
     </div>
     <!--end::App Wrapper-->
     <!--begin::Script-->
@@ -164,7 +164,7 @@
   crossorigin="anonymous"
 ></script>
     <!--end::Required Plugin(Bootstrap 5)--><!--begin::Required Plugin(AdminLTE)-->
-    <script src="../../../dist/js/adminlte.js"></script>
+    <!-- <script src="../../../dist/js/adminlte.js"></script> -->
     <!--end::Required Plugin(AdminLTE)--><!--begin::OverlayScrollbars Configure-->
     <script>
       const SELECTOR_SIDEBAR_WRAPPER = '.sidebar-wrapper';
