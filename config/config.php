@@ -16,3 +16,9 @@ $baseFolder = str_replace('\\', '/', str_replace($documentRoot, '', $projectPath
 
 // Gabungkan host dan folder untuk URL
 define('BASE_URL', "http://$host$baseFolder/");
+
+// Konfigurasi database
+define('DB_HOST', 'localhost');
+define('DB_USER', 'root');
+define('DB_PASS', '');
+define('DB_NAME', 'magang_php');
