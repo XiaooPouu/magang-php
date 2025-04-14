@@ -7,13 +7,11 @@ class Database {
     private $conn;
 
     public function getConnection() {
-        global $DB_HOST, $DB_USER, $DB_PASS, $DB_NAME;
-
         $this->conn = new mysqli(
-            $DB_HOST,
-            $DB_USER,
-            $DB_PASS,
-            $DB_NAME
+            DB_HOST,
+            DB_USER,
+            DB_PASS,
+            DB_NAME
         );
 
         if ($this->conn->connect_error) {

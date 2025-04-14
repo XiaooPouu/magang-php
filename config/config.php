@@ -21,7 +21,7 @@ define('BASE_PATH', realpath(__DIR__ . '/../') . '/');
 
 // Gabungkan host dan folder untuk URL
 // define('BASE_URL', "http://$host$baseFolder/");
-define('BASE_URL', $BASE_URL);
+// define('BASE_URL', 'ISI');
 
 // Konfigurasi database
 // define('DB_HOST', 'localhost');
