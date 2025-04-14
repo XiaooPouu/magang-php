@@ -1,5 +1,6 @@
 # Ignore environment file
 .env
+env_simple.php
 
 # Ignore OS/system files
 .DS_Store
