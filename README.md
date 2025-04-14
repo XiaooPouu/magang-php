@@ -59,13 +59,13 @@ Atau:
 
 ### 3. Konfigurasi Database
 
-Buka file `config/config.php` dan ubah bagian berikut:
+Buat file `.env` diluar dari folder-folder dan sesuaikan dengan konfigurasi database lokal kamu:
 
-```php
-define('DB_HOST', 'localhost');
-define('DB_USER', 'root');
-define('DB_PASS', ''); 
-define('DB_NAME', 'web_magang'); // Ganti sesuai nama database kamu
+```env
+DB_HOST=localhost
+DB_USER=root
+DB_PASS=
+DB_NAME= // Isi sesuai nama database kamu
 ```
 
 ---
