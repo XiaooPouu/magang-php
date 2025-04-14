@@ -1,6 +1,6 @@
 <?php
 // require_once __DIR__ . '/env.php';
-require_once __DIR__ . '/../env_simple.php';
+require_once __DIR__ . '/../env.php';
 
 // EnvLoader::load();
 ini_set('display_errors', 1);
