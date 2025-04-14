@@ -1,4 +1,6 @@
 <?php
+require_once __DIR__ . '/env.php';
+EnvLoader::load();
 ini_set('display_errors', 1);
 ini_set('display_startup_errors', 1);
 error_reporting(E_ALL);
@@ -18,7 +20,7 @@ $baseFolder = str_replace('\\', '/', str_replace($documentRoot, '', $projectPath
 define('BASE_URL', "http://$host$baseFolder/");
 
 // Konfigurasi database
-define('DB_HOST', 'localhost');
-define('DB_USER', 'root');
-define('DB_PASS', '');
-define('DB_NAME', 'magang_php');
+// define('DB_HOST', 'localhost');
+// define('DB_USER', 'root');
+// define('DB_PASS', '');
+// define('DB_NAME', 'magang_php');
