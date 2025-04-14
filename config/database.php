@@ -8,10 +8,10 @@ class Database {
 
     public function getConnection() {
         $this->conn = new mysqli(
-            EnvLoader::get('DB_HOST'),
-            EnvLoader::get('DB_USER'),
-            EnvLoader::get('DB_PASS'),
-            EnvLoader::get('DB_NAME')
+            DB_HOST,
+            DB_USER,
+            DB_PASS,
+            DB_NAME
         );
 
         if ($this->conn->connect_error) {
