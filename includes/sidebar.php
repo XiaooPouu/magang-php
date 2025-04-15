@@ -64,6 +64,12 @@ if (!defined('BASE_PATH')) {
                 <p>Data Suppliers</p>
               </a>
             </li>
+            <li class="nav-item">
+              <a href="<?= BASE_URL ?>pages/dataItems_Costumer.php" class="nav-link">
+                <i class="nav-icon bi bi-circle"></i>
+                <p>Data Items Costumers</p>
+              </a>
+            </li>
           </ul>
         </li>
       </ul>
