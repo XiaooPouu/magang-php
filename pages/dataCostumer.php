@@ -7,8 +7,16 @@ include BASE_PATH . 'models/costumer.php';
 $database = new Database();
 $db = $database->getConnection();
 
+$search = $_SESSION['costumers_data'] ?? [];
+
+unset($_SESSION['costumers_data']);
+
 $costumerModel = new Costumer($db);
-$customers = $costumerModel->getAll();
+if (!empty($search)) {
+  $customers = $search; // hasil dari session
+} else {
+  $customers = $costumerModel->getAll();
+}
 
 if(isset($_SESSION['alert'])) {
   $type = $_SESSION['alert']['type'];
@@ -130,6 +138,12 @@ if(isset($_SESSION['alert_update'])) {
     <a href="<?= BASE_URL?>pages/createCostumer.php" class="btn btn-primary btn-sm">Create New</a>
   </div>
   <!-- end button create -->
+
+  <form action="<?= BASE_URL ?>controllers/costumersController.php" method="GET" class="d-flex mb-3">
+  <input type="text" name="search" class="form-control me-2" placeholder="Search">
+  <button class="btn btn-primary m-2" type="submit">Search</button>
+  <a href="<?= BASE_URL ?>pages/dataCostumer.php" class="btn btn-secondary m-2">Reset</a>
+</form>
 
  <!-- TABEL CUSTOMERS -->
  <div class="col-lg-12">

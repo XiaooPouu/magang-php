@@ -7,8 +7,17 @@ include BASE_PATH . 'models/suppliers.php';
 $database = new Database();
 $db = $database->getConnection();
 
+$search = $_SESSION['suppliers_data'] ?? [];
+
+unset($_SESSION['suppliers_data']);
+
 $supplierModel = new Supplier($db);
-$suppliers = $supplierModel->getAll();
+if(!empty($search)) {
+  $suppliers = $search;
+} else {
+  $suppliers = $supplierModel->getAll();
+}
+
 
 if(isset($_SESSION['alert'])) {
     $type = $_SESSION['alert']['type'];
@@ -132,6 +141,12 @@ if(isset($_SESSION['alert_update'])) {
     <a href="<?= BASE_URL?>pages/createSuppliers.php" class="btn btn-primary btn-sm">Create New</a>
   </div>
   <!-- end button create -->
+
+  <form action="<?= BASE_URL ?>controllers/suppliersController.php" method="GET" class="d-flex mb-3">
+  <input type="text" name="search" class="form-control me-2" placeholder="Search">
+  <button class="btn btn-primary m-2" type="submit">Search</button>
+  <a href="<?= BASE_URL ?>pages/dataSuppliers.php" class="btn btn-secondary m-2">Reset</a>
+</form>
 
       <!-- TABEL SUPPLIERS -->
   <div class="col-lg-12">

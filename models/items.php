@@ -50,4 +50,14 @@ class Item {
         $stmt->bind_param("i", $id);
         return $stmt->execute();
     }
+
+    public function search($keyword) {
+        $query = "SELECT * FROM items WHERE ref_no LIKE ? OR name LIKE ?";
+        $stmt = $this->conn->prepare($query);
+        $like = '%' . $keyword . '%';
+        $stmt->bind_param('ss', $like, $like);
+        $stmt->execute();
+        $result = $stmt->get_result();
+        return $result;
+    }
 }

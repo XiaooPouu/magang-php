@@ -7,8 +7,18 @@ include BASE_PATH . 'models/items.php';
 $database = new Database();
 $db = $database->getConnection();
 
+// Ambil data dari session kalau ada
+$search = $_SESSION['items_data'] ?? [];
+
+// Setelah diambil, hapus session biar tidak terus muncul
+unset($_SESSION['items_data']);
+
 $itemModel = new Item($db);
-$items = $itemModel->getAll();
+if (!empty($search)) {
+  $items = $search; // hasil dari session
+} else {
+  $items = $itemModel->getAll();
+}
 
 if(isset($_SESSION['alert'])) {
   $type = $_SESSION['alert']['type'];
@@ -129,6 +139,14 @@ if(isset($_SESSION['alert_update'])) {
     <a href="<?= BASE_URL ?>pages/createItems.php" class="btn btn-primary btn-sm">Create New</a>
   </div>
   <!-- end button create -->
+
+  <form action="<?= BASE_URL ?>controllers/itemsController.php" method="GET" class="d-flex mb-3">
+  <input type="text" name="search" class="form-control me-2" placeholder="Search">
+  <button class="btn btn-primary m-2" type="submit">Search</button>
+  <a href="<?= BASE_URL ?>pages/dataItems.php" class="btn btn-secondary m-2">Reset</a>
+</form>
+
+
 
     <!-- TABEL ITEMS -->
     <div class="col-lg-12">

@@ -45,7 +45,7 @@ if (isset($_POST['add_costumer'])) {
 }
 
 // Update costumer
-if (isset($_POST['update_costumer'])) {
+else if (isset($_POST['update_costumer'])) {
     $id = $_POST['id'];
     $ref_no = $_POST['ref_no'];
     $name = $_POST['name'];
@@ -84,13 +84,13 @@ if (isset($_POST['update_costumer'])) {
 }
 
 //  Detail costumer
-if (isset($_GET['detail_costumer'])) {
+else if (isset($_GET['detail_costumer'])) {
     $id = $_GET['detail_costumer'];
     $costumer = $costumerModel->getById($id);
 }
 
 // Hapus costumer
-if (isset($_GET['delete_costumer'])) {
+else if (isset($_GET['delete_costumer'])) {
     $id = $_GET['delete_costumer'];
     $costumerModel->delete($id);
 
@@ -100,6 +100,19 @@ if (isset($_GET['delete_costumer'])) {
       'type' => 'success',
       'message' => 'Costumer berhasil dihapus!'  
     ];
+    header('Location:' . BASE_URL . 'pages/dataCostumer.php');
+    exit();
+}
+
+else if(isset($_GET['search'])){
+    $keyword = $_GET['search'];
+    $results = $costumerModel->search($keyword);
+    $_SESSION['costumers_data'] = $results->fetch_all(MYSQLI_ASSOC);
+    header('Location:' . BASE_URL . 'pages/dataCostumer.php');
+    exit();
+}
+
+else {
     header('Location:' . BASE_URL . 'pages/dataCostumer.php');
     exit();
 }

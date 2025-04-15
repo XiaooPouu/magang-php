@@ -45,7 +45,7 @@ if (isset($_POST['add_supplier'])) {
 }
 
 // Update supplier
-if (isset($_POST['update_supplier'])) {
+else if (isset($_POST['update_supplier'])) {
     $id = $_POST['id'];
     $ref_no = $_POST['ref_no'];
     $name = $_POST['name'];
@@ -83,13 +83,13 @@ if (isset($_POST['update_supplier'])) {
 }
 
 // Detail supplier
-if(isset($_GET['detail_supplier'])){
+else if(isset($_GET['detail_supplier'])){
     $id = $_GET['detail_supplier'];
     $suppliers = $supplierModel->getById($id);
 }
 
 // Hapus supplier
-if (isset($_GET['delete_supplier'])) {
+else if (isset($_GET['delete_supplier'])) {
     $id = $_GET['delete_supplier'];
     $supplierModel->delete($id);
 
@@ -100,4 +100,16 @@ if (isset($_GET['delete_supplier'])) {
         ];
     header('Location:' . BASE_URL . 'pages/dataSuppliers.php');
     exit();
+}
+
+else if (isset($_GET['search'])) {
+    $keyword = $_GET['search'];
+    $results = $supplierModel->search($keyword);
+    $_SESSION['suppliers_data'] = $results->fetch_all(MYSQLI_ASSOC);
+    header('Location:' . BASE_URL . 'pages/dataSuppliers.php');
+    exit();
+}
+
+else {
+    header('Location:' . BASE_URL . 'pages/dataSuppliers.php');
 }
