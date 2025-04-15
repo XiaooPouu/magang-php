@@ -12,6 +12,12 @@ if (isset($_POST['add_costumer'])) {
     $ref_no = $_POST['ref_no'];
     $name = $_POST['name'];
 
+    // Simpan alert ke session
+    $_SESSION['form_data'] = [
+        'ref_no' => $ref_no,
+        'name' => $name
+    ];
+
     $existingCostumer = $costumerModel->getByRefNo($ref_no);
 
     // cek apakah ref_no sudah ada
@@ -21,6 +27,8 @@ if (isset($_POST['add_costumer'])) {
             'type' => 'danger',
             'message' => 'Ref No sudah ada, silahkan coba lagi!'
         ];
+        header('Location:' . BASE_URL . 'pages/createCostumer.php');
+        exit();
     } else {
         // Simpan alert ke session
         $costumerModel->insert($ref_no, $name);
@@ -28,10 +36,12 @@ if (isset($_POST['add_costumer'])) {
             'type' => 'success',
             'message' => 'Costumer berhasil ditambahkan!'
         ];
-    }
 
-    header('Location:' . BASE_URL . 'pages/dataCostumer.php');
+        // unset session
+        unset($_SESSION['form_data']);
+        header('Location:' . BASE_URL . 'pages/dataCostumer.php');
     exit();
+    }
 }
 
 // Update costumer
@@ -40,6 +50,13 @@ if (isset($_POST['update_costumer'])) {
     $ref_no = $_POST['ref_no'];
     $name = $_POST['name'];
 
+    // Simpan alert ke session
+    $_SESSION['form_update'] = [
+        'id' => $id,
+        'ref_no' => $ref_no,
+        'name' => $name
+    ];
+
     $existingCostumer = $costumerModel->getByRefNo($ref_no);
     // cek apakah ref_no sudah ada
     if($existingCostumer){
@@ -48,6 +65,9 @@ if (isset($_POST['update_costumer'])) {
             'type' => 'danger',
             'message' => 'Ref No sudah ada, silahkan coba lagi!'
         ];
+
+        header('Location:' . BASE_URL . 'pages/editCostumer.php' . '?id=' . $id);
+        exit();
     } else {
         // Simpan alert ke session
         $costumerModel->update($id, $ref_no, $name);
@@ -55,10 +75,12 @@ if (isset($_POST['update_costumer'])) {
             'type' => 'success',
             'message' => 'Costumer berhasil diupdate!'
         ];
-    }
 
-    header('Location:' . BASE_URL . 'pages/dataCostumer.php');
+        // unset session
+        unset($_SESSION['form_update']);
+        header('Location:' . BASE_URL . 'pages/dataCostumer.php');
     exit();
+    }
 }
 
 //  Detail costumer

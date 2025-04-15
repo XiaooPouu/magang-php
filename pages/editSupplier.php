@@ -1,4 +1,5 @@
 <?php
+session_start();
     require_once __DIR__ . '/../config/config.php';
     require_once BASE_PATH . 'config/database.php';
     include BASE_PATH. 'models/suppliers.php';
@@ -16,6 +17,9 @@
         echo "Supplier not found!";
         exit();
     }
+
+    $formUpdate = isset($_SESSION['form_update']) ? $_SESSION['form_update'] : $suppliers;
+    $alert = isset ($_SESSION['alert_update']);
 ?>
 
 
@@ -91,29 +95,28 @@
           <div class="container-fluid">
           <div class="row g-4">
       <div class="col-md-12">
-      <div class="card-header border-0">
-        <h3 class="card-title">Costumers</h3>
-      </div>
+
+      <?php if ($alert): ?>
+  <div class="alert alert-<?= $_SESSION['alert_update']['type'] ?> alert-dismissible fade show" role="alert">
+    <?= $_SESSION['alert_update']['message'] ?>
+    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
   </div>
-  <!-- button create -->
-  <div class="mt-2">
-    <a href="<?= BASE_URL?>pages/createCostumer.php" class="btn btn-primary btn-sm">Create New</a>
-  </div>
-  <!-- end button create -->
+  <?php unset($_SESSION['alert']); ?>
+<?php endif; ?>
 
 <!-- Form Edit Supplier -->
 <div class="card card-warning card-outline mb-4">
     <div class="card-header"><div class="card-title">Edit Supplier</div></div>
     <form action="<?= BASE_URL?>controllers/suppliersController.php" method="POST">
-      <input type="hidden" name="id" value="<?= $suppliers['id'] ?>">
+      <input type="hidden" name="id" value="<?= $formUpdate['id'] ?>">
       <div class="card-body row g-3">
         <div class="col-md-6">
           <label for="supplier_ref_no" class="form-label">REF NO</label>
-          <input type="text" name="ref_no" class="form-control" id="supplier_ref_no" value="<?= htmlspecialchars($suppliers['ref_no']) ?>" required>
+          <input type="text" name="ref_no" class="form-control" id="supplier_ref_no" value="<?= htmlspecialchars($formUpdate['ref_no']) ?>" required>
         </div>
         <div class="col-md-6">
           <label for="supplier_name" class="form-label">Name</label>
-          <input type="text" name="name" class="form-control" id="supplier_name" value="<?= htmlspecialchars($suppliers['name']) ?>" required>
+          <input type="text" name="name" class="form-control" id="supplier_name" value="<?= htmlspecialchars($formUpdate['name']) ?>" required>
         </div>
       </div>
       <div class="card-footer">

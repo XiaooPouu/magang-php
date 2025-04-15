@@ -13,7 +13,7 @@ $suppliers = $supplierModel->getAll();
 if(isset($_SESSION['alert'])) {
     $type = $_SESSION['alert']['type'];
     $message = $_SESSION['alert']['message'];
-    echo "<div class='alert alert-{$type} alert-dismissible fade show' role='alert'>
+    $input = "<div class='alert alert-{$type} alert-dismissible fade show' role='alert'>
             {$message}
             <button type='button' class='btn-close' data-bs-dismiss='alert' aria-label='Close'></button>
           </div>";
@@ -24,7 +24,7 @@ if(isset($_SESSION['alert'])) {
 if(isset($_SESSION['alert_delete'])) {
     $type = $_SESSION['alert_delete']['type'];
     $message = $_SESSION['alert_delete']['message'];
-    echo "<div class='alert alert-{$type} alert-dismissible fade show' role='alert'>
+    $hapus = "<div class='alert alert-{$type} alert-dismissible fade show' role='alert'>
             {$message}
             <button type='button' class='btn-close' data-bs-dismiss='alert' aria-label='Close'></button>
           </div>";
@@ -35,7 +35,7 @@ if(isset($_SESSION['alert_delete'])) {
 if(isset($_SESSION['alert_update'])) {
     $type = $_SESSION['alert_update']['type'];
     $message = $_SESSION['alert_update']['message'];
-    echo "<div class='alert alert-{$type} alert-dismissible fade show' role='alert'>
+    $edit = "<div class='alert alert-{$type} alert-dismissible fade show' role='alert'>
             {$message}
             <button type='button' class='btn-close' data-bs-dismiss='alert' aria-label='Close'></button>
           </div>";
@@ -99,6 +99,10 @@ if(isset($_SESSION['alert_update'])) {
   <!--end::Head-->
   <!--begin::Body-->
   <body class="layout-fixed sidebar-expand-lg bg-body-tertiary">
+    <!-- Alert Message -->
+    <?= isset($input) ? $input : '' ?>
+    <?= isset($edit) ? $edit : '' ?>
+    <?= isset($hapus) ? $hapus : '' ?>
     <!--begin::App Wrapper-->
       <div class="app-wrapper">
         <!--begin::Header-->

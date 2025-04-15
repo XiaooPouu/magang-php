@@ -1,4 +1,5 @@
 <?php
+session_start();
    require_once __DIR__ . '/../config/config.php';
    require_once BASE_PATH . 'config/database.php';
    include BASE_PATH. 'models/items.php';
@@ -15,6 +16,9 @@
         echo "Items not found!";
         exit();
     }
+
+    $formUpdate = isset($_SESSION['form_update']) ? $_SESSION['form_update'] : $item;
+    $alert = isset ($_SESSION['alert_update']);
 ?>
 
 
@@ -90,23 +94,34 @@
           <div class="container-fluid">
           <div class="row g-4">
 
+          <?php if ($alert): ?>
+  <div class="alert alert-<?= $_SESSION['alert_update']['type'] ?> alert-dismissible fade show" role="alert">
+    <?= $_SESSION['alert_update']['message'] ?>
+    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+  </div>
+  <?php unset($_SESSION['alert']); ?>
+<?php endif; ?>
+
 <!-- Form Edit Item -->
 <div class="card card-info card-outline mb-4">
     <div class="card-header"><div class="card-title">Edit Item</div></div>
     <form action="<?= BASE_URL?>controllers/itemsController.php" method="POST">
-      <input type="hidden" name="id" value="<?= $item['id'] ?>">
+      <input type="hidden" name="id" value="<?= $formUpdate['id'] ?>">
       <div class="card-body row g-3">
         <div class="col-md-4">
           <label for="item_ref_no" class="form-label">REF NO</label>
-          <input type="text" name="ref_no" class="form-control" id="item_ref_no" value="<?= htmlspecialchars($item['ref_no']) ?>" required>
+          <input type="text" name="ref_no" class="form-control" id="item_ref_no" value="<?= htmlspecialchars($formUpdate['ref_no']) ?>" required>
         </div>
         <div class="col-md-4">
           <label for="item_name" class="form-label">Name</label>
-          <input type="text" name="name" class="form-control" id="item_name" value="<?= htmlspecialchars($item['name']) ?>" required>
+          <input type="text" name="name" class="form-control" id="item_name" value="<?= htmlspecialchars($formUpdate['name']) ?>" required>
         </div>
-        <div class="col-md-4">
-          <label for="item_price" class="form-label">Price</label>
-          <input type="number" name="price" class="form-control" id="item_price" value="<?= htmlspecialchars($item['price']) ?>" required>
+        <div class="col-md-4 position-relative">
+              <label for="item_price" class="form-label">Price</label>
+            <div class="input-group">
+                <span class="input-group-text bg-white border-end-0">Rp</span>
+                <input type="number" name="price" class="form-control border-start-0" id="item_price" required value="<?= htmlspecialchars($formUpdate['price'])?>">
+            </div>
         </div>
       </div>
       <div class="card-footer">
@@ -213,3 +228,5 @@
   </body>
   <!--end::Body-->
 </html>
+
+<?php unset($_SESSION['form_update'])?>

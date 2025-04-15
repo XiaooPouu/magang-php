@@ -13,6 +13,12 @@ if (isset($_POST['add_supplier'])) {
     $ref_no = $_POST['ref_no'];
     $name = $_POST['name'];
 
+    // Simpan alert ke session
+    $_SESSION['form_data'] = [
+        'ref_no' => $ref_no,
+        'name' => $name
+    ];
+
     $existingSupplier = $supplierModel->getByRefNo($ref_no);
     // cek apakah ref no sudah ada
     if($existingSupplier){
@@ -21,6 +27,8 @@ if (isset($_POST['add_supplier'])) {
             'type' => 'danger',
             'message' => 'Ref No sudah ada, silahkan coba lagi!'
         ];
+        header('Location:' . BASE_URL . 'pages/createSuppliers.php');
+        exit();
     } else {
         // Simpan alert ke session
         $supplierModel->insert($ref_no, $name);
@@ -28,10 +36,12 @@ if (isset($_POST['add_supplier'])) {
             'type' => 'success',
             'message' => 'Supplier berhasil ditambahkan!'
         ];
-    }
 
-    header('Location:' . BASE_URL . 'pages/dataSuppliers.php');
+        // unset session
+        unset($_SESSION['form_data']);
+        header('Location:' . BASE_URL . 'pages/dataSuppliers.php');
     exit();
+    }
 }
 
 // Update supplier
@@ -40,6 +50,12 @@ if (isset($_POST['update_supplier'])) {
     $ref_no = $_POST['ref_no'];
     $name = $_POST['name'];
 
+    $_SESSION['form_update'] = [
+        'id' => $id,
+        'ref_no' => $ref_no,
+        'name' => $name
+    ];
+
     $existingSupplier = $supplierModel->getByRefNo($ref_no);
     // cek apakah ref no sudah ada
     if($existingSupplier){
@@ -48,6 +64,9 @@ if (isset($_POST['update_supplier'])) {
             'type' => 'danger',
             'message' => 'Ref No sudah ada, silahkan coba lagi!'
         ];
+
+        header('Location:' . BASE_URL . 'pages/editSupplier.php' . '?id=' . $id);
+        exit();
     } else {
         // Simpan alert ke session
         $supplierModel->update($id, $ref_no, $name);
@@ -55,10 +74,12 @@ if (isset($_POST['update_supplier'])) {
             'type' => 'success',
             'message' => 'Supplier berhasil diupdate!'
         ];
-}
 
-    header('Location:' . BASE_URL . 'pages/dataSuppliers.php');
-    exit();
+        // unset session
+        unset($_SESSION['form_update']);
+        header('Location:' . BASE_URL . 'pages/dataSuppliers.php');
+        exit();
+ }
 }
 
 // Detail supplier

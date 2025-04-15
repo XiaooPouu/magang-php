@@ -1,5 +1,8 @@
 <?php
+session_start();
 require_once __DIR__ . '/../config/config.php';
+$formData = isset($_SESSION['form_data']) ? $_SESSION['form_data'] : ['ref_no' => '', 'name' => ''];
+$alert = isset($_SESSION['alert']);
 ?>
 <!doctype html>
 <html lang="en">
@@ -71,6 +74,15 @@ require_once __DIR__ . '/../config/config.php';
           <div class="container-fluid">
           <div class="row g-4">
       <div class="col-md-12">
+
+      <?php if ($alert): ?>
+  <div class="alert alert-<?= $_SESSION['alert']['type'] ?> alert-dismissible fade show" role="alert">
+    <?= $_SESSION['alert']['message'] ?>
+    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+  </div>
+  <?php unset($_SESSION['alert']); ?>
+<?php endif; ?>
+
 <!-- Form Supplier -->
 <div class="card card-warning card-outline mb-4">
       <div class="card-header"><div class="card-title">Input Supplier</div></div>
@@ -78,15 +90,16 @@ require_once __DIR__ . '/../config/config.php';
         <div class="card-body row g-3">
           <div class="col-md-6">
             <label for="supplier_ref_no" class="form-label">REF NO</label>
-            <input type="text" name="ref_no" class="form-control" id="supplier_ref_no" required>
+            <input type="text" name="ref_no" class="form-control" id="supplier_ref_no" required value="<?= htmlspecialchars($formData['ref_no']) ?>">
           </div>
           <div class="col-md-6">
             <label for="supplier_name" class="form-label">Name</label>
-            <input type="text" name="name" class="form-control" id="supplier_name" required>
+            <input type="text" name="name" class="form-control" id="supplier_name" required value="<?= htmlspecialchars($formData['name']) ?>">
           </div>
         </div>
         <div class="card-footer">
           <button type="submit" name="add_supplier" class="btn btn-warning">Save Supplier</button>
+          <a href="<?= BASE_URL?>pages/dataSuppliers.php" class="btn btn-secondary">Cancel</a>
         </div>
       </form>
     </div>

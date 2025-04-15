@@ -1,5 +1,8 @@
 <?php
+session_start();
 require_once __DIR__ . '/../config/config.php';
+$formData = isset($_SESSION['form_data']) ? $_SESSION['form_data'] : ['ref_no' => '', 'name' => '', 'price' => ''];
+$alert = isset ($_SESSION['alert']);
 ?>
 
 <!doctype html>
@@ -72,6 +75,15 @@ require_once __DIR__ . '/../config/config.php';
           <div class="container-fluid">
           <div class="row g-4">
       <div class="col-md-12">
+
+      <?php if ($alert): ?>
+  <div class="alert alert-<?= $_SESSION['alert']['type'] ?> alert-dismissible fade show" role="alert">
+    <?= $_SESSION['alert']['message'] ?>
+    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+  </div>
+  <?php unset($_SESSION['alert']); ?>
+<?php endif; ?>
+      
 <!-- Form Item -->
 <div class="card card-info card-outline mb-4">
       <div class="card-header"><div class="card-title">Input Item</div></div>
@@ -79,19 +91,23 @@ require_once __DIR__ . '/../config/config.php';
         <div class="card-body row g-3">
           <div class="col-md-4">
             <label for="item_ref_no" class="form-label">REF NO</label>
-            <input type="text" name="ref_no" class="form-control" id="item_ref_no" required>
+            <input type="text" name="ref_no" class="form-control" id="item_ref_no" required value="<?= htmlspecialchars($formData['ref_no'])?>">
           </div>
           <div class="col-md-4">
             <label for="item_name" class="form-label">Name</label>
-            <input type="text" name="name" class="form-control" id="item_name" required>
+            <input type="text" name="name" class="form-control" id="item_name" required value="<?= htmlspecialchars($formData['name'])?>">
           </div>
-          <div class="col-md-4">
-            <label for="item_price" class="form-label">Price</label>
-            <input type="number" name="price" class="form-control" id="item_price" required>
-          </div>
+          <div class="col-md-4 position-relative">
+              <label for="item_price" class="form-label">Price</label>
+            <div class="input-group">
+                <span class="input-group-text bg-white border-end-0">Rp</span>
+                <input type="number" name="price" class="form-control border-start-0" id="item_price" required value="<?= htmlspecialchars($formData['price'])?>">
+            </div>
+        </div>
         </div>
         <div class="card-footer">
           <button type="submit" name="add_item" class="btn btn-info">Save Item</button>
+          <a href="<?= BASE_URL?>pages/dataItems.php" class="btn btn-secondary">Cancel</a>
         </div>
       </form>
     </div>
@@ -191,3 +207,6 @@ require_once __DIR__ . '/../config/config.php';
   </body>
   <!--end::Body-->
 </html>
+
+<?php unset($_SESSION['form_data']); ?>
+
