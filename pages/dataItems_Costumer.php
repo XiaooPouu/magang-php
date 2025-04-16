@@ -9,7 +9,15 @@ include BASE_PATH . 'models/costumer.php';
 $db = (new Database())->getConnection();
 $itemsCostumerModel = new ItemsCostumer($db);
 
-$data = $itemsCostumerModel->getAll();
+$keyword = $_GET['search'] ?? '';
+
+if (isset($_SESSION['search_data'])) {
+  $data = $_SESSION['search_data'];
+  unset($_SESSION['search_data']); // biar gak nyangkut terus
+  unset($_SESSION['search_keyword']);
+} else {
+  $data = $itemsCostumerModel->getAll();
+}
 ?>
 
 <!doctype html>
@@ -61,10 +69,10 @@ $data = $itemsCostumerModel->getAll();
               </div>
 
               <!-- Search Form -->
-              <form action="<?= BASE_URL ?>controllers/itemsCostumerController.php" method="GET" class="d-flex mb-3">
-                <input type="text" name="search" class="form-control me-2" placeholder="Search">
+              <form action="<?= BASE_URL ?>controllers/items_costumersController.php" method="GET" class="d-flex mb-3">
+                <input type="text" name="search" class="form-control me-2" placeholder="Search" value="<?= $_SESSION['search_keyword'] ?? '' ?>">
                 <button class="btn btn-primary m-2" type="submit">Search</button>
-                <a href="<?= BASE_URL ?>pages/dataItemsCostumer.php" class="btn btn-secondary m-2">Reset</a>
+                <a href="<?= BASE_URL ?>pages/dataItems_Costumer.php" class="btn btn-secondary m-2">Reset</a>
               </form>
 
               <!-- Table Items -->
@@ -88,11 +96,11 @@ $data = $itemsCostumerModel->getAll();
     <tr>
       <td><?= htmlspecialchars($row['items_name']) ?></td>
       <td><?= htmlspecialchars($row['customers_name']) ?></td>
-      <td><?= htmlspecialchars($row['price']) ?></td>
+      <td><?= htmlspecialchars('Rp. ' . number_format($row['price'], 2,',','.')) ?></td>
       <td>
   <?php if (isset($row['id_ic'])): ?>
-    <a href="<?= BASE_URL ?>pages/editItemsCostumer.php?id=<?= htmlspecialchars($row['id_ic']) ?>" class="btn btn-sm btn-warning me-1">Edit</a>
-    <a href="<?= BASE_URL ?>controllers/itemsCostumerController.php?delete=<?= htmlspecialchars($row['id_ic']) ?>" class="btn btn-sm btn-danger" onclick="return confirm('Are you sure?')">Delete</a>
+    <a href="<?= BASE_URL ?>pages/editItemsCostumer.php?id_ic=<?= htmlspecialchars($row['id_ic']) ?>" class="btn btn-sm btn-warning me-1">Edit</a>
+    <a href="<?= BASE_URL ?>controllers/items_costumersController.php?delete_ic=<?= htmlspecialchars($row['id_ic']) ?>" class="btn btn-sm btn-danger" onclick="return confirm('Are you sure?')">Delete</a>
   <?php else: ?>
     <span class="text-danger">ID not found</span>
   <?php endif; ?>
