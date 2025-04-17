@@ -72,6 +72,13 @@ if (!defined('BASE_PATH')) {
             </li>
           </ul>
         </li>
+
+        <li class="nav-item">
+          <a href="<?= BASE_URL ?>pages/dataInvoice.php" class="nav-link">
+            <i class="nav-icon bi bi-table"></i>
+            <p>Tabel Invoice</p>
+          </a>
+        </li>
       </ul>
       <!--end::Sidebar Menu-->
     </nav>
