@@ -1,5 +1,6 @@
 <?php
-require_once __DIR__ . '/../config/database.php'; // harus return instance Medoo
+require_once __DIR__ . '/../env.php';
+require_once BASE_PATH . 'config/database.php'; // harus return instance Medoo
 
 class ItemsCostumer {
     private $db;

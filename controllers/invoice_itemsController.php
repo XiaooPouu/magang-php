@@ -1,6 +1,6 @@
 <?php
 session_start();
-require_once '../config/config.php';
+require_once __DIR__ . '/../env.php';
 require_once BASE_PATH . 'config/database.php';
 require_once BASE_PATH . 'models/invoice_items.php';
 

@@ -1,5 +1,5 @@
 <?php
-require_once __DIR__ . '/../config/config.php';
+require_once __DIR__ . '/../env.php';
 require_once BASE_PATH . 'config/database.php'; // Pastikan database.php sudah berisi pengaturan Medoo
 class Invoice {
     private $db;

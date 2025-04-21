@@ -8,7 +8,7 @@ ini_set('display_startup_errors', 1);
 error_reporting(E_ALL);
 
 // BASE_PATH: Path absolut ke root project di server
-define('BASE_PATH', realpath(__DIR__ . '/../') . '/');
+// define('BASE_PATH', realpath(__DIR__ . '/../') . '/');
 
 // BASE_URL: Path URL dinamis (misalnya http://localhost/magang/)
  $host = $_SERVER['HTTP_HOST']; // Contoh: localhost
@@ -20,7 +20,7 @@ define('BASE_PATH', realpath(__DIR__ . '/../') . '/');
 $baseFolder = str_replace('\\', '/', str_replace($documentRoot, '', $projectPath));
 
 // Gabungkan host dan folder untuk URL
-define('BASE_URL', "http://$host$baseFolder/");
+// define('BASE_URL', "http://$host$baseFolder/");
 // define('BASE_URL', 'ISI');
 
 // Konfigurasi database

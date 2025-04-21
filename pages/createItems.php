@@ -1,6 +1,6 @@
 <?php
 session_start();
-require_once __DIR__ . '/../config/config.php';
+require_once __DIR__ . '/../env.php';
 $formData = isset($_SESSION['form_data']) ? $_SESSION['form_data'] : ['ref_no' => '', 'name' => '', 'price' => ''];
 $alert = isset ($_SESSION['alert']);
 ?>
