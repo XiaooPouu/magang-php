@@ -1,7 +1,6 @@
 <?php
 if (!defined('BASE_PATH')) {
   require_once __DIR__ . '/../config/config.php';
-  include BASE_PATH . 'env.php';
 }
 ?>
 

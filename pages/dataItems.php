@@ -113,13 +113,7 @@ if(isset($_SESSION['alert_update'])) {
     <!--begin::App Wrapper-->
       <div class="app-wrapper">
         <!--begin::Header-->
-        <nav class="app-header navbar navbar-expand bg-body">
-          <!--begin::Container-->
-          <div class="container-fluid">
-           
-          </div>
-          <!--end::Container-->
-        </nav>
+        <?php include BASE_PATH . 'includes/header.php' ?>
         <!--end::Header-->
           <?php  include BASE_PATH . 'includes/sidebar.php'  ?>
             <!--begin::App Main-->

@@ -3,6 +3,7 @@ ini_set('display_errors', 1);
 ini_set('display_startup_errors', 1);
 error_reporting(E_ALL);
 
+
 require_once __DIR__ . '/config/config.php';
 require_once BASE_PATH . 'config/database.php';
 $database = new Database();
@@ -73,6 +74,7 @@ $totalCustomers = $resultCustomers;
   <body class="layout-fixed sidebar-expand-lg bg-body-tertiary">
     <!--begin::App Wrapper-->
     <div class="app-wrapper">
+    <?php include BASE_PATH . 'includes/header.php' ?>
       <?php include BASE_PATH . 'includes/sidebar.php' ?>
       <!--begin::App Main-->
       <main class="app-main">

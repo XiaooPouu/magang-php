@@ -45,11 +45,7 @@ if (isset($_SESSION['search_data'])) {
   </head>
   <body class="layout-fixed sidebar-expand-lg bg-body-tertiary">
     <div class="app-wrapper">
-      <nav class="app-header navbar navbar-expand bg-body">
-        <div class="container-fluid">
-          <!-- Header content here -->
-        </div>
-      </nav>
+    <?php include BASE_PATH . 'includes/header.php' ?>
 
       <?php include BASE_PATH . 'includes/sidebar.php' ?>
 
