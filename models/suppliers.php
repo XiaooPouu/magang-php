@@ -1,65 +1,51 @@
 <?php
-require_once __DIR__ . '/../config/database.php';
+require_once __DIR__ . '/../config/database.php'; // pastikan file ini return instance Medoo
 
 class Supplier {
-    private $conn;
+    private $db;
 
     public function __construct($db) {
-        $this->conn = $db;
+        $this->db = $db; // Medoo instance
     }
 
     public function insert($ref_no, $name) {
-        $query = "INSERT INTO suppliers (ref_no, name) VALUES (?, ?)";
-        $stmt = $this->conn->prepare($query);
-        $stmt->bind_param("ss", $ref_no, $name);
-        return $stmt->execute();
+        return $this->db->insert("suppliers", [
+            "ref_no" => $ref_no,
+            "name"   => $name
+        ]);
     }
 
     public function getAll() {
-        $result = $this->conn->query("SELECT * FROM suppliers");
-        return $result;
+        return $this->db->select("suppliers", "*");
     }
 
     public function getByRefNo($ref_no) {
-        $query = "SELECT * FROM suppliers WHERE ref_no = ?";
-        $stmt = $this->conn->prepare($query);
-        $stmt->bind_param("s", $ref_no);
-        $stmt->execute();
-        $result = $stmt->get_result();
-
-        return $result->fetch_assoc();
+        return $this->db->get("suppliers", "*", ["ref_no" => $ref_no]);
     }
 
-    public function getById($id){
-        $query = "SELECT * FROM suppliers WHERE id = ?";
-        $stmt = $this->conn->prepare($query);
-        $stmt->bind_param("i", $id);
-        $stmt->execute();
-        $result = $stmt->get_result();
-        return $result->fetch_assoc();
+    public function getById($id) {
+        return $this->db->get("suppliers", "*", ["id" => $id]);
     }
 
     public function update($id, $ref_no, $name) {
-        $query = "UPDATE suppliers SET ref_no = ?, name = ? WHERE id = ?";
-        $stmt = $this->conn->prepare($query);
-        $stmt->bind_param("ssi", $ref_no, $name, $id);
-        return $stmt->execute();
+        return $this->db->update("suppliers", [
+            "ref_no" => $ref_no,
+            "name"   => $name
+        ], [
+            "id" => $id
+        ]);
     }
 
     public function delete($id) {
-        $query = "DELETE FROM suppliers WHERE id = ?";
-        $stmt = $this->conn->prepare($query);
-        $stmt->bind_param("i", $id);
-        return $stmt->execute();
+        return $this->db->delete("suppliers", ["id" => $id]);
     }
 
     public function search($keyword) {
-        $query = "SELECT * FROM suppliers WHERE ref_no LIKE ? OR name LIKE ?";
-        $stmt = $this->conn->prepare($query);
-        $like = '%' . $keyword . '%';
-        $stmt->bind_param("ss", $like, $like);
-        $stmt->execute();
-        $result = $stmt->get_result();
-        return $result;
+        return $this->db->select("suppliers", "*", [
+            "OR" => [
+                "ref_no[~]" => $keyword,
+                "name[~]"   => $keyword
+            ]
+        ]);
     }
 }

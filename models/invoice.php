@@ -1,61 +1,98 @@
 <?php
 require_once __DIR__ . '/../config/config.php';
-require_once BASE_PATH . 'config/database.php';
-
+require_once BASE_PATH . 'config/database.php'; // Pastikan database.php sudah berisi pengaturan Medoo
 class Invoice {
-    private $conn;
+    private $db;
 
-    public function __construct($db){
-        $this->conn = $db;   
+    public function __construct($db) {
+        $this->db = $db;
     }
 
-    public function createInvoice($kode_inv, $tgl_inv, $customers_id){
-        $query = "INSERT INTO invoice (kode_inv, tgl_inv, customers_id) VALUES (?, ?, ?)";
-        $stmt = $this->conn->prepare($query);
-        $stmt->bind_param("ssi", $kode_inv, $tgl_inv, $customers_id);
-        return $stmt->execute();
+    // Membuat invoice baru
+    public function createInvoice($kode_inv, $tgl_inv, $customers_id) {
+        return $this->db->insert('invoice', [
+            'kode_inv' => $kode_inv,
+            'tgl_inv' => $tgl_inv,
+            'customers_id' => $customers_id
+        ]);
     }
 
-    public function getByAll(){
-        $query = "SELECT invoice.*, customers.name as nama_customer
-                  FROM invoice
-                  JOIN customers ON invoice.customers_id = customers.id
-                  ORDER BY invoice.id_inv DESC";
-
-        $result = mysqli_query($this->conn, $query);
-
-        $data = [];
-        while ($row = mysqli_fetch_assoc($result)) {
-            $data[] = $row;
-        }
-
-        return $data;
+    // Mendapatkan semua invoice beserta nama customer
+    public function getByAll() {
+        return $this->db->select('invoice', [
+            '[>]customers' => ['customers_id' => 'id'],
+        ], [
+            'invoice.id_inv',
+            'invoice.kode_inv',
+            'invoice.tgl_inv',
+            'customers.name AS nama_customer'
+        ], [
+            'ORDER' => ['invoice.id_inv' => 'DESC']
+        ]);
     }
 
-    public function getById($id_inv){
-        $query = "SELECT invoice.*, customers.name AS nama_customer 
-                  FROM invoice 
-                  JOIN customers ON invoice.customers_id = customers.id 
-                  WHERE invoice.id_inv = ?";
-        
-        $stmt = $this->conn->prepare($query);
-        $stmt->bind_param("i", $id_inv);
-        $stmt->execute();
-        $result = $stmt->get_result();
-        return $result->fetch_assoc();
+    // Mendapatkan invoice berdasarkan kode_inv
+    public function getBykode_inv($kode_inv) {
+        return $this->db->get('invoice', [
+            '[>]customers' => ['customers_id' => 'id']
+        ], [
+            'invoice.id_inv',
+            'invoice.kode_inv',
+            'invoice.tgl_inv',
+            'customers.name AS nama_customer'
+        ], [
+            'invoice.kode_inv' => $kode_inv
+        ]);
     }
 
-    public function update($id_inv, $kode_inv, $tgl_inv, $customers_id){
-        $query = "UPDATE invoice SET kode_inv = ?, tgl_inv = ?, customers_id = ? WHERE id_inv = ?";
-        $stmt = $this->conn->prepare($query);
-        $stmt->bind_param("ssii", $kode_inv, $tgl_inv, $customers_id, $id_inv);
-        return $stmt->execute();
+    // Mendapatkan invoice berdasarkan id_inv
+    public function getById($id_inv) {
+        return $this->db->get('invoice', [
+            '[>]customers' => ['customers_id' => 'id']
+        ], [
+            'invoice.id_inv',
+            'invoice.kode_inv',
+            'invoice.tgl_inv',
+            'customers.name AS nama_customer'
+        ], [
+            'invoice.id_inv' => $id_inv
+        ]);
     }
 
+    // Mengupdate invoice
+    public function update($id_inv, $kode_inv, $tgl_inv, $customers_id) {
+        return $this->db->update('invoice', [
+            'kode_inv' => $kode_inv,
+            'tgl_inv' => $tgl_inv,
+            'customers_id' => $customers_id
+        ], [
+            'id_inv' => $id_inv
+        ]);
+    }
+
+    // Menghapus invoice
     public function delete($id_inv) {
-        $sql = "DELETE FROM invoice WHERE id_inv = ?";
-        $stmt = $this->conn->prepare($sql);
-        $stmt->bind_param("i", $id_inv);
-        return $stmt->execute();
+        return $this->db->delete('invoice', [
+            'id_inv' => $id_inv
+        ]);
+    }
+
+    // Mencari invoice berdasarkan kata kunci
+    public function search($keyword) {
+        return $this->db->select('invoice', [
+            '[>]customers' => ['customers_id' => 'id']
+        ], [
+            'invoice.id_inv',
+            'invoice.kode_inv',
+            'invoice.tgl_inv',
+            'customers.name AS nama_customer'
+        ], [
+            'OR' => [
+                'invoice.kode_inv[~]' => $keyword,
+                'customers.name[~]' => $keyword,
+                'invoice.tgl_inv[~]' => $keyword
+            ]
+        ]);
     }
 }
+?>

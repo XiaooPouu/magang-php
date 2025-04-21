@@ -8,17 +8,15 @@ require_once BASE_PATH . 'config/database.php';
 $database = new Database();
 $db = $database->getConnection();
 
-$resultItems = $db->query("SELECT COUNT(*) AS total FROM items");
-$rowItems = $resultItems->fetch_assoc();
-$totalItems = $rowItems['total'];
+$resultItems = $db->count('items'); // Menghitung jumlah baris di tabel items
+$totalItems = $resultItems;
 
-$resultSuppliers = $db->query("SELECT COUNT(*) AS total FROM suppliers");
-$rowSuppliers = $resultSuppliers->fetch_assoc();
-$totalSuppliers = $rowSuppliers['total'];
+$resultSuppliers = $db->count('suppliers'); // Menghitung jumlah baris di tabel suppliers
+$totalSuppliers = $resultSuppliers;
 
-$resultCustomers = $db->query("SELECT COUNT(*) AS total FROM customers");
-$rowCustomers = $resultCustomers->fetch_assoc();
-$totalCustomers = $rowCustomers['total'];
+$resultCustomers = $db->count('customers'); // Menghitung jumlah baris di tabel customers
+$totalCustomers = $resultCustomers;
+
 
 
 

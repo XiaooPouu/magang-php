@@ -62,7 +62,7 @@ $items = $itemsModel->getAll();
             <span class="badge bg-info"><i class="bi bi-calendar2-week-fill me-1"></i> Tanggal: <?= htmlspecialchars($invoice['tgl_inv']) ?></span>
           </div>
           <div class="mb-4">
-            <span class="badge bg-primary"><i class="bi bi-person-circle me-1"></i> Customer: <?= htmlspecialchars($invoice['nama_customer']) ?></span>
+            <span class="badge bg-primary"><i class="bi bi-person-circle me-1"></i> Customer: <?= htmlspecialchars($invoice['name']) ?></span>
           </div>
 
           <!-- 2 tombol -->
@@ -122,8 +122,8 @@ $items = $itemsModel->getAll();
                 <?php if (!empty($invoiceItems)) : ?>
                   <?php foreach ($invoiceItems as $item) : ?>
                     <tr>
-                      <td><?= htmlspecialchars($item['kode_item']) ?></td>
-                      <td><?= htmlspecialchars($item['nama_item']) ?></td>
+                      <td><?= htmlspecialchars($item['ref_no']) ?></td>
+                      <td><?= htmlspecialchars($item['name']) ?></td>
                       <td><?= $item['qty'] ?></td>
                       <td>Rp. <?= number_format($item['price'], 0, ',', '.') ?></td>
                       <td>Rp. <?= number_format($item['total'], 0, ',', '.') ?></td>

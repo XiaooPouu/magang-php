@@ -96,7 +96,7 @@ $total_invoice = 0;
     <div class="info">
         <p><strong>Kode Invoice:</strong> <?= htmlspecialchars($data_invoice['kode_inv']) ?></p>
         <p><strong>Tanggal:</strong> <?= htmlspecialchars($data_invoice['tgl_inv']) ?></p>
-        <p><strong>Customer:</strong> <?= htmlspecialchars($data_invoice['nama_customer']) ?></p>
+        <p><strong>Customer:</strong> <?= htmlspecialchars($data_invoice['name']) ?></p>
     </div>
 
     <table>

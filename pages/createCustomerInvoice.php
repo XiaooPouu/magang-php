@@ -5,6 +5,9 @@ require_once BASE_PATH . 'config/database.php';
 include BASE_PATH . 'models/invoice.php';
 include BASE_PATH . 'models/costumer.php';
 
+$formData = isset($_SESSION['form_data']) ? $_SESSION['form_data'] : ['kode_inv' => '', 'tgl_inv' => '', 'customers_id' => ''];
+$alert = isset($_SESSION['alert']);
+
 
 $db = (new Database())->getConnection();
 
@@ -39,6 +42,15 @@ $customers = $customersModel->getAll();
   </head>
 
   <body class="layout-fixed sidebar-expand-lg bg-body-tertiary">
+<!-- notifikasi -->
+  <?php if ($alert): ?>
+  <div class="alert alert-<?= $_SESSION['alert']['type'] ?> alert-dismissible fade show" role="alert">
+    <?= $_SESSION['alert']['message'] ?>
+    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+  </div>
+  <?php unset($_SESSION['alert']); ?>
+<?php endif; ?>
+<!-- end notifikasi -->
     <div class="app-wrapper">
       <nav class="app-header navbar navbar-expand bg-body">
         <div class="container-fluid"></div>
@@ -61,11 +73,11 @@ $customers = $customersModel->getAll();
                     <div class="card-body row g-3">
                       <div class="col-md-6">
                         <label for="invoice_code" class="form-label">Kode Invoice</label>
-                        <input type="text" name="kode_inv" class="form-control" id="invoice_code" required>
+                        <input type="text" name="kode_inv" class="form-control" id="invoice_code" required value="<?= htmlspecialchars($formData['kode_inv'])?>">
                       </div>
                       <div class="col-md-6">
                         <label for="invoice_date" class="form-label">Tanggal Invoice</label>
-                        <input type="date" name="tgl_inv" class="form-control" id="invoice_date" required>
+                        <input type="date" name="tgl_inv" class="form-control" id="invoice_date" required value="<?= htmlspecialchars($formData['tgl_inv'])?>">
                       </div>
                       <div class="col-md-6">
                         <label for="customer_id" class="form-label">Customer</label>
@@ -124,3 +136,5 @@ $customers = $customersModel->getAll();
     </script>
   </body>
 </html>
+
+<?php unset($_SESSION['form_data']);?>

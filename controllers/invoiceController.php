@@ -8,26 +8,48 @@ $db = (new Database())->getConnection();
 $model = new Invoice($db);
 
 if(isset($_POST['save_invoice'])){
-    $kode_inv = $_POST['kode_inv'] ?? '';
-    $tgl_inv = $_POST['tgl_inv'] ?? '';
-    $customer_id = $_POST['customers_id'] ?? '';
+    $kode_inv = $_POST['kode_inv'];
+    $tgl_inv = $_POST['tgl_inv'];
+    $customer_id = $_POST['customers_id'];
 
-    $success = $model->createInvoice($kode_inv, $tgl_inv, $customer_id);
-   
-
-    $_SESSION['alert'] = [
-        'type' => $success ? 'success' : 'danger',
-        'message' => $success ? 'Data berhasil ditambahkan!' : 'Gagal menambahkan data.'
+    // menyimpan session form data
+    $_SESSION['form_data'] = [
+        'kode_inv' => $kode_inv,
+        'tgl_inv' => $tgl_inv,
+        'customers_id' => $customer_id
     ];
-    unset($_SESSION['alert']);
 
-    header('Location: ' . BASE_URL . 'pages/datainvoice.php');
-    exit();
+    $existingInvoice = $model->getBykode_inv($kode_inv);
+
+    if($existingInvoice){
+        $_SESSION['alert'] = [
+            'type' => 'danger',
+            'message' => 'Kode Invoice sudah ada, silahkan coba lagi!'
+        ];
+        header('Location:' . BASE_URL . 'pages/createCustomerInvoice.php');
+        exit();
+    } else {
+        $model->createInvoice($kode_inv, $tgl_inv, $customer_id);
+        $_SESSION['alert'] = [
+            'type' => 'success',
+            'message' => 'Invoice berhasil disimpan!'
+        ];
+
+        unset($_SESSION['form_data']);
+        header('Location:' . BASE_URL . 'pages/dataInvoice.php');
+        exit();
+    }
 }
-
+// hapus invoice
 else if (isset($_GET['delete_invoice'])) {
     $id_inv = $_GET['delete_invoice'];
     $success = $model->delete($id_inv);
+
+    // simpan alert_delete ke session
+    $_SESSION['alert_delete'] = [
+        'type' => 'success',
+        'message' => 'Invoice berhasil dihapus!'  
+      ];
 
     header('Location: ' . BASE_URL . 'pages/dataInvoice.php');
     exit();
@@ -39,8 +61,45 @@ else if (isset($_POST['update_invoice'])){
     $tgl_inv = $_POST['tgl_inv'];
     $customer_id = $_POST['customers_id'];
 
-    $success = $model->update($id_inv, $kode_inv, $tgl_inv, $customer_id);
+    // simpan form_update ke session
+    $_SESSION['form_update'] = [
+        'id_inv' => $id_inv,
+        'kode_inv' => $kode_inv,
+        'tgl_inv' => $tgl_inv,
+        'customers_id' => $customer_id
+    ];
 
-    header('Location: ' . BASE_URL . 'pages/dataInvoice.php');
+    $existingInvoice = $model->getBykode_inv($kode_inv);
+
+    if($existingInvoice){
+        $_SESSION['alert_update'] = [
+            'type' => 'danger',
+            'message' => 'Kode Invoice sudah ada, silahkan coba lagi!'
+        ];
+        header('Location:' . BASE_URL . 'pages/editInvoice.php' . '?id=' . $id_inv);
+        exit();
+    }else {
+        // simpan alert_update ke session
+        $model->update($id_inv, $kode_inv, $tgl_inv, $customer_id);
+        $_SESSION['alert_update'] = [
+            'type' => 'success',
+            'message' => 'Invoice berhasil diupdate!'
+        ];
+        // unser form update
+        unset($_SESSION['form_update']);
+        header('Location: ' . BASE_URL . 'pages/dataInvoice.php');
+    exit();
+    }
+}
+
+// Pencarian invoice
+else if (isset($_GET['search'])) {
+    $keyword = trim($_GET['search']);
+    $data = $model->search($keyword);
+
+    $_SESSION['search_data'] = $data;
+    $_SESSION['search_keyword'] = $keyword;
+
+    header('Location:' . BASE_URL . 'pages/dataInvoice.php');
     exit();
 }

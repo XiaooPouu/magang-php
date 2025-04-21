@@ -9,6 +9,29 @@ $db = (new Database())->getConnection();
 
 $invoiceModel = new Invoice($db);
 $data = $invoiceModel->getByAll();
+
+$keyword = $_GET['search'] ?? '';
+
+if (isset($_SESSION['search_data'])) {
+  $data = $_SESSION['search_data'];
+  unset($_SESSION['search_data']); // biar gak nyangkut terus
+  unset($_SESSION['search_keyword']);
+} else {
+  $data = $invoiceModel->getByAll();
+}
+
+// hapus notifikasi
+if(isset($_SESSION['alert_delete'])) {
+  $type = $_SESSION['alert_delete']['type'];
+  $message = $_SESSION['alert_delete']['message'];
+  $hapus = "<div class='alert alert-{$type} alert-dismissible fade show' role='alert'>
+      {$message}
+      <button type='button' class='btn-close' data-bs-dismiss='alert' aria-label='Close'></button>
+      </div>";
+  
+  unset($_SESSION['alert_delete']); // agar hanya tampil sekali
+}
+
 ?>
 
 
@@ -62,7 +85,29 @@ $data = $invoiceModel->getByAll();
   <!--end::Head-->
   <!--begin::Body-->
   <body class="layout-fixed sidebar-expand-lg bg-body-tertiary">
-   
+<!-- allert hapus -->
+  <?= isset($hapus) ? $hapus : '' ?>
+  <!-- end allert -->
+
+    <!-- notifikasi tambah berhasil -->
+  <?php if (isset($_SESSION['alert'])): ?>
+    <div class="alert alert-<?= $_SESSION['alert']['type'] ?> alert-dismissible fade show" role="alert">
+        <?= $_SESSION['alert']['message'] ?>
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+    <?php unset($_SESSION['alert']); ?>
+<?php endif; ?>
+<!-- end notifikasi tambah -->
+
+ <!-- notifikasi update berhasil -->
+ <?php if (isset($_SESSION['alert_update'])): ?>
+    <div class="alert alert-<?= $_SESSION['alert_update']['type'] ?> alert-dismissible fade show" role="alert">
+        <?= $_SESSION['alert_update']['message'] ?>
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+    <?php unset($_SESSION['alert_update']); ?>
+<?php endif; ?>
+<!-- end notifikasi update -->
 
     <!--begin::App Wrapper-->
       <div class="app-wrapper">
@@ -89,10 +134,10 @@ $data = $invoiceModel->getByAll();
       </div>
   </div>
 
-  <form action="<?= BASE_URL ?>controllers/costumersController.php" method="GET" class="d-flex mb-3">
+  <form action="<?= BASE_URL ?>controllers/invoiceController.php" method="GET" class="d-flex mb-3">
   <input type="text" name="search" class="form-control me-2" placeholder="Search">
   <button class="btn btn-primary m-2" type="submit">Search</button>
-  <a href="<?= BASE_URL ?>pages/dataCostumer.php" class="btn btn-secondary m-2">Reset</a>
+  <a href="<?= BASE_URL ?>pages/dataInvoice.php" class="btn btn-secondary m-2">Reset</a>
 </form>
  <!-- TABEL INVOICE -->
  <div class="col-lg-12">
@@ -123,7 +168,7 @@ $data = $invoiceModel->getByAll();
               <td><?= htmlspecialchars($row['kode_inv']) ?></td>
               <td><?= htmlspecialchars($row['tgl_inv']) ?></td>
               <td>
-              <?= htmlspecialchars($row['nama_customer']) ?>
+              <?= htmlspecialchars($row['name']) ?>
               </td>
               <td>
               <a href="<?= BASE_URL?>pages/editInvoice.php?id_inv=<?=$row['id_inv']?>" class="btn btn-sm btn-warning me-1">

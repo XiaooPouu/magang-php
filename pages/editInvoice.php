@@ -16,6 +16,8 @@ $customers = $customersModel->getAll();
 $id_inv = $_GET['id_inv'];
 $data = $model->getById($id_inv);
 
+$formUpdate = isset($_SESSION['form_update']) ? $_SESSION['form_update'] : $data;
+$alert = isset ($_SESSION['alert_update']);
 ?>
 <!doctype html>
 <html lang="en">
@@ -54,7 +56,13 @@ $data = $model->getById($id_inv);
           <div class="container-fluid">
             <div class="row g-4">
               <div class="col-md-12">
-
+              <?php if ($alert): ?>
+  <div class="alert alert-<?= $_SESSION['alert_update']['type'] ?> alert-dismissible fade show" role="alert">
+    <?= $_SESSION['alert_update']['message'] ?>
+    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+  </div>
+  <?php unset($_SESSION[$alert]); ?>
+<?php endif; ?>
                 <!-- Form Invoice -->
                 <div class="card card-primary card-outline mb-4">
                   <div class="card-header">
@@ -62,21 +70,21 @@ $data = $model->getById($id_inv);
                   </div>
                   <form action="<?= BASE_URL ?>controllers/invoiceController.php" method="POST">
                     <div class="card-body row g-3">
-                    <input type="hidden" name="id_inv" value="<?= $data['id_inv'] ?>">
+                    <input type="hidden" name="id_inv" value="<?= $formUpdate['id_inv'] ?>">
                       <div class="col-md-6">
                         <label for="invoice_code" class="form-label">Kode Invoice</label>
-                        <input type="text" name="kode_inv" class="form-control" id="invoice_code" required value="<?= $data['kode_inv'];?>">
+                        <input type="text" name="kode_inv" class="form-control" id="invoice_code" required value="<?= $formUpdate['kode_inv'];?>">
                       </div>
                       <div class="col-md-6">
                         <label for="invoice_date" class="form-label">Tanggal Invoice</label>
-                        <input type="date" name="tgl_inv" class="form-control" id="invoice_date" required value="<?= $data['tgl_inv'];?>">
+                        <input type="date" name="tgl_inv" class="form-control" id="invoice_date" required value="<?= $formUpdate['tgl_inv'];?>">
                       </div>
                       <div class="col-md-6">
                         <label for="customer_id" class="form-label">Customer</label>
                         <select name="customers_id" class="form-select" id="customer_id" required>
                           <option value="">-- Pilih Customer --</option>
                           <?php foreach ($customers as $customer): ?>
-                            <option value="<?= $customer['id'] ?>"<?=($data['customers_id'] == $customer['id'] ? 'selected' : '')?>>
+                            <option value="<?= $customer['id'] ?>"<?=($formUpdate['name'] == $customer['id'] ? 'selected' : '')?>>
                               <?= htmlspecialchars($customer['name']) ?>
                             </option>
                           <?php endforeach; ?>
@@ -128,3 +136,5 @@ $data = $model->getById($id_inv);
     </script>
   </body>
 </html>
+
+<?php unset($_SESSION['form_update']);?>
