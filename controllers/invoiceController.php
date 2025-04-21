@@ -13,6 +13,7 @@ if(isset($_POST['save_invoice'])){
     $customer_id = $_POST['customers_id'] ?? '';
 
     $success = $model->createInvoice($kode_inv, $tgl_inv, $customer_id);
+   
 
     $_SESSION['alert'] = [
         'type' => $success ? 'success' : 'danger',

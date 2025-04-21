@@ -2,10 +2,10 @@
 session_start();
 require_once __DIR__ . "/../config/config.php";
 include BASE_PATH . "models/invoice.php";
+include BASE_PATH . 'models/invoice_items.php';
 require_once BASE_PATH . 'config/database.php';
 
 $db = (new Database())->getConnection();
-
 
 $invoiceModel = new Invoice($db);
 $data = $invoiceModel->getByAll();
@@ -128,7 +128,7 @@ $data = $invoiceModel->getByAll();
               <td>
               <a href="<?= BASE_URL?>pages/editInvoice.php?id_inv=<?=$row['id_inv']?>" class="btn btn-sm btn-warning me-1">
               <i class="bi bi-pencil-square me-1"></i>Edit</a>
-              <a href="<?= BASE_URL?>pages/editInvoice.php?id_inv=<?=$row['id_inv']?>" class="btn btn-sm btn-primary me-1">
+              <a href="<?= BASE_URL?>pages/dataInvoiceItems.php?id_inv=<?=$row['id_inv']?>" class="btn btn-sm btn-primary me-1">
               <i class="bi bi-file-earmark-text me-1"></i>Detail</a>
               <a href="<?= BASE_URL ?>controllers/invoiceController.php?delete_invoice=<?= $row['id_inv']?>" class="btn btn-sm btn-danger" onclick="return confirm('Are you sure?')">
               <i class="bi bi-trash me-1"></i>Delete</a>
