@@ -45,7 +45,7 @@ git clone https://github.com/XiaooPouu/magang-php.git
 Atau:
 
 - Download ZIP dari GitHub
-- Ekstrak ke folder `htdocs (XAMPP) atau www (Laragon)`
+- Ekstrak ke folder `htdocs (XAMPP)`
 
 ---
 
@@ -59,13 +59,13 @@ Atau:
 
 ### 3. Konfigurasi Database
 
-Buat file `.env` diluar dari folder-folder dan sesuaikan dengan konfigurasi database lokal kamu:
+Ubah nama file `env.php.example` menjadi `env.php` dan sesuaikan dengan konfigurasi database lokal kamu:
 
-```env
-DB_HOST=localhost
-DB_USER=root
-DB_PASS=
-DB_NAME= // Isi sesuai nama database kamu
+```php
+define('DB_HOST', 'localhost');
+define('DB_USER', 'root');
+define('DB_PASS', null);
+define('DB_NAME', ''); // isi dengan nama database
 ```
 
 ---
@@ -75,9 +75,12 @@ DB_NAME= // Isi sesuai nama database kamu
 Buka browser dan akses:
 
 ```
-http://localhost/nama-folder-kamu/public/
+http://localhost/nama-folder-kamu/
 ```
 
-> ✅ Tidak perlu ganti folder khusus, URL akan menyesuaikan otomatis berkat konfigurasi `BASE_URL`.
+> ✅  Tidak perlu ubah path apapun! Semua URL akan otomatis menyesuaikan folder kamu.
 
 ---
+
+## 📌 Catatan Tambahan
+- Pastikan folder src/, assets/, atau css/ diletakkan dengan benar agar CSS ter-load.
