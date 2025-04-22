@@ -59,7 +59,7 @@ Atau:
 
 ### 3. Konfigurasi Database
 
-Ubah nama file `env.php.example` menjadi `env.php` dan sesuaikan dengan konfigurasi database lokal kamu:
+Ubah nama file `env.php.example` pada folder `config` menjadi `env.php` dan sesuaikan dengan konfigurasi database lokal kamu:
 
 ```php
 define('DB_HOST', 'localhost');
@@ -78,7 +78,7 @@ Buka browser dan akses:
 http://localhost/nama-folder-kamu/
 ```
 
-> ✅  Tidak perlu ubah path apapun! Semua URL akan otomatis menyesuaikan folder kamu.
+> ✅  Tidak perlu ubah path apapun! Semua URL akan otomatis menyesuaikan folder kamu. Karena Mengambil document rootnya
 
 ---
 

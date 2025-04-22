@@ -112,7 +112,7 @@ $total_invoice = 0;
         <?php foreach ($data_items as $item): ?>
             <?php if ($item['invoice_id'] == $id_inv): ?>
                 <tr>
-                    <td><?= htmlspecialchars($item['item_name']) ?></td>
+                    <td><?= htmlspecialchars($item['name']) ?></td>
                     <td><?= $item['qty'] ?></td>
                     <td><?= number_format($item['price'], 3, ',', '.') ?></td>
                     <td><?= number_format($item['total'], 3, ',', '.') ?></td>
