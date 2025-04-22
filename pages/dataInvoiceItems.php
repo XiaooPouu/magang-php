@@ -48,7 +48,24 @@ $items = $itemsModel->getAll();
 <body class="layout-fixed sidebar-expand-lg bg-body-tertiary">
   <div class="app-wrapper">
     <?php include BASE_PATH . 'includes/sidebar.php'; ?>
-    
+    <!-- notifikasi tambah -->
+    <?php if (isset($_SESSION['alert'])): ?>
+    <div class="alert alert-<?= $_SESSION['alert']['type'] ?> alert-dismissible fade show" role="alert">
+        <?= $_SESSION['alert']['message'] ?>
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+    <?php unset($_SESSION['alert']); ?>
+<?php endif; ?>
+<!-- end notifikasi tambah -->
+
+<!-- notifikasi hapus -->
+<?php if (isset($_SESSION['alert_delete'])): ?>
+    <div class="alert alert-<?= $_SESSION['alert_delete']['type'] ?> alert-dismissible fade show" role="alert">
+        <?= $_SESSION['alert_delete']['message'] ?>
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+    <?php unset($_SESSION['alert_delete']); ?>
+<?php endif; ?>
     <main class="app-main">
       <div class="container mt-5">
         <div class="card p-4">
@@ -88,7 +105,7 @@ $items = $itemsModel->getAll();
           <!-- Ringkasan -->
           <div class="d-flex justify-content-between align-items-center mb-3">
             <div>
-              <strong>Jumlah Barang:</strong> <?= $totalQty ?> &nbsp;&nbsp;
+              <strong>Jumlah Barang:</strong> <?= count($invoiceItems) ?> &nbsp;&nbsp;
               <strong>Total Harga:</strong> Rp. <?= number_format($totalHarga, 0, ',', '.') ?>
             </div>
           </div>

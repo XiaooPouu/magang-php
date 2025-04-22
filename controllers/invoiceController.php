@@ -66,7 +66,7 @@ else if (isset($_POST['update_invoice'])){
         'id_inv' => $id_inv,
         'kode_inv' => $kode_inv,
         'tgl_inv' => $tgl_inv,
-        'customers_id' => $customer_id
+        'customers_id' => $customers_id
     ];
 
     $existingInvoice = $model->getBykode_inv($kode_inv);
@@ -76,11 +76,11 @@ else if (isset($_POST['update_invoice'])){
             'type' => 'danger',
             'message' => 'Kode Invoice sudah ada, silahkan coba lagi!'
         ];
-        header('Location:' . BASE_URL . 'pages/editInvoice.php' . '?id=' . $id_inv);
+        header('Location:' . BASE_URL . 'pages/editInvoice.php' . '?id_inv=' . $id_inv);
         exit();
     }else {
         // simpan alert_update ke session
-        $model->update($id_inv, $kode_inv, $tgl_inv, $customer_id);
+        $model->update($id_inv, $kode_inv, $tgl_inv, $customers_id);
         $_SESSION['alert_update'] = [
             'type' => 'success',
             'message' => 'Invoice berhasil diupdate!'

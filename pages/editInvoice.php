@@ -16,6 +16,8 @@ $customers = $customersModel->getAll();
 $id_inv = $_GET['id_inv'];
 $data = $model->getById($id_inv);
 
+$customers_id = isset($formUpdate['customers_id']) ? $formUpdate['customers_id'] : '';
+
 $formUpdate = isset($_SESSION['form_update']) ? $_SESSION['form_update'] : $data;
 $alert = isset ($_SESSION['alert_update']);
 ?>
@@ -82,13 +84,14 @@ $alert = isset ($_SESSION['alert_update']);
                       <div class="col-md-6">
                         <label for="customer_id" class="form-label">Customer</label>
                         <select name="customers_id" class="form-select" id="customer_id" required>
-                          <option value="">-- Pilih Customer --</option>
-                          <?php foreach ($customers as $customer): ?>
-                            <option value="<?= $customer['id'] ?>"<?=($formUpdate['name'] == $customer['id'] ? 'selected' : '')?>>
-                              <?= htmlspecialchars($customer['name']) ?>
-                            </option>
-                          <?php endforeach; ?>
-                        </select>
+  <option value="">-- Pilih Customer --</option>
+  <?php foreach ($customers as $customer): ?>
+    <option value="<?= $customer['id'] ?>" <?= ($customers_id == $customer['id'] ? 'selected' : '') ?>>
+      <?= htmlspecialchars($customer['name']) ?>
+    </option>
+  <?php endforeach; ?>
+</select>
+
                       </div>
                     </div>
                     <div class="card-footer">

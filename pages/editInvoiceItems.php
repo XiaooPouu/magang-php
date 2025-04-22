@@ -11,8 +11,9 @@ $items = $itemModel->getAll();
 
 $invoiceItemsModel = new InvoiceItems($db);
 
-$id = $_GET['id'] ?? null;
-$id_inv = $_GET['id_inv'] ?? $_SESSION['invoice_id'] ?? null;
+$id = isset($_GET['id']) ? intval($_GET['id']) : null;
+$id_inv = isset($_GET['id_inv']) ? intval($_GET['id_inv']) : ($_SESSION['invoice_id'] ?? null);
+
 
 
 // Simpan ke session biar konsisten

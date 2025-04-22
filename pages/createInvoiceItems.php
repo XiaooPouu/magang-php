@@ -73,7 +73,7 @@ $invoiceItemsModel = new InvoiceItems($db);
 
                 <div class="d-flex justify-content-between">
                     <button type="submit" class="btn btn-primary">Simpan</button>
-                    <a href="<?= BASE_URL ?>pages/dataInvoiceItems.php?id=<?= $invoice_id ?>" class="btn btn-secondary">Kembali</a>
+                    <a href="<?= BASE_URL ?>pages/dataInvoiceItems.php?id_inv=<?= $invoice_id ?>" class="btn btn-secondary">Kembali</a>
                 </div>
             </form>
         </div>

@@ -17,11 +17,17 @@ switch ($action) {
         $qty        = $_POST['qty'] ?? 1;
         $price      = $_POST['price'] ?? 0;
 
+
         if ($invoice_id && $items_id && $qty) {
             $model->insert($invoice_id, $items_id, $qty, $price);
 
             // ✅ Hapus session untuk hindari konflik redirect ke ID lama
             unset($_SESSION['invoice_id']);
+
+            $_SESSION['alert'] = [
+                'type' => 'success',
+                'message' => 'Items berhasil disimpan!'
+            ];
 
             // ✅ Redirect ke halaman dengan parameter yang sesuai
             header('Location:' . BASE_URL . 'pages/dataInvoiceItems.php?id_inv=' . $invoice_id);
@@ -41,6 +47,10 @@ switch ($action) {
                 
                 unset($_SESSION['invoice_id']);
                 if ($model->delete($id)) {
+                    $_SESSION['alert_delete'] = [
+                        'type' => 'success',
+                        'message' => 'Items berhasil dihapus!'
+                    ];
                     header('Location:' . BASE_URL . 'pages/dataInvoiceItems.php?id_inv=' . $invoice_id);
                     exit;
                 } else {
