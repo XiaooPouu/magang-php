@@ -6,16 +6,27 @@ include BASE_PATH . 'models/suppliers.php';
 
 $database = new Database();
 $db = $database->getConnection();
+$supplierModel = new Supplier($db);
 
 $search = $_SESSION['suppliers_data'] ?? [];
 
 unset($_SESSION['suppliers_data']);
 
-$supplierModel = new Supplier($db);
+// pagination
+$page = isset($_GET['page']) ? $_GET['page'] : 1;
+$perPage = 5;
+$offset = ($page - 1) * $perPage;
+
+// hitung total data
+$totalSuppliers = $supplierModel->getCount();
+
+// hitung total halaman
+$totalPages = ceil($totalSuppliers / $perPage);
+
 if(!empty($search)) {
   $suppliers = $search;
 } else {
-  $suppliers = $supplierModel->getAll();
+  $suppliers = $supplierModel->getWithLimit($perPage, $offset);
 }
 
 
@@ -51,9 +62,6 @@ if(isset($_SESSION['alert_update'])) {
     
     unset($_SESSION['alert_update   ']); // agar hanya tampil sekali
 }
-
-
-
 ?>
 
 
@@ -108,10 +116,6 @@ if(isset($_SESSION['alert_update'])) {
   <!--end::Head-->
   <!--begin::Body-->
   <body class="layout-fixed sidebar-expand-lg bg-body-tertiary">
-    <!-- Alert Message -->
-    <?= isset($input) ? $input : '' ?>
-    <?= isset($edit) ? $edit : '' ?>
-    <?= isset($hapus) ? $hapus : '' ?>
     <!--begin::App Wrapper-->
       <div class="app-wrapper">
         <!--begin::Header-->
@@ -124,11 +128,27 @@ if(isset($_SESSION['alert_update'])) {
         <div class="app-content-header">
           <!--begin::Container-->
           <div class="container-fluid">
+             <!--begin::Container-->
+          <div class="container-fluid mb-4">
+            <!--begin::Row-->
+            <div class="row">
+              <div class="col-sm-6"><h3 class="mb-0">Data Suppliers</h3></div>
+              <div class="col-sm-6">
+                <ol class="breadcrumb float-sm-end">
+                  <li class="breadcrumb-item"><a href="<?= BASE_URL?>pages/dataSuppliers.php">Data Suppliers</a></li>
+                  <li class="breadcrumb-item active" aria-current="page">Tabel Suppliers</li>
+                </ol>
+              </div>
+            </div>
+            <!--end::Row-->
+          </div>
+          <!--end::Container-->
           <div class="row g-4">
       <div class="col-md-12">
-      <div class="card-header border-0">
-        <h3 class="card-title">Suppliers</h3>
-      </div>
+        <!-- Alert Message -->
+    <?= isset($input) ? $input : '' ?>
+    <?= isset($edit) ? $edit : '' ?>
+    <?= isset($hapus) ? $hapus : '' ?>
   </div>
   <!-- button create -->
   <div class="mt-2">
@@ -142,38 +162,55 @@ if(isset($_SESSION['alert_update'])) {
   <a href="<?= BASE_URL ?>pages/dataSuppliers.php" class="btn btn-secondary m-2">Reset</a>
 </form>
 
-      <!-- TABEL SUPPLIERS -->
-  <div class="col-lg-12">
-    <div class="card mb-4">
-      <div class="card-header border-0">
-        <h3 class="card-title">Suppliers</h3>
-      </div>
-      <div class="card-body table-responsive p-0">
-        <table class="table table-striped align-middle">
-          <thead>
-            <tr>
-              <th>REF_NO</th>
-              <th>NAME</th>
-              <th>ACTION</th>
-            </tr>
-          </thead>
-          <tbody>
-            <?php foreach($suppliers as $sp): ?>
-            <tr>
-              <td><?= htmlspecialchars($sp['ref_no'])?></td>
-              <td><?= htmlspecialchars($sp['name'])?></td>
-              <td>
-                <a href="<?= BASE_URL?>pages/editSupplier.php?id=<?=$sp['id']?>" class="btn btn-sm btn-warning me-1">Edit</a>
-                <a href="<?=BASE_URL?>controllers/suppliersController.php?delete_supplier=<?= $sp['id']?>" class="btn btn-sm btn-danger" onclick="return confirm('Are you sure?')">Delete</a>
-              </td>
-            </tr>
-            <?php endforeach; ?>
-          </tbody>
-        </table>
-      </div>
-    </div>
-  </div>
-<!-- end table suppliers -->
+      <!-- tabel costumer -->
+      <div class="card mb-4">
+                  <div class="card-header"><h3 class="card-title">Table Costumers</h3></div>
+                  <!-- /.card-header -->
+                  <div class="card-body">
+                    <table class="table table-bordered">
+                      <thead>
+                        <tr>
+                          <th>Ref_No</th>
+                          <th>Nama Suppliers</th>
+                          <th>Aciton</th>
+                        </tr>
+                      </thead>
+                      <?php foreach ($suppliers as $sp):?>
+                      <tbody>
+                        <tr class="align-middle">
+                          <td><?= htmlspecialchars($sp['ref_no'])?></td>
+                          <td><?= htmlspecialchars($sp['name'])?></td>
+                          <td><a href="<?= BASE_URL?>pages/editSupplier.php?id=<?=$sp['id']?>" class="btn btn-sm btn-warning me-1">
+                            <i class="bi bi-pencil-square me-1"></i>Edit</a>
+                           <a href="<?= BASE_URL ?>controllers/suppliersController.php?delete_supplier=<?= $sp['id']?>" class="btn btn-sm btn-danger" onclick="return confirm('Are you sure?')">
+                            <i class="bi bi-trash me-1"></i>Delete</a>
+                          </td>
+                        </tr>
+                      </tbody>
+                      <?php endforeach;?>
+                    </table>
+                  </div>
+                  <!-- /.card-body -->
+                    <!-- /.card-body -->
+                  <div class="card-footer clearfix">
+                    <ul class="pagination pagination-sm m-0 float-end">
+                      <?php if ($page > 1): ?>
+                        <li class="page-item"><a class="page-link" href="?page=<?= $page - 1 ?>">&laquo;</a></li>
+                      <?php endif; ?>
+
+                      <?php for ($i = 1; $i <= $totalPages; $i++): ?>
+                        <li class="page-item <?= $i == $page ? 'active' : '' ?>">
+                          <a class="page-link" href="?page=<?= $i ?>"><?= $i ?></a>
+                        </li>
+                      <?php endfor; ?>
+
+                      <?php if ($page < $totalPages): ?>
+                        <li class="page-item"><a class="page-link" href="?page=<?= $page + 1 ?>">&raquo;</a></li>
+                      <?php endif; ?>
+                    </ul>
+                  </div>
+                </div>
+                <!-- /.card -->
 </div>
                   <!-- begin::JavaScript-->
                   <!-- <script>

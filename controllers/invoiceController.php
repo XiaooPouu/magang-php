@@ -66,7 +66,7 @@ else if (isset($_POST['update_invoice'])){
         'id_inv' => $id_inv,
         'kode_inv' => $kode_inv,
         'tgl_inv' => $tgl_inv,
-        'customers_id' => $customers_id
+        'customers_id' => $customer_id
     ];
 
     $existingInvoice = $model->getBykode_inv($kode_inv);
@@ -80,7 +80,7 @@ else if (isset($_POST['update_invoice'])){
         exit();
     }else {
         // simpan alert_update ke session
-        $model->update($id_inv, $kode_inv, $tgl_inv, $customers_id);
+        $model->update($id_inv, $kode_inv, $tgl_inv, $customer_id);
         $_SESSION['alert_update'] = [
             'type' => 'success',
             'message' => 'Invoice berhasil diupdate!'
@@ -93,13 +93,23 @@ else if (isset($_POST['update_invoice'])){
 }
 
 // Pencarian invoice
-else if (isset($_GET['search'])) {
-    $keyword = trim($_GET['search']);
-    $data = $model->search($keyword);
+else if (isset($_GET['search']) || isset($_GET['customer']) || isset($_GET['tgl_dari']) || isset($_GET['tgl_ke'])) {
+    $keyword = $_GET['search'] ?? '';
+    $customer_id = $_GET['customer'] ?? null;
+    $tgl_dari = $_GET['tgl_dari'] ?? null;
+    $tgl_ke = $_GET['tgl_ke'] ?? null;
 
+    // Mengambil data berdasarkan parameter pencarian
+    $data = $model->search($keyword, $customer_id, $tgl_dari, $tgl_ke);
+
+    // Simpan hasil pencarian ke session
     $_SESSION['search_data'] = $data;
     $_SESSION['search_keyword'] = $keyword;
+    $_SESSION['search_customer'] = $customer_id;
+    $_SESSION['search_tgl_dari'] = $tgl_dari;
+    $_SESSION['search_tgl_ke'] = $tgl_ke;
 
-    header('Location:' . BASE_URL . 'pages/dataInvoice.php');
+    header('Location: ' . BASE_URL . 'pages/dataInvoice.php');
     exit();
 }
+

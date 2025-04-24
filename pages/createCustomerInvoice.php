@@ -42,7 +42,32 @@ $customers = $customersModel->getAll();
   </head>
 
   <body class="layout-fixed sidebar-expand-lg bg-body-tertiary">
-<!-- notifikasi -->
+    <div class="app-wrapper">
+      <?php include BASE_PATH . 'includes/header.php'; ?>
+
+      <?php include BASE_PATH . 'includes/sidebar.php'; ?>
+
+      <main class="app-main">
+        <div class="app-content-header">
+          <div class="container-fluid">
+             <!--begin::Container-->
+          <div class="container-fluid mb-4">
+            <!--begin::Row-->
+            <div class="row">
+              <div class="col-sm-6"><h3 class="mb-0">Data Invoice</h3></div>
+              <div class="col-sm-6">
+                <ol class="breadcrumb float-sm-end">
+                  <li class="breadcrumb-item"><a href="<?= BASE_URL?>pages/dataInvoice.php">Data Invoice</a></li>
+                  <li class="breadcrumb-item active" aria-current="page">Table Invoices</li>
+                </ol>
+              </div>
+            </div>
+            <!--end::Row-->
+          </div>
+          <!--end::Container-->
+            <div class="row g-4">
+              <div class="col-md-12">
+              <!-- notifikasi -->
   <?php if ($alert): ?>
   <div class="alert alert-<?= $_SESSION['alert']['type'] ?> alert-dismissible fade show" role="alert">
     <?= $_SESSION['alert']['message'] ?>
@@ -51,21 +76,9 @@ $customers = $customersModel->getAll();
   <?php unset($_SESSION['alert']); ?>
 <?php endif; ?>
 <!-- end notifikasi -->
-    <div class="app-wrapper">
-      <nav class="app-header navbar navbar-expand bg-body">
-        <div class="container-fluid"></div>
-      </nav>
-
-      <?php include BASE_PATH . 'includes/sidebar.php'; ?>
-
-      <main class="app-main">
-        <div class="app-content-header">
-          <div class="container-fluid">
-            <div class="row g-4">
-              <div class="col-md-12">
-
-                <!-- Form Invoice -->
-                <div class="card card-primary card-outline mb-4">
+              </div>
+              <!-- Form Invoice -->
+              <div class="card card-primary card-outline mb-4">
                   <div class="card-header">
                     <div class="card-title">Create Invoice</div>
                   </div>
@@ -91,15 +104,14 @@ $customers = $customersModel->getAll();
                         </select>
                       </div>
                     </div>
-                    <div class="card-footer">
-                      <button type="submit" name="save_invoice" class="btn btn-primary">Save Invoice</button>
-                      <a href="<?= BASE_URL ?>pages/dataInvoice.php" class="btn btn-secondary">Cancel</a>
+                    <div class="card-footer d-flex justify-content-end mx-2">
+                      <button type="submit" name="save_invoice" class="btn btn-primary mx-1">Save Invoice</button>
+                      <a href="<?= BASE_URL ?>pages/dataInvoice.php" class="btn btn-secondary mx-1">Cancel</a>
                     </div>
                   </form>
                 </div>
                 <!-- End Form Invoice -->
 
-              </div>
             </div>
           </div>
         </div>

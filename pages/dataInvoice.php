@@ -3,12 +3,24 @@ session_start();
 require_once __DIR__ . '/../config/env.php';
 include BASE_PATH . "models/invoice.php";
 include BASE_PATH . 'models/invoice_items.php';
+include BASE_PATH . 'models/costumer.php';
 require_once BASE_PATH . 'config/database.php';
 
 $db = (new Database())->getConnection();
 
 $invoiceModel = new Invoice($db);
-$data = $invoiceModel->getByAll();
+$costumerModel = new Costumer($db);
+$customers = $costumerModel->getAll();
+
+$page = isset($_GET['page']) ? $_GET['page'] : 1;
+$perPage = 5;
+$offset = ($page - 1) * $perPage;
+
+// hitung total data
+$total_invoice = $invoiceModel->getCount();
+
+// hitung total halaman
+$totalPages = ceil($total_invoice / $perPage);
 
 $keyword = $_GET['search'] ?? '';
 
@@ -17,7 +29,7 @@ if (isset($_SESSION['search_data'])) {
   unset($_SESSION['search_data']); // biar gak nyangkut terus
   unset($_SESSION['search_keyword']);
 } else {
-  $data = $invoiceModel->getByAll();
+  $data = $invoiceModel->getWithLimit($offset, $perPage); // ambil data();
 }
 
 // hapus notifikasi
@@ -31,7 +43,7 @@ if(isset($_SESSION['alert_delete'])) {
   
   unset($_SESSION['alert_delete']); // agar hanya tampil sekali
 }
-
+// var_dump($data);die;
 ?>
 
 
@@ -85,7 +97,37 @@ if(isset($_SESSION['alert_delete'])) {
   <!--end::Head-->
   <!--begin::Body-->
   <body class="layout-fixed sidebar-expand-lg bg-body-tertiary">
-<!-- allert hapus -->
+    <!--begin::App Wrapper-->
+      <div class="app-wrapper">
+        <!--begin::Header-->
+        <?php include BASE_PATH . 'includes/header.php' ?>
+        <!--end::Header-->
+          <?php  include BASE_PATH .'includes/sidebar.php'  ?>
+            <!--begin::App Main-->
+      <main class="app-main">
+        <!--begin::App Content Header-->
+        <div class="app-content-header">
+          <!--begin::Container-->
+          <div class="container-fluid">
+            <!--begin::Container-->
+          <div class="container-fluid mb-4">
+            <!--begin::Row-->
+            <div class="row">
+              <div class="col-sm-6"><h3 class="mb-0">Data Invoice</h3></div>
+              <div class="col-sm-6">
+                <ol class="breadcrumb float-sm-end">
+                  <li class="breadcrumb-item"><a href="<?= BASE_URL?>pages/dataInvoice.php">Data Invoice</a></li>
+                  <li class="breadcrumb-item active" aria-current="page">Table Invoices</li>
+                </ol>
+              </div>
+            </div>
+            <!--end::Row-->
+          </div>
+          <!--end::Container-->
+          <div class="row g-4">
+             
+      <div class="col-md-12">
+        <!-- allert hapus -->
   <?= isset($hapus) ? $hapus : '' ?>
   <!-- end allert -->
 
@@ -108,78 +150,97 @@ if(isset($_SESSION['alert_delete'])) {
     <?php unset($_SESSION['alert_update']); ?>
 <?php endif; ?>
 <!-- end notifikasi update -->
-
-    <!--begin::App Wrapper-->
-      <div class="app-wrapper">
-        <!--begin::Header-->
-        <?php include BASE_PATH . 'includes/header.php' ?>
-        <!--end::Header-->
-          <?php  include BASE_PATH .'includes/sidebar.php'  ?>
-            <!--begin::App Main-->
-      <main class="app-main">
-        <!--begin::App Content Header-->
-        <div class="app-content-header">
-          <!--begin::Container-->
-          <div class="container-fluid">
-          <div class="row g-4">
-      <div class="col-md-12">
-      <div class="card-header border-0">
-        <h3 class="card-title">Invoice</h3>
       </div>
-  </div>
 
-  <form action="<?= BASE_URL ?>controllers/invoiceController.php" method="GET" class="d-flex mb-3">
-  <input type="text" name="search" class="form-control me-2" placeholder="Search">
-  <button class="btn btn-primary m-2" type="submit">Search</button>
-  <a href="<?= BASE_URL ?>pages/dataInvoice.php" class="btn btn-secondary m-2">Reset</a>
+      <!-- search form -->
+      <form action="<?= BASE_URL ?>controllers/invoiceController.php" method="GET" class="d-flex mb-3">
+      <input type="hidden" name="page" value="<?= $page ?>">
+    <input type="text" name="search" class="form-control me-2 mb-2" value="<?= $_SESSION['search_keyword'] ?? '' ?>" placeholder="Search">
+    
+    <select name="customer" class="form-control me-2 mb-2">
+        <option value="">-- Pilih Customer --</option>
+        <?php
+        // Menampilkan list customer berdasarkan data yang ada di model atau tabel
+        foreach ($customers as $customer) {
+            $selected = ($_SESSION['search_customer'] ?? '') == $customer['id'] ? 'selected' : '';
+            echo '<option value="' . $customer['id'] . '" ' . $selected . '>' . htmlspecialchars($customer['name']) . '</option>';
+        }
+        ?>
+    </select>
+    
+    <input type="date" name="tgl_dari" class="form-control me-2 mb-2" value="<?= $_SESSION['search_tgl_dari'] ?? '' ?>" placeholder="Tanggal Dari">
+    <input type="date" name="tgl_ke" class="form-control me-2 mb-2" value="<?= $_SESSION['search_tgl_ke'] ?? '' ?>" placeholder="Tanggal Ke">
+    
+    <button class="btn btn-primary m-2" type="submit">Search</button>
+    <a href="<?= BASE_URL ?>pages/dataInvoice.php" class="btn btn-secondary m-2">Reset</a>
 </form>
- <!-- TABEL INVOICE -->
- <div class="col-lg-12">
-    <div class="card mb-4">
-      <div class="card-header border-0">
-        <h3 class="card-title">Invoice Customers</h3>
-      </div>
-        <!-- button create -->
-  <div class="mx-3 mb-2">
-    <a href="<?= BASE_URL?>pages/createCustomerInvoice.php" class="btn btn-primary btn-sm">
-    <i class="bi bi-plus-circle me-1"></i> Create New</a>
-  </div>
-  <!-- end button create -->
+<!-- end search form -->
 
-      <div class="card-body table-responsive p-0">
-        <table class="table table-striped align-middle">
-          <thead>
-            <tr>
-              <th>Kode Inv</th>
-              <th>Tanggal Inv</th>
-              <th>Customers</th>
-              <th>Action</th>
-            </tr>
-          </thead>
-          <tbody>
-          <?php foreach($data as $row): ?>
-            <tr>
-              <td><?= htmlspecialchars($row['kode_inv']) ?></td>
-              <td><?= htmlspecialchars($row['tgl_inv']) ?></td>
-              <td>
-              <?= htmlspecialchars($row['name']) ?>
-              </td>
-              <td>
-              <a href="<?= BASE_URL?>pages/editInvoice.php?id_inv=<?=$row['id_inv']?>" class="btn btn-sm btn-warning me-1">
+  <!-- Table Items -->
+  <div class="card mb-4">
+                  <div class="card-header"><h3 class="card-title">Table Invoice</h3>
+                </div>
+
+                <!-- button create -->
+            <div class="mx-3 mt-3">
+              <a href="<?= BASE_URL?>pages/createCustomerInvoice.php" class="btn btn-primary btn-sm">
+              <i class="bi bi-plus-circle me-1"></i> Create New</a>
+            </div>
+            <!-- end button create -->
+                  <!-- /.card-header -->
+                  <div class="card-body">
+                    <table class="table table-bordered">
+                      <thead>
+                        <tr>
+                          <th>Kode Invoice</th>
+                          <th>Tanggal Invoice</th>
+                          <th>Costumers</th>
+                          <th>Action</th>
+                        </tr>
+                      </thead>
+                      <?php foreach ($data as $row): ?>
+                      <tbody>
+                        <tr class="align-middle">
+                          <td><?= htmlspecialchars($row['kode_inv'])?></td>
+                          <td><?= htmlspecialchars($row['tgl_inv'])?></td>
+                          <td>
+                          <?= htmlspecialchars($row['name'])?>
+                          </td>
+                          <td>
+                          <a href="<?= BASE_URL?>pages/editInvoice.php?id_inv=<?=$row['id_inv']?>" class="btn btn-sm btn-warning me-1">
               <i class="bi bi-pencil-square me-1"></i>Edit</a>
               <a href="<?= BASE_URL?>pages/dataInvoiceItems.php?id_inv=<?=$row['id_inv']?>" class="btn btn-sm btn-primary me-1">
               <i class="bi bi-file-earmark-text me-1"></i>Detail</a>
               <a href="<?= BASE_URL ?>controllers/invoiceController.php?delete_invoice=<?= $row['id_inv']?>" class="btn btn-sm btn-danger" onclick="return confirm('Are you sure?')">
               <i class="bi bi-trash me-1"></i>Delete</a>
-              </td>
-            </tr>
-            <?php endforeach; ?>
-          </tbody>
-        </table>
-      </div>
-    </div>
-  </div>
-  <!-- end table invoice -->
+                          </td>
+                        </tr>
+                        <?php endforeach;?>
+                      </tbody>
+                    </table>
+                  </div>
+                  <!-- /.card-body -->
+                   <!-- /.card-body -->
+                  <div class="card-footer clearfix">
+                    <ul class="pagination pagination-sm m-0 float-end">
+                      <?php if ($page > 1): ?>
+                        <li class="page-item"><a class="page-link" href="?page=<?= $page - 1 ?>">&laquo;</a></li>
+                      <?php endif; ?>
+
+                      <?php for ($i = 1; $i <= $totalPages; $i++): ?>
+                        <li class="page-item <?= $i == $page ? 'active' : '' ?>">
+                          <a class="page-link" href="?page=<?= $i ?>"><?= $i ?></a>
+                        </li>
+                      <?php endfor; ?>
+
+                      <?php if ($page < $totalPages): ?>
+                        <li class="page-item"><a class="page-link" href="?page=<?= $page + 1 ?>">&raquo;</a></li>
+                      <?php endif; ?>
+                    </ul>
+                  </div>
+                </div>
+                <!-- /.card -->
+            </div>
 </div>
                   <!-- begin::JavaScript-->
                   <!-- <script>

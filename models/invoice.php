@@ -31,6 +31,32 @@ class Invoice {
         ]);
     }
 
+    public function searchAdvanced($keyword = '', $customerId = '', $tglDari = '', $tglKe = '') {
+        $where = [];
+    
+        if (!empty($keyword)) {
+            $where['kode_inv[~]'] = $keyword; // LIKE pencarian
+        }
+    
+        if (!empty($customerId)) {
+            $where['customers_id'] = $customerId;
+        }
+    
+        if (!empty($tglDari) && !empty($tglKe)) {
+            $where['tgl_inv[<>]'] = [$tglDari, $tglKe]; // BETWEEN
+        } elseif (!empty($tglDari)) {
+            $where['tgl_inv[>=]'] = $tglDari;
+        } elseif (!empty($tglKe)) {
+            $where['tgl_inv[<=]'] = $tglKe;
+        }
+    
+        return $this->db->select('invoice', '*', [
+            'AND' => $where,
+            'ORDER' => ['id_inv' => 'DESC']
+        ]);
+    }
+    
+
     // Mendapatkan invoice berdasarkan kode_inv
     public function getBykode_inv($kode_inv) {
         return $this->db->get('invoice', [
@@ -42,6 +68,24 @@ class Invoice {
             'customers.name AS nama_customer'
         ], [
             'invoice.kode_inv' => $kode_inv
+        ]);
+    }
+
+    public function getCount(){
+        return $this->db->count("invoice");
+    }
+
+    public function getWithLimit($offset, $limit){
+        return $this->db->select("invoice", [
+            '[>]customers' => ['customers_id' => 'id']
+        ], [
+            'invoice.id_inv',
+            'invoice.kode_inv',
+            'invoice.tgl_inv',
+            'customers.name AS nama_customer'
+        ],[
+            "LIMIT" => [$offset, $limit],
+            "ORDER" => ["id_inv" => "DESC"]
         ]);
     }
 
@@ -78,7 +122,34 @@ class Invoice {
     }
 
     // Mencari invoice berdasarkan kata kunci
-    public function search($keyword) {
+    public function search($keyword = '', $customerId = '', $tglDari = '', $tglKe = '') {
+        // Inisialisasi array WHERE untuk filter pencarian
+        $where = [];
+    
+        // Pencarian berdasarkan keyword
+        if (!empty($keyword)) {
+            $where['OR'] = [
+                'invoice.kode_inv[~]' => $keyword, // Mencari di kode_inv
+                'customers.name[~]' => $keyword,   // Mencari di nama customer
+                'invoice.tgl_inv[~]' => $keyword  // Mencari di tanggal invoice
+            ];
+        }
+    
+        // Filter berdasarkan customer (jika ada)
+        if (!empty($customerId)) {
+            $where['invoice.customers_id'] = $customerId;
+        }
+    
+        // Filter berdasarkan tanggal (jika ada)
+        if (!empty($tglDari) && !empty($tglKe)) {
+            $where['invoice.tgl_inv[<>]'] = [$tglDari, $tglKe]; // Rentang tanggal
+        } elseif (!empty($tglDari)) {
+            $where['invoice.tgl_inv[>=]'] = $tglDari; // Tanggal dari
+        } elseif (!empty($tglKe)) {
+            $where['invoice.tgl_inv[<=]'] = $tglKe; // Tanggal ke
+        }
+    
+        // Query menggunakan Medoo untuk mencari data
         return $this->db->select('invoice', [
             '[>]customers' => ['customers_id' => 'id']
         ], [
@@ -86,13 +157,8 @@ class Invoice {
             'invoice.kode_inv',
             'invoice.tgl_inv',
             'customers.name AS nama_customer'
-        ], [
-            'OR' => [
-                'invoice.kode_inv[~]' => $keyword,
-                'customers.name[~]' => $keyword,
-                'invoice.tgl_inv[~]' => $keyword
-            ]
-        ]);
+        ], $where);
     }
+    
 }
 ?>

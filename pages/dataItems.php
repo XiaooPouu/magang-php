@@ -4,8 +4,10 @@ require_once __DIR__ . '/../config/env.php';
 require_once BASE_PATH . 'config/database.php';
 include BASE_PATH . 'models/items.php';
 
+
 $database = new Database();
 $db = $database->getConnection();
+$itemModel = new Item($db);
 
 // Ambil data dari session kalau ada
 $search = $_SESSION['items_data'] ?? [];
@@ -13,11 +15,21 @@ $search = $_SESSION['items_data'] ?? [];
 // Setelah diambil, hapus session biar tidak terus muncul
 unset($_SESSION['items_data']);
 
-$itemModel = new Item($db);
+// pagination
+$page = isset($_GET['page']) ? $_GET['page'] : 1;
+$perPage = 5;
+$offset = ($page - 1) * $perPage;
+
+// hitung total data
+$totalItems = $itemModel->getCount();
+
+// hitung total halaman
+$totalPages = ceil($totalItems / $perPage);
+
 if (!empty($search)) {
   $items = $search; // hasil dari session
 } else {
-  $items = $itemModel->getAll();
+  $items = $itemModel->getWhitLimit($perPage, $offset);
 }
 
 if(isset($_SESSION['alert'])) {
@@ -106,10 +118,6 @@ if(isset($_SESSION['alert_update'])) {
   <!--end::Head-->
   <!--begin::Body-->
   <body class="layout-fixed sidebar-expand-lg bg-body-tertiary">
-     <!-- Alert Message -->
-    <?= isset($input) ? $input : '' ?>
-    <?= isset($edit) ? $edit : '' ?>
-    <?= isset($hapus) ? $hapus : '' ?>
     <!--begin::App Wrapper-->
       <div class="app-wrapper">
         <!--begin::Header-->
@@ -122,11 +130,27 @@ if(isset($_SESSION['alert_update'])) {
         <div class="app-content-header">
           <!--begin::Container-->
           <div class="container-fluid">
+             <!--begin::Container-->
+          <div class="container-fluid mb-4">
+            <!--begin::Row-->
+            <div class="row">
+              <div class="col-sm-6"><h3 class="mb-0">Data Items</h3></div>
+              <div class="col-sm-6">
+                <ol class="breadcrumb float-sm-end">
+                  <li class="breadcrumb-item"><a href="<?= BASE_URL?>pages/dataItems.php">Data Items</a></li>
+                  <li class="breadcrumb-item active" aria-current="page">Tabel Items</li>
+                </ol>
+              </div>
+            </div>
+            <!--end::Row-->
+          </div>
+          <!--end::Container-->
           <div class="row g-4">
       <div class="col-md-12">
-      <div class="card-header border-0">
-        <h3 class="card-title">Items</h3>
-      </div>
+         <!-- Alert Message -->
+    <?= isset($input) ? $input : '' ?>
+    <?= isset($edit) ? $edit : '' ?>
+    <?= isset($hapus) ? $hapus : '' ?>
   </div>
   <!-- button create -->
   <div class="mt-2">
@@ -135,47 +159,65 @@ if(isset($_SESSION['alert_update'])) {
   <!-- end button create -->
 
   <form action="<?= BASE_URL ?>controllers/itemsController.php" method="GET" class="d-flex mb-3">
+  <input type="hidden" name="page" value="<?= $page ?>">
   <input type="text" name="search" class="form-control me-2" placeholder="Search">
   <button class="btn btn-primary m-2" type="submit">Search</button>
   <a href="<?= BASE_URL ?>pages/dataItems.php" class="btn btn-secondary m-2">Reset</a>
 </form>
 
+                <!-- Table Items -->
+                <div class="card mb-4">
+                  <div class="card-header"><h3 class="card-title">Table Items</h3></div>
+                  <!-- /.card-header -->
+                  <div class="card-body">
+                    <table class="table table-bordered">
+                      <thead>
+                        <tr>
+                          <th style="width: 10px">Ref_No</th>
+                          <th style="width: 40px;">Nama Barang</th>
+                          <th style="width: 40px;">Harga</th>
+                          <th style="width: 10px;">Action</th>
+                        </tr>
+                      </thead>
+                      <?php foreach ($items as $item): ?>
+                      <tbody>
+                        <tr class="align-middle">
+                          <td><?= htmlspecialchars($item['ref_no'])?></td>
+                          <td><?= htmlspecialchars($item['name'])?></td>
+                          <td>
+                          <?= htmlspecialchars('Rp. ' . number_format($item['price'], 0,',','.'))?>
+                          </td>
+                          <td>
+                          <a href="<?= BASE_URL?>pages/editItems.php?id=<?= $item['id']?>" class="btn btn-sm btn-warning me-1">
+                            <i class="bi bi-pencil-square me-1"></i>Edit</a>
+                <a href="<?= BASE_URL ?>controllers/itemsController.php?delete_item=<?= $item['id']?>" class="btn btn-sm btn-danger" onclick="return confirm('Are you sure?')">
+                            <i class="bi bi-trash me-1"></i>Delete</a>
+                          </td>
+                        </tr>
+                        <?php endforeach;?>
+                      </tbody>
+                    </table>
+                  </div>
+                  <!-- /.card-body -->
+                  <div class="card-footer clearfix">
+                    <ul class="pagination pagination-sm m-0 float-end">
+                      <?php if ($page > 1): ?>
+                        <li class="page-item"><a class="page-link" href="?page=<?= $page - 1 ?>">&laquo;</a></li>
+                      <?php endif; ?>
 
+                      <?php for ($i = 1; $i <= $totalPages; $i++): ?>
+                        <li class="page-item <?= $i == $page ? 'active' : '' ?>">
+                          <a class="page-link" href="?page=<?= $i ?>"><?= $i ?></a>
+                        </li>
+                      <?php endfor; ?>
 
-    <!-- TABEL ITEMS -->
-    <div class="col-lg-12">
-    <div class="card mb-4">
-      <div class="card-header border-0">
-        <h3 class="card-title">Items</h3>
-      </div>
-      <div class="card-body table-responsive p-0">
-        <table class="table table-striped align-middle">
-          <thead>
-            <tr>
-              <th>REF_NO</th>
-              <th>NAME</th>
-              <th>PRICE</th>
-              <th>ACTION</th>
-            </tr>
-          </thead>
-          <tbody>
-            <?php foreach ($items as $item): ?>
-            <tr>
-              <td><?= htmlspecialchars($item['ref_no'])?></td>
-              <td><?= htmlspecialchars($item['name'])?></td>
-              <td><?= htmlspecialchars('Rp. ' . number_format($item['price'], 2,',','.'))?></td>
-              <td>
-                <a href="<?= BASE_URL?>pages/editItems.php?id=<?= $item['id']?>" class="btn btn-sm btn-warning me-1">Edit</a>
-                <a href="<?= BASE_URL ?>controllers/itemsController.php?delete_item=<?= $item['id']?>" class="btn btn-sm btn-danger" onclick="return confirm('Are you sure?')">Delete</a>
-              </td>
-            </tr>
-            <?php endforeach; ?>
-          </tbody>
-        </table>
-      </div>
-    </div>
-  </div>
-<!-- end table items -->
+                      <?php if ($page < $totalPages): ?>
+                        <li class="page-item"><a class="page-link" href="?page=<?= $page + 1 ?>">&raquo;</a></li>
+                      <?php endif; ?>
+                    </ul>
+                  </div>
+                </div>
+                <!-- /.card -->
 </div>
                   <!-- begin::JavaScript-->
                   <!-- <script>

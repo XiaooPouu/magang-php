@@ -11,13 +11,28 @@ $itemsCostumerModel = new ItemsCostumer($db);
 
 $keyword = $_GET['search'] ?? '';
 
+$page = isset($_GET['page']) ? $_GET['page'] : 1;
+$perPage = 5;
+$offset = ($page - 1) * $perPage;
+
+// hitung total data
+$totalItems_Costumers = $itemsCostumerModel->getCount();
+
+// hitung total halaman
+$totalPages = ceil($totalItems_Costumers / $perPage);
+
+
 if (isset($_SESSION['search_data'])) {
   $data = $_SESSION['search_data'];
   unset($_SESSION['search_data']); // biar gak nyangkut terus
   unset($_SESSION['search_keyword']);
 } else {
-  $data = $itemsCostumerModel->getAll();
+  $data = $itemsCostumerModel->getWithLimit($perPage, $offset);
 }
+
+$formDelete = isset($_SESSION['form_delete']) ? $_SESSION['form_delete'] : [];
+$alert = isset($_SESSION['alert_delete']);
+
 ?>
 
 <!doctype html>
@@ -52,64 +67,127 @@ if (isset($_SESSION['search_data'])) {
       <main class="app-main">
         <div class="app-content-header">
           <div class="container-fluid">
+             <!--begin::Container-->
+          <div class="container-fluid mb-4">
+            <!--begin::Row-->
+            <div class="row">
+              <div class="col-sm-6"><h3 class="mb-0">Data Items Costumers</h3></div>
+              <div class="col-sm-6">
+                <ol class="breadcrumb float-sm-end">
+                  <li class="breadcrumb-item"><a href="<?= BASE_URL?>pages/dataItems_Costumer.php">Data Items Costumers</a></li>
+                  <li class="breadcrumb-item active" aria-current="page">Tabel Items Costumers</li>
+                </ol>
+              </div>
+            </div>
+            <!--end::Row-->
+          </div>
+          <!--end::Container-->
             <div class="row g-4">
+              <!-- untuk notif -->
               <div class="col-md-12">
-                <div class="card-header border-0">
-                  <h3 class="card-title">Items Customer</h3>
-                </div>
-              </div>
+                <!-- notif tambah -->
+              <?php if (isset($_SESSION['alert'])): ?>
+            <div class="alert alert-<?= $_SESSION['alert']['type'] ?> alert-dismissible fade show" role="alert">
+                <?= $_SESSION['alert']['message'] ?>
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+            <?php unset($_SESSION['alert']); ?>
+        <?php endif; ?>
+        <!-- end notif tambah -->
 
-              <!-- Button Create -->
-              <div class="mt-2">
-                <a href="<?= BASE_URL ?>pages/createItemsCostumer.php" class="btn btn-primary btn-sm">Create New</a>
+              <!-- notif update -->
+                  <?php if (isset($_SESSION['alert_update'])): ?>
+                    <div class="alert alert-<?= $_SESSION['alert_update']['type'] ?> alert-dismissible fade show" role="alert">
+                        <?= $_SESSION['alert_update']['message'] ?>
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    </div>
+                    <?php unset($_SESSION['alert_update']); ?>
+                <?php endif; ?>
+                <!-- end notif update -->
+
+                <!-- notif delete -->
+                <?php if (isset($_SESSION['alert_delete'])): ?>
+                    <div class="alert alert-<?= $_SESSION['alert_delete']['type'] ?> alert-dismissible fade show" role="alert">
+                        <?= $_SESSION['alert_delete']['message'] ?>
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    </div>
+                    <?php unset($_SESSION['alert_delete']); ?>
+                <?php endif; ?>
+              <!-- end notif delete -->
               </div>
+                <!-- end untuk notif -->
 
               <!-- Search Form -->
               <form action="<?= BASE_URL ?>controllers/items_costumersController.php" method="GET" class="d-flex mb-3">
                 <input type="text" name="search" class="form-control me-2" placeholder="Search" value="<?= $_SESSION['search_keyword'] ?? '' ?>">
+                <input type="hidden" name="page" value="<?= $page ?>">
                 <button class="btn btn-primary m-2" type="submit">Search</button>
                 <a href="<?= BASE_URL ?>pages/dataItems_Costumer.php" class="btn btn-secondary m-2">Reset</a>
               </form>
 
               <!-- Table Items -->
-              <div class="col-lg-12">
                 <div class="card mb-4">
-                  <div class="card-header border-0">
-                    <h3 class="card-title">Items Customer List</h3>
-                  </div>
-                  <div class="card-body table-responsive p-0">
-                    <table class="table table-striped align-middle">
+                  <div class="card-header"><h3 class="card-title">Table Items Costumers</h3>
+                </div>
+
+                 <!-- Button Create -->
+              <div class="mt-3 mx-3">
+                <a href="<?= BASE_URL ?>pages/createItemsCostumer.php" class="btn btn-primary btn-sm">Create New</a>
+              </div>
+                  <!-- /.card-header -->
+                  <div class="card-body">
+                    <table class="table table-bordered">
                       <thead>
                         <tr>
-                          <th>Item</th>
-                          <th>Customer</th>
+                          <th>Items</th>
+                          <th>Nama Customers</th>
                           <th>Harga</th>
-                          <th>Action</th>
+                          <th >Action</th>
                         </tr>
                       </thead>
-                      <tbody>
                       <?php foreach ($data as $row): ?>
-    <tr>
-      <td><?= htmlspecialchars($row['items_name']) ?></td>
-      <td><?= htmlspecialchars($row['customers_name']) ?></td>
-      <td><?= htmlspecialchars('Rp. ' . number_format($row['price'], 2,',','.')) ?></td>
-      <td>
-  <?php if (isset($row['id_ic'])): ?>
-    <a href="<?= BASE_URL ?>pages/editItemsCostumer.php?id_ic=<?= htmlspecialchars($row['id_ic']) ?>" class="btn btn-sm btn-warning me-1">Edit</a>
-    <a href="<?= BASE_URL ?>controllers/items_costumersController.php?delete_ic=<?= htmlspecialchars($row['id_ic']) ?>" class="btn btn-sm btn-danger" onclick="return confirm('Are you sure?')">Delete</a>
-  <?php else: ?>
-    <span class="text-danger">ID not found</span>
-  <?php endif; ?>
-</td>
-
-    </tr>
-<?php endforeach; ?>
+                      <tbody>
+                        <tr class="align-middle">
+                          <td><?= htmlspecialchars($row['items_name'])?></td>
+                          <td><?= htmlspecialchars($row['customers_name'])?></td>
+                          <td>
+                          <?= htmlspecialchars('Rp. ' . number_format($row['price'], 0,',','.'))?>
+                          </td>
+                          <td>
+                          <?php if (isset($row['id_ic'])): ?>
+                          <a href="<?= BASE_URL ?>pages/editItemsCostumer.php?id_ic=<?= htmlspecialchars($row['id_ic']) ?>" class="btn btn-sm btn-warning me-1">
+                            <i class="bi bi-pencil-square"></i>Edit</a>
+                          <a href="<?= BASE_URL ?>controllers/items_costumersController.php?delete_ic=<?= htmlspecialchars($row['id_ic']) ?>" class="btn btn-sm btn-danger" onclick="return confirm('Are you sure?')">
+                            <i class="bi bi-trash"></i>Delete</a>
+                        <?php else: ?>
+                          <span class="text-danger">ID not found</span>
+                        <?php endif; ?>
+                          </td>
+                        </tr>
+                        <?php endforeach;?>
                       </tbody>
                     </table>
                   </div>
+                  <!-- /.card-body -->
+                  <div class="card-footer clearfix">
+                    <ul class="pagination pagination-sm m-0 float-end">
+                      <?php if ($page > 1): ?>
+                        <li class="page-item"><a class="page-link" href="?page=<?= $page - 1 ?>">&laquo;</a></li>
+                      <?php endif; ?>
+
+                      <?php for ($i = 1; $i <= $totalPages; $i++): ?>
+                        <li class="page-item <?= $i == $page ? 'active' : '' ?>">
+                          <a class="page-link" href="?page=<?= $i ?>"><?= $i ?></a>
+                        </li>
+                      <?php endfor; ?>
+
+                      <?php if ($page < $totalPages): ?>
+                        <li class="page-item"><a class="page-link" href="?page=<?= $page + 1 ?>">&raquo;</a></li>
+                      <?php endif; ?>
+                    </ul>
+                  </div>
                 </div>
-              </div>
-              <!-- End Table -->
+                <!-- /.card -->
             </div>
           </div>
         </div>

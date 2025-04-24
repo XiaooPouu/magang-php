@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Apr 21, 2025 at 10:44 AM
+-- Generation Time: Apr 24, 2025 at 08:51 AM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -33,12 +33,6 @@ CREATE TABLE `customers` (
   `name` varchar(100) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
---
--- Dumping data for table `customers`
---
-
-
-
 -- --------------------------------------------------------
 
 --
@@ -51,12 +45,6 @@ CREATE TABLE `invoice` (
   `tgl_inv` date NOT NULL,
   `customers_id` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
---
--- Dumping data for table `invoice`
---
-
-
 
 -- --------------------------------------------------------
 
@@ -73,12 +61,6 @@ CREATE TABLE `inv_items` (
   `total` decimal(10,2) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
---
--- Dumping data for table `inv_items`
---
-
-
-
 -- --------------------------------------------------------
 
 --
@@ -91,12 +73,6 @@ CREATE TABLE `items` (
   `name` varchar(100) NOT NULL,
   `price` decimal(10,2) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
---
--- Dumping data for table `items`
---
-
-
 
 -- --------------------------------------------------------
 
@@ -124,12 +100,6 @@ CREATE TABLE `suppliers` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
--- Dumping data for table `suppliers`
---
-
-
-
---
 -- Indexes for dumped tables
 --
 
@@ -146,7 +116,7 @@ ALTER TABLE `customers`
 ALTER TABLE `invoice`
   ADD PRIMARY KEY (`id_inv`),
   ADD UNIQUE KEY `kode_inv_unique` (`kode_inv`),
-  ADD KEY `fk_customers_inv` (`customers_id`);
+  ADD KEY `fk_customers_id` (`customers_id`);
 
 --
 -- Indexes for table `inv_items`
@@ -226,7 +196,7 @@ ALTER TABLE `suppliers`
 -- Constraints for table `invoice`
 --
 ALTER TABLE `invoice`
-  ADD CONSTRAINT `fk_customers_inv` FOREIGN KEY (`customers_id`) REFERENCES `customers` (`id`);
+  ADD CONSTRAINT `fk_customers_id` FOREIGN KEY (`customers_id`) REFERENCES `customers` (`id`);
 
 --
 -- Constraints for table `inv_items`
@@ -239,6 +209,8 @@ ALTER TABLE `inv_items`
 -- Constraints for table `items_customers`
 --
 ALTER TABLE `items_customers`
+  ADD CONSTRAINT `fk_items_customers_customers` FOREIGN KEY (`id_customers`) REFERENCES `customers` (`id`),
+  ADD CONSTRAINT `fk_items_customers_items` FOREIGN KEY (`id_items`) REFERENCES `items` (`id`),
   ADD CONSTRAINT `items_customers_ibfk_1` FOREIGN KEY (`id_items`) REFERENCES `items` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
   ADD CONSTRAINT `items_customers_ibfk_2` FOREIGN KEY (`id_customers`) REFERENCES `customers` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 COMMIT;

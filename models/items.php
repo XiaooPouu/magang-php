@@ -39,6 +39,17 @@ class Item {
         ]);
     }
 
+    public function getWhitLimit($limit, $offset) {
+        return $this->db->select("items", "*",[
+            "LIMIT" => [$offset, $limit],
+            "ORDER" => ["id" => "DESC"]
+        ]);
+    }
+
+    public function getCount() {
+        return $this->db->count("items");
+    }
+
     public function delete($id) {
         return $this->db->delete("items", ["id" => $id]);
     }

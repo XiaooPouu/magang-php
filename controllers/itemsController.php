@@ -98,7 +98,7 @@ else if (isset($_GET['delete_item'])) {
 else if (isset($_GET['search'])) {
     $keyword = $_GET['search'];
     $results = $itemModel->search($keyword);
-    $_SESSION['items_data'] = $results->fetch_all(MYSQLI_ASSOC);
+    $_SESSION['items_data'] = $results;
     header('Location:' . BASE_URL . 'pages/dataItems.php');
     exit();
 }

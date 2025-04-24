@@ -57,13 +57,7 @@ $alert = isset($_SESSION['alert']);
     <!--begin::App Wrapper-->
       <div class="app-wrapper">
         <!--begin::Header-->
-        <nav class="app-header navbar navbar-expand bg-body">
-          <!--begin::Container-->
-          <div class="container-fluid">
-           
-          </div>
-          <!--end::Container-->
-        </nav>
+        <?php include BASE_PATH . 'includes/header.php'?>
         <!--end::Header-->
         <?php  include BASE_PATH . 'includes/sidebar.php'  ?>
         <!--begin::App Main-->
@@ -72,6 +66,21 @@ $alert = isset($_SESSION['alert']);
         <div class="app-content-header">
           <!--begin::Container-->
           <div class="container-fluid">
+            <!--begin::Container-->
+          <div class="container-fluid mb-4">
+            <!--begin::Row-->
+            <div class="row">
+              <div class="col-sm-6"><h3 class="mb-0">Form Suppliers</h3></div>
+              <div class="col-sm-6">
+                <ol class="breadcrumb float-sm-end">
+                  <li class="breadcrumb-item"><a href="<?= BASE_URL?>pages/dataSuppliers.php">Data Suppliers</a></li>
+                  <li class="breadcrumb-item active" aria-current="page">Input Form</li>
+                </ol>
+              </div>
+            </div>
+            <!--end::Row-->
+          </div>
+          <!--end::Container-->
           <div class="row g-4">
       <div class="col-md-12">
 
@@ -83,27 +92,57 @@ $alert = isset($_SESSION['alert']);
   <?php unset($_SESSION['alert']); ?>
 <?php endif; ?>
 
-<!-- Form Supplier -->
-<div class="card card-warning card-outline mb-4">
-      <div class="card-header"><div class="card-title">Input Supplier</div></div>
-      <form action="<?= BASE_URL?>controllers/suppliersController.php" method="POST">
-        <div class="card-body row g-3">
-          <div class="col-md-6">
-            <label for="supplier_ref_no" class="form-label">REF NO</label>
-            <input type="text" name="ref_no" class="form-control" id="supplier_ref_no" required value="<?= htmlspecialchars($formData['ref_no']) ?>">
-          </div>
-          <div class="col-md-6">
-            <label for="supplier_name" class="form-label">Name</label>
-            <input type="text" name="name" class="form-control" id="supplier_name" required value="<?= htmlspecialchars($formData['name']) ?>">
-          </div>
-        </div>
-        <div class="card-footer">
-          <button type="submit" name="add_supplier" class="btn btn-warning">Save Supplier</button>
-          <a href="<?= BASE_URL?>pages/dataSuppliers.php" class="btn btn-secondary">Cancel</a>
-        </div>
-      </form>
-    </div>
-   <!-- end form suppliers -->
+                <!--begin::Input Suppliers Group-->
+                <div class="card card-success card-outline mb-4">
+                  <!--begin::Header-->
+                  <div class="card-header"><div class="card-title">Input Items</div></div>
+                  <!--end::Header-->
+                  <form action="<?= BASE_URL?>controllers/suppliersController.php" method="POST">
+                  <!--begin::Body-->
+                  <div class="card-body">
+                    <div class="input-group mb-3">
+                      <span class="input-group-text" id="basic-addon1">Ref_No</span>
+                      <input
+                        type="text"
+                        class="form-control"
+                        placeholder="Kode Supplier"
+                        aria-label="Ref_No"
+                        name="ref_no"
+                        id="item_ref_no"
+                        aria-describedby="basic-addon1"
+                        required
+                        value="<?= htmlspecialchars($formData['ref_no'])?>"
+                      />
+                    </div>
+                    <div class="mb-3">
+                      <label for="basic-url" class="form-label">Nama Supplier</label>
+                      <div class="input-group">
+                        <span class="input-group-text" id="basic-addon3"
+                          >Nama Costumer</span
+                        >
+                        <input
+                          type="text"
+                          class="form-control"
+                          name="name"
+                          id="item_name"
+                          required
+                          aria-describedby="basic-addon3 basic-addon4"
+                          value="<?= htmlspecialchars($formData['name'])?>"
+                        />
+                      </div>
+                      <div class="form-text" id="basic-addon4">
+                        Isi nama Costumer di atas
+                      </div>
+                    </div>
+                  <!--end::Body-->
+                  <!--begin::Footer-->
+                  <div class="card-footer d-flex justify-content-end">
+                    <button type="submit" class="btn btn-success mx-2" name="add_supplier">Submit</button>
+                    <a href="<?= BASE_URL?>pages/dataSuppliers.php" class="btn btn-secondary">Cancel</a>
+                  </div>
+                  </form>
+                  <!--end::Footer-->
+                  </div>
 </div>
                   <!-- begin::JavaScript-->
                   <!-- <script>

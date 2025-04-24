@@ -47,15 +47,28 @@ $alert = isset ($_SESSION['alert_update']);
 
   <body class="layout-fixed sidebar-expand-lg bg-body-tertiary">
     <div class="app-wrapper">
-      <nav class="app-header navbar navbar-expand bg-body">
-        <div class="container-fluid"></div>
-      </nav>
+      <?php include BASE_PATH . 'includes/header.php'; ?>
 
       <?php include BASE_PATH . 'includes/sidebar.php'; ?>
 
       <main class="app-main">
         <div class="app-content-header">
           <div class="container-fluid">
+             <!--begin::Container-->
+          <div class="container-fluid mb-4">
+            <!--begin::Row-->
+            <div class="row">
+              <div class="col-sm-6"><h3 class="mb-0">Edit Invoice</h3></div>
+              <div class="col-sm-6">
+                <ol class="breadcrumb float-sm-end">
+                  <li class="breadcrumb-item"><a href="<?= BASE_URL?>pages/dataInvoice.php">Data Invoice</a></li>
+                  <li class="breadcrumb-item active" aria-current="page">Edit Form</li>
+                </ol>
+              </div>
+            </div>
+            <!--end::Row-->
+          </div>
+          <!--end::Container-->
             <div class="row g-4">
               <div class="col-md-12">
               <?php if ($alert): ?>
@@ -84,7 +97,6 @@ $alert = isset ($_SESSION['alert_update']);
                       <div class="col-md-6">
                         <label for="customer_id" class="form-label">Customer</label>
                         <select name="customers_id" class="form-select" id="customer_id" required>
-  <option value="">-- Pilih Customer --</option>
   <?php foreach ($customers as $customer): ?>
     <option value="<?= $customer['id'] ?>" <?= ($customers_id == $customer['id'] ? 'selected' : '') ?>>
       <?= htmlspecialchars($customer['name']) ?>
@@ -94,9 +106,9 @@ $alert = isset ($_SESSION['alert_update']);
 
                       </div>
                     </div>
-                    <div class="card-footer">
-                      <button type="submit" name="update_invoice" class="btn btn-primary">Save Invoice</button>
-                      <a href="<?= BASE_URL ?>pages/dataInvoice.php" class="btn btn-secondary">Cancel</a>
+                    <div class="card-footer d-flex justify-content-end mx-2">
+                      <button type="submit" name="update_invoice" class="btn btn-primary mx-1">Save Invoice</button>
+                      <a href="<?= BASE_URL ?>pages/dataInvoice.php" class="btn btn-secondary mx-1">Cancel</a>
                     </div>
                   </form>
                 </div>

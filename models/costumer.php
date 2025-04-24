@@ -24,6 +24,17 @@ class Costumer {
         return $this->db->get("customers", "*", ["ref_no" => $ref_no]);
     }
 
+    public function getCount() {
+        return $this->db->count("customers");
+    }
+
+    public function getWhitLimit($limit, $offset) {
+        return $this->db->select("customers", "*",[
+            "LIMIT" => [$offset, $limit],
+            "ORDER" => ["id" => "DESC"]
+        ]);
+    }
+
     public function getById($id) {
         return $this->db->get("customers", "*", ["id" => $id]);
     }

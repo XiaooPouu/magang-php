@@ -37,6 +37,25 @@ class ItemsCostumer {
         ]);
     }
 
+    public function getCount(){
+        return $this->db->count("items_customers");
+    }
+
+    public function getWithLimit($limit, $offset) {
+        return $this->db->select("items_customers (ic)", [
+            "[>]items (i)" => ["id_items" => "id"],
+            "[>]customers (c)" => ["id_customers" => "id"]
+        ], [
+            "ic.id_ic",
+            "i.name(items_name)",
+            "c.name(customers_name)",
+            "ic.price"
+        ], [
+            "LIMIT" => [$offset, $limit],
+            "ORDER" => ["id_ic" => "DESC"]
+        ]);
+    }
+
     public function insert($item_id, $customer_id, $price) {
         return $this->db->insert("items_customers", [
             "id_items"     => $item_id,

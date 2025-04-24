@@ -77,13 +77,7 @@ require_once __DIR__ . '/../config/env.php';
     <!--begin::App Wrapper-->
       <div class="app-wrapper">
         <!--begin::Header-->
-        <nav class="app-header navbar navbar-expand bg-body">
-          <!--begin::Container-->
-          <div class="container-fluid">
-           
-          </div>
-          <!--end::Container-->
-        </nav>
+        <?php include BASE_PATH . 'includes/header.php'  ?>
         <!--end::Header-->
           <?php  include  BASE_PATH . 'includes/sidebar.php'  ?>
             <!--begin::App Main-->
@@ -91,6 +85,21 @@ require_once __DIR__ . '/../config/env.php';
         <!--begin::App Content Header-->
         <div class="app-content-header">
           <!--begin::Container-->
+          <div class="container-fluid mb-3">
+            <!--begin::Row-->
+            <div class="row">
+              <div class="col-sm-6"><h3 class="mb-0">Items Form</h3></div>
+              <div class="col-sm-6">
+                <ol class="breadcrumb float-sm-end">
+                  <li class="breadcrumb-item"><a href="<?= BASE_URL?>pages/dataItems.php">Data Items</a></li>
+                  <li class="breadcrumb-item active" aria-current="page">Edit Form</li>
+                </ol>
+              </div>
+            </div>
+            <!--end::Row-->
+          </div>
+          <!--end::Container-->
+          <!--begin::Container Edit-->
           <div class="container-fluid">
           <div class="row g-4">
 
@@ -102,37 +111,72 @@ require_once __DIR__ . '/../config/env.php';
   <?php unset($_SESSION['alert']); ?>
 <?php endif; ?>
 
-<!-- Form Edit Item -->
-<div class="card card-info card-outline mb-4">
-    <div class="card-header"><div class="card-title">Edit Item</div></div>
-    <form action="<?= BASE_URL?>controllers/itemsController.php" method="POST">
-      <input type="hidden" name="id" value="<?= $formUpdate['id'] ?>">
-      <div class="card-body row g-3">
-        <div class="col-md-4">
-          <label for="item_ref_no" class="form-label">REF NO</label>
-          <input type="text" name="ref_no" class="form-control" id="item_ref_no" value="<?= htmlspecialchars($formUpdate['ref_no']) ?>" required>
-        </div>
-        <div class="col-md-4">
-          <label for="item_name" class="form-label">Name</label>
-          <input type="text" name="name" class="form-control" id="item_name" value="<?= htmlspecialchars($formUpdate['name']) ?>" required>
-        </div>
-        <div class="col-md-4 position-relative">
-              <label for="item_price" class="form-label">Price</label>
-            <div class="input-group">
-                <span class="input-group-text bg-white border-end-0">Rp</span>
-                <input type="number" name="price" class="form-control border-start-0" id="item_price" required value="<?= htmlspecialchars($formUpdate['price'])?>">
-            </div>
-        </div>
-      </div>
-      <div class="card-footer">
-        <button type="submit" name="update_item" class="btn btn-info">Update Item</button>
-        <a href="<?= BASE_URL?>pages/dataItems.php" class="btn btn-secondary">Cancel</a>
-      </div>
-    </form>
-  </div>
-  <!-- end Form Edit Item  -->
-
-
+                <!--begin::Input Group-->
+                <div class="card card-success card-outline mb-4">
+                  <!--begin::Header-->
+                  <div class="card-header"><div class="card-title">Input Items</div></div>
+                  <!--end::Header-->
+                  <form action="<?= BASE_URL?>controllers/itemsController.php" method="POST">
+                  <input type="hidden" name="id" value="<?= $formUpdate['id'] ?>">
+                  <!--begin::Body-->
+                  <div class="card-body">
+                    <div class="input-group mb-3">
+                      <span class="input-group-text" id="basic-addon1">Ref_No</span>
+                      <input
+                        type="text"
+                        class="form-control"
+                        placeholder="Kode Items"
+                        aria-label="Ref_No"
+                        name="ref_no"
+                        id="item_ref_no"
+                        aria-describedby="basic-addon1"
+                        required
+                        value="<?= htmlspecialchars($formUpdate['ref_no'])?>"
+                      />
+                    </div>
+                    <div class="mb-3">
+                      <label for="basic-url" class="form-label">Nama Items</label>
+                      <div class="input-group">
+                        <span class="input-group-text" id="basic-addon3"
+                          >Nama Items</span
+                        >
+                        <input
+                          type="text"
+                          class="form-control"
+                          name="name"
+                          id="item_name"
+                          required
+                          aria-describedby="basic-addon3 basic-addon4"
+                          value="<?= htmlspecialchars($formUpdate['name'])?>"
+                        />
+                      </div>
+                      <div class="form-text" id="basic-addon4">
+                        Isi nama items di atas
+                      </div>
+                    </div>
+                    <div class="input-group mb-3">
+                      <span class="input-group-text">Rp.</span>
+                      <input
+                        type="number"
+                        class="form-control"
+                        aria-label="Amount (to the nearest dollar)"
+                        name="price"
+                        id="item_price"
+                        required 
+                        value="<?= htmlspecialchars($formUpdate['price'])?>"
+                      />
+                      <span class="input-group-text">.00</span>
+                    </div>
+                  <!--end::Body-->
+                  <!--begin::Footer-->
+                  <div class="card-footer d-flex justify-content-end">
+                    <button type="submit" class="btn btn-success mx-2" name="update_item">Submit</button>
+                    <a href="<?= BASE_URL?>pages/dataItems.php" class="btn btn-secondary">Cancel</a>
+                  </div>
+                  </form>
+                  <!--end::Footer-->
+                  </div>
+                <!--end::Input Group-->
 </div>
                   <!-- begin::JavaScript-->
                   <!-- <script>

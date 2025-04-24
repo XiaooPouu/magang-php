@@ -29,10 +29,7 @@ $customers = $costumerModel->getAll();
 
   <body class="layout-fixed sidebar-expand-lg bg-body-tertiary">
     <div class="app-wrapper">
-      <!-- Navbar -->
-      <nav class="app-header navbar navbar-expand bg-body">
-        <div class="container-fluid"></div>
-      </nav>
+      <?php include BASE_PATH . 'includes/header.php'; ?>
 
       <!-- Sidebar -->
       <?php include BASE_PATH . 'includes/sidebar.php'; ?>
@@ -41,9 +38,23 @@ $customers = $costumerModel->getAll();
       <main class="app-main">
         <div class="app-content-header">
           <div class="container-fluid">
+            <!--begin::Container-->
+          <div class="container-fluid mb-4">
+            <!--begin::Row-->
+            <div class="row">
+              <div class="col-sm-6"><h3 class="mb-0">Input Items Costumers</h3></div>
+              <div class="col-sm-6">
+                <ol class="breadcrumb float-sm-end">
+                  <li class="breadcrumb-item"><a href="<?= BASE_URL?>pages/dataItems_Costumer.php">Data Items Costumers</a></li>
+                  <li class="breadcrumb-item active" aria-current="page">Input Form</li>
+                </ol>
+              </div>
+            </div>
+            <!--end::Row-->
+          </div>
+          <!--end::Container-->
             <div class="row g-4">
               <div class="col-12">
-                <h1>Tambah Data Item Customer</h1>
 
                 <!-- Notifikasi -->
                 <?php if (isset($_SESSION['alert'])): ?>
@@ -54,41 +65,72 @@ $customers = $costumerModel->getAll();
                   <?php unset($_SESSION['alert']); ?>
                 <?php endif; ?>
 
-                <!-- Form -->
-                <form action="<?= BASE_URL ?>controllers/items_costumersController.php" method="POST" class="row g-3">
-                  <div class="col-md-4">
-                    <label for="items_id" class="form-label">Item</label>
-                    <select name="items_id" class="form-select" required>
-                      <option value="" selected disabled>-- Pilih Item --</option>
+                <!--begin::Form Validation-->
+                <div class="card card-info card-outline mb-4">
+                  <!--begin::Header-->
+                  <div class="card-header"><div class="card-title">Form Items Costumer</div></div>
+                  <!--end::Header-->
+                  <!--begin::Form-->
+                  <form action="<?= BASE_URL ?>controllers/items_costumersController.php" method="POST">
+                    <!--begin::Body-->
+                    <div class="card-body">
+                      <!--begin::Row-->
+                      <div class="row g-3">
+                       <!--begin::Col-->
+                       <div class="col-md-6">
+                          <label for="items_id" class="form-label">Nama Items</label>
+                          <select class="form-select" name="items_id" id="items_id" required>
+                          <option value="" selected disabled> Pilih Item... </option>
                       <?php foreach ($items as $item): ?>
                         <option value="<?= $item['id'] ?>"><?= $item['name'] ?></option>
                       <?php endforeach; ?>
-                    </select>
-                  </div>
-
-                  <div class="col-md-4">
-                    <label for="customers_id" class="form-label">Customer</label>
-                    <select name="customers_id" class="form-select" required>
-                      <option value="" selected disabled>-- Pilih Customer --</option>
+                          </select>
+                          <div class="invalid-feedback">Please select a valid state.</div>
+                        </div>
+                        <!--end::Col-->
+                        <!--begin::Col-->
+                        <div class="col-md-6">
+                          <label for="customers_id" class="form-label">Nama Costumers</label>
+                          <select class="form-select" name="customers_id" id="customers_id" required>
+                          <option value="" selected disabled>-- Pilih Customer --</option>
                       <?php foreach ($customers as $cust): ?>
                         <option value="<?= $cust['id'] ?>"><?= $cust['name'] ?></option>
                       <?php endforeach; ?>
-                    </select>
-                  </div>
-
-                  <div class="col-md-4">
-                    <label for="price" class="form-label">Harga</label>
-                    <input type="number" name="price" class="form-control" required>
-                  </div>
-
-                  <div class="col-12">
-                    <button type="submit" name="add_item_customer" class="btn btn-primary">
+                          </select>
+                          <div class="invalid-feedback">Please select a valid state.</div>
+                        </div>
+                        <!--end::Col-->
+                        <!--begin::Col-->
+                        <div class="col-md-6">
+                          <label for="price" class="form-label">Harga</label>
+                          <div class="input-group has-validation">
+                            <span class="input-group-text" id="inputGroupPrepend">Rp.</span>
+                            <input
+                              type="number"
+                              class="form-control"
+                              id="price"
+                              aria-describedby="inputGroupPrepend"
+                              required
+                              name="price"
+                            />
+                            <div class="invalid-feedback">Please choose a username.</div>
+                          </div>
+                        </div>
+                        <!--end::Col-->
+                      </div>
+                      <!--end::Row-->
+                    </div>
+                    <!--end::Body-->
+                    <!--begin::Footer-->
+                    <div class="card-footer d-flex justify-content-end">
+                      <button type="submit" name="add_item_customer" class="btn btn-info">
                       <i class="bi bi-save me-1"></i> Simpan
                     </button>
                     <a href="<?= BASE_URL ?>pages/dataItems_Costumer.php" class="btn btn-secondary ms-2">← Kembali</a>
-                  </div>
-                </form>
-                <!-- End Form -->
+                    </div>
+                    <!--end::Footer-->
+                  </form>
+                  <!--end::Form-->
               </div>
             </div>
           </div>

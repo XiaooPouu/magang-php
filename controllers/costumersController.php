@@ -107,7 +107,7 @@ else if (isset($_GET['delete_costumer'])) {
 else if(isset($_GET['search'])){
     $keyword = $_GET['search'];
     $results = $costumerModel->search($keyword);
-    $_SESSION['costumers_data'] = $results->fetch_all(MYSQLI_ASSOC);
+    $_SESSION['costumers_data'] = $results;
     header('Location:' . BASE_URL . 'pages/dataCostumer.php');
     exit();
 }

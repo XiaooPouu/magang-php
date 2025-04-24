@@ -20,6 +20,17 @@ class Supplier {
         return $this->db->select("suppliers", "*");
     }
 
+    public function getCount() {
+        return $this->db->count("suppliers");
+    }
+
+    public function getWithLimit($limit, $offset) {
+        return $this->db->select("suppliers", "*", [
+            "LIMIT" => [$offset, $limit],
+            "ORDER" => ["id" => "DESC"]
+        ]);
+    }
+
     public function getByRefNo($ref_no) {
         return $this->db->get("suppliers", "*", ["ref_no" => $ref_no]);
     }

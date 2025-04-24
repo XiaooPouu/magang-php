@@ -18,7 +18,7 @@ if (isset($_POST['add_item_customer'])) {
 
     $_SESSION['alert'] = [
         'type' => $success ? 'success' : 'danger',
-        'message' => $success ? 'Data berhasil ditambahkan!' : 'Gagal menambahkan data.'
+        'message' => $success ? 'Items Customer berhasil ditambahkan!' : 'Gagal menambahkan data.'
     ];
 
     header('Location: ' . BASE_URL . 'pages/dataItems_Costumer.php');
@@ -28,7 +28,10 @@ if (isset($_POST['add_item_customer'])) {
 else if (isset($_GET['delete_ic'])){
     $id_ic = $_GET['delete_ic'];
     $success = $model->delete($id_ic);
-
+    $_SESSION['alert_delete'] = [
+        'type' => 'success',
+        'message' => 'Item berhasil dihapus!'
+    ];
     header('Location: ' . BASE_URL . 'pages/dataItems_Costumer.php');
     exit();
 }
@@ -41,7 +44,10 @@ else if(isset($_POST['update_ic'])){
     $price = $_POST['price'];
 
     $success = $model->update($id_ic, $item_id, $customer_id, $price);
-
+    $_SESSION['alert_update'] = [
+        'type' => 'success',
+        'message' => 'Item berhasil diupdate!'
+    ];
     header('Location: ' . BASE_URL . 'pages/dataItems_Costumer.php');
     exit();
 }
