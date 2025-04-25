@@ -104,7 +104,7 @@ else if (isset($_GET['delete_supplier'])) {
 else if (isset($_GET['search'])) {
     $keyword = $_GET['search'];
     $results = $supplierModel->search($keyword);
-    $_SESSION['suppliers_data'] = $results->fetch_all(MYSQLI_ASSOC);
+    $_SESSION['suppliers_data'] = $results;
     header('Location:' . BASE_URL . 'pages/dataSuppliers.php');
     exit();
 }
