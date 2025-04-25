@@ -151,11 +151,6 @@ if(isset($_SESSION['alert_update'])) {
     <?= isset($edit) ? $edit : '' ?>
     <?= isset($hapus) ? $hapus : '' ?>
   </div>
-  <!-- button create -->
-  <div class="mt-2">
-    <a href="<?= BASE_URL?>pages/createCostumer.php" class="btn btn-primary btn-sm">Create New</a>
-  </div>
-  <!-- end button create -->
 
   <form action="<?= BASE_URL ?>controllers/costumersController.php" method="GET" class="d-flex mb-3">
   <input type="hidden" name="page" value="<?= $page ?>">
@@ -166,7 +161,14 @@ if(isset($_SESSION['alert_update'])) {
 
               <!-- tabel costumer -->
                 <div class="card mb-4">
-                  <div class="card-header"><h3 class="card-title">Table Costumers</h3></div>
+                  <div class="card-header"><h3 class="card-title">Table Costumers</h3>
+                </div>
+                <!-- button create -->
+            <div class="mx-3 mt-3">
+              <a href="<?= BASE_URL?>pages/createCustomerInvoice.php" class="btn btn-primary btn-sm">
+              <i class="bi bi-plus-circle me-1"></i> Create New</a>
+            </div>
+            <!-- end button create -->
                   <!-- /.card-header -->
                   <div class="card-body">
                     <table class="table table-bordered">

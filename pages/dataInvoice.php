@@ -28,6 +28,9 @@ if (isset($_SESSION['search_data'])) {
   $data = $_SESSION['search_data'];
   unset($_SESSION['search_data']); // biar gak nyangkut terus
   unset($_SESSION['search_keyword']);
+  unset($_SESSION['search_customer']);
+  unset($_SESSION['search_tgl_dari']);
+  unset($_SESSION['search_tgl_ke']);
 } else {
   $data = $invoiceModel->getWithLimit($offset, $perPage); // ambil data();
 }

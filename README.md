@@ -53,7 +53,8 @@ Atau:
 
 1. Buka **phpMyAdmin**
 2. Buat database, misalnya: `web_magang`
-3. Import file `magang_php.sql` dari folder `sql/`
+3. Import file `schema.sql` dari folder `sql/` untuk struktur tabel databasenya
+4. Import file `sample-data.sql` dari folder `sql/` untuk data dummy-nya
 
 ---
 
@@ -66,6 +67,8 @@ define('DB_HOST', 'localhost');
 define('DB_USER', 'root');
 define('DB_PASS', null);
 define('DB_NAME', ''); // isi dengan nama database
+
+define('BASE_URL', 'http://localhost/nama_projek_kalian/'); //rubah sesuai dengan localhost projek kalian atau vhost kalian
 ```
 
 ---

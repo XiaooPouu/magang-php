@@ -121,7 +121,8 @@ $alert = isset($_SESSION['alert_delete']);
               <form action="<?= BASE_URL ?>controllers/items_costumersController.php" method="GET" class="d-flex mb-3">
                 <input type="text" name="search" class="form-control me-2" placeholder="Search" value="<?= $_SESSION['search_keyword'] ?? '' ?>">
                 <input type="hidden" name="page" value="<?= $page ?>">
-                <button class="btn btn-primary m-2" type="submit">Search</button>
+                <button class="btn btn-primary m-2" type="submit">
+                  Search</button>
                 <a href="<?= BASE_URL ?>pages/dataItems_Costumer.php" class="btn btn-secondary m-2">Reset</a>
               </form>
 
@@ -132,7 +133,8 @@ $alert = isset($_SESSION['alert_delete']);
 
                  <!-- Button Create -->
               <div class="mt-3 mx-3">
-                <a href="<?= BASE_URL ?>pages/createItemsCostumer.php" class="btn btn-primary btn-sm">Create New</a>
+                <a href="<?= BASE_URL ?>pages/createItemsCostumer.php" class="btn btn-primary btn-sm">
+                  <i class="bi bi-plus-circle me-1"></i>Create New</a>
               </div>
                   <!-- /.card-header -->
                   <div class="card-body">

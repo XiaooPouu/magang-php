@@ -152,12 +152,7 @@ if(isset($_SESSION['alert_update'])) {
     <?= isset($edit) ? $edit : '' ?>
     <?= isset($hapus) ? $hapus : '' ?>
   </div>
-  <!-- button create -->
-  <div class="mt-2">
-    <a href="<?= BASE_URL ?>pages/createItems.php" class="btn btn-primary btn-sm">Create New</a>
-  </div>
-  <!-- end button create -->
-
+  
   <form action="<?= BASE_URL ?>controllers/itemsController.php" method="GET" class="d-flex mb-3">
   <input type="hidden" name="page" value="<?= $page ?>">
   <input type="text" name="search" class="form-control me-2" placeholder="Search">
@@ -168,6 +163,12 @@ if(isset($_SESSION['alert_update'])) {
                 <!-- Table Items -->
                 <div class="card mb-4">
                   <div class="card-header"><h3 class="card-title">Table Items</h3></div>
+                  <!-- button create -->
+                    <div class="mt-3 mx-3">
+                      <a href="<?= BASE_URL ?>pages/createItems.php" class="btn btn-primary btn-sm">
+                        <i class="bi bi-plus-circle me-1"></i>Create New</a>
+                    </div>
+                    <!-- end button create -->
                   <!-- /.card-header -->
                   <div class="card-body">
                     <table class="table table-bordered">
