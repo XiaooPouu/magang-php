@@ -79,3 +79,27 @@ switch ($action) {
         echo "Aksi tidak dikenali.";
         break;
 }
+
+// Handle search di luar switch supaya bisa jalan tanpa "action"
+if (isset($_GET['search'])) {
+    $keyword = $_GET['search'];
+    $invoice_id = $_GET['id_inv'] ?? null;
+
+    if (!empty($keyword) && $invoice_id) {
+        // Panggil fungsi search untuk mencari data dengan keyword dan invoice_id
+        $invoiceItems = $model->search($keyword, $invoice_id);
+
+        // Simpan data pencarian di session untuk digunakan di halaman dataInvoiceItems
+        $_SESSION['search_data'] = $invoiceItems;
+        $_SESSION['search_keyword'] = $keyword;
+
+        // Redirect ke halaman dataInvoiceItems.php dengan parameter id_inv
+        header('Location:' . BASE_URL . 'pages/dataInvoiceItems.php?id_inv=' . $invoice_id);
+        exit;
+    } else {
+        // Jika keyword atau invoice_id tidak ditemukan
+        echo "Keyword atau ID invoice tidak ditemukan.";
+    }
+}
+
+

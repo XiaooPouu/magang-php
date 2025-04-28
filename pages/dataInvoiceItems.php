@@ -10,7 +10,7 @@ include BASE_PATH . 'models/items.php';
 $db = (new Database())->getConnection();
 
 $id_inv = $_GET['id_inv'] ?? $_SESSION['invoice_id'] ?? null;
-
+$invoiceItemsModel = new InvoiceItems($db);
 
 $invoiceModel = new Invoice($db);
 $invoice = $invoiceModel->getById($id_inv);
@@ -18,8 +18,26 @@ if (!$invoice) {
     die("Data invoice tidak ditemukan.");
 }
 
-$invoiceItemsModel = new InvoiceItems($db);
-$invoiceItems = $invoiceItemsModel->getByInvoiceId($id_inv);
+$keyword = $_GET['search'] ?? '';
+$search_data = $_SESSION['search_data'] ?? [];
+
+$page = isset($_GET['page']) ? (int)$_GET['page'] : 1;
+$perPage = 5;
+$offset = ($page - 1) * $perPage;
+
+// Jika ada pencarian, jalankan pencarian
+if (!empty($keyword)) {
+  $invoiceItems = $invoiceItemsModel->search($keyword, $id_inv);
+  $_SESSION['search_data'] = $invoiceItems; // Simpan data pencarian ke session
+  $_SESSION['search_keyword'] = $keyword;
+} else {
+  // Ambil data invoice items dengan pagination
+  $invoiceItems = $invoiceItemsModel->getWithLimit($perPage, $offset, $id_inv);
+}
+
+$invoiceItems = $invoiceItemsModel->getByInvoiceId($id_inv, $perPage, $offset);
+$totalInvoiceItems = $invoiceItemsModel->getCountByInvoiceId($id_inv);
+$totalPages = ceil($totalInvoiceItems / $perPage);
 
 // Hitung total dan jumlah barang
 $totalHarga = 0;
@@ -115,11 +133,6 @@ $items = $itemsModel->getAll();
             <a href="<?= BASE_URL ?>pages/createInvoiceItems.php?id_inv=<?= $invoice['id_inv'] ?>" class="btn btn-primary btn-sm">
               <i class="bi bi-plus-circle me-1"></i> Tambah Item
             </a>
-            <form class="d-flex" method="GET" action="">
-              <input type="hidden" name="id_inv" value="<?= htmlspecialchars($id_inv) ?>">
-              <input type="text" name="search" class="form-control form-control-sm me-2" placeholder="Search item...">
-              <button class="btn btn-secondary btn-sm" type="submit">Cari</button>
-            </form>
           </div>
 
           <!-- Tabel Item -->
@@ -146,9 +159,9 @@ $items = $itemsModel->getAll();
                       <td>Rp. <?= number_format($item['total'], 0, ',', '.') ?></td>
                       <td>
                       <a href="<?= BASE_URL ?>pages/editInvoiceItems.php?id=<?= $item['id'] ?>&id_inv=<?= $invoice['id_inv'] ?>" 
-   class="btn btn-warning btn-sm">
-   <i class="bi bi-pencil-square"></i>
-</a>
+                        class="btn btn-warning btn-sm">
+                        <i class="bi bi-pencil-square"></i>
+                      </a>
 
 
                         <a href="<?= BASE_URL?>controllers/invoice_itemsController.php?action=delete&id=<?= $item['id'] ?>" 
@@ -167,6 +180,23 @@ $items = $itemsModel->getAll();
               </tbody>
             </table>
           </div>
+          <div class="card-footer clearfix">
+                    <ul class="pagination pagination-sm m-0 float-end">
+                      <?php if ($page > 1): ?>
+                        <li class="page-item"><a class="page-link" href="?page=<?= $page - 1 ?>&id_inv=<?= $invoice['id_inv'] ?>">&laquo;</a></li>
+                      <?php endif; ?>
+
+                      <?php for ($i = 1; $i <= $totalPages; $i++): ?>
+                        <li class="page-item <?= $i == $page ? 'active' : '' ?>">
+                          <a class="page-link" href="?page=<?= $i ?>&id_inv=<?= $invoice['id_inv'] ?>"><?= $i ?></a>
+                        </li>
+                      <?php endfor; ?>
+
+                      <?php if ($page < $totalPages): ?>
+                        <li class="page-item"><a class="page-link" href="?page=<?= $page + 1 ?>&id_inv=<?= $invoice['id_inv'] ?>">&raquo;</a></li>
+                      <?php endif; ?>
+                    </ul>
+                  </div>
         </div>
       </div>
     </main>

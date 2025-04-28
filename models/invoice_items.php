@@ -11,20 +11,28 @@ class InvoiceItems {
     }
 
     // Ambil semua item dari 1 invoice berdasarkan invoice_id
-    public function getByInvoiceId($invoiceId) {
-        return $this->db->select('inv_items', [
-            '[>]items' => ['items_id' => 'id']
+    public function getByInvoiceId($invoice_id, $limit = null, $offset = null) {
+        $where = [
+            "invoice_id" => $invoice_id
+        ];
+    
+        if ($limit !== null && $offset !== null) {
+            $where["LIMIT"] = [$offset, $limit];
+        }
+    
+        return $this->db->select("inv_items", [
+            "[>]items" => ["items_id" => "id"]
         ], [
-            'inv_items.id',
-            'items.ref_no AS kode_item',
-            'items.name AS nama_item',
-            'inv_items.qty',
-            'inv_items.price',
-            'inv_items.total'
-        ], [
-            'inv_items.invoice_id' => $invoiceId
-        ]);
+            "inv_items.id",
+            "inv_items.invoice_id",
+            "inv_items.qty",
+            "inv_items.price",
+            "inv_items.total",
+            "items.name",
+            "items.ref_no"
+        ], $where);
     }
+    
 
     // Insert item baru ke invoice
     public function insert($invoiceId, $itemsId, $qty, $price = 0) {
@@ -81,6 +89,50 @@ class InvoiceItems {
             'ORDER' => ['inv_items.id' => 'DESC']
         ]);
     }
+
+    public function getCountByInvoiceId($invoice_id) {
+        return $this->db->count("inv_items", [
+            "invoice_id" => $invoice_id
+        ]);
+    }
+    
+
+    public function getWithLimit($limit, $offset, $invoice_id) {
+        return $this->db->select('inv_items', [
+            '[>]items' => ['items_id' => 'id']  // Join tabel items berdasarkan items_id
+        ], [
+            'inv_items.id',
+            'inv_items.invoice_id',
+            'items.name AS item_name',
+            'inv_items.qty',
+            'inv_items.price',
+            'inv_items.total'
+        ], [
+            'inv_items.invoice_id' => $invoice_id,  // Menyaring berdasarkan invoice_id
+            'LIMIT' => [$offset, $limit],  // Menentukan limit dan offset
+            'ORDER' => ['inv_items.id' => 'DESC']  // Mengurutkan berdasarkan id inv_items secara descending
+        ]);
+    }
+
+    public function search($keyword, $invoice_id) {
+        return $this->db->select('inv_items', [
+            '[>]items' => ['items_id' => 'id']
+        ], [
+            'inv_items.id',
+            'inv_items.invoice_id',
+            'items.name',
+            'inv_items.qty',
+            'inv_items.price',
+            'inv_items.total'
+        ], [
+            'AND' => [
+                'inv_items.invoice_id' => $invoice_id,
+                'items.name[~]' => $keyword  // Gunakan operator LIKE
+            ],
+            'ORDER' => ['inv_items.id' => 'DESC']
+        ]);
+    }
+    
 
     // Ambil 1 data berdasarkan ID
     public function getById($id) {
