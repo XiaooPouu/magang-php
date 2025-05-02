@@ -89,7 +89,7 @@ if (!$data) {
                       <!--begin::Row-->
                       <div class="row g-3">
                        <!--begin::Col-->
-                       <div class="col-md-6">
+                       <div class="col-md-4">
                           <label for="items_id" class="form-label">Nama Items</label>
                           <select class="form-select" name="items_id" id="items_id" required>
                           <option value="" disabled>-- Pilih Item --</option>
@@ -103,7 +103,7 @@ if (!$data) {
                         </div>
                         <!--end::Col-->
                         <!--begin::Col-->
-                        <div class="col-md-6">
+                        <div class="col-md-4">
                           <label for="customers_id" class="form-label">Nama Costumers</label>
                           <select class="form-select" name="customers_id" id="customers_id" required>
                           <option value="" disabled>-- Pilih Customer --</option>
@@ -117,7 +117,7 @@ if (!$data) {
                         </div>
                         <!--end::Col-->
                         <!--begin::Col-->
-                        <div class="col-md-6">
+                        <div class="col-md-4">
                           <label for="price" class="form-label">Harga</label>
                           <div class="input-group has-validation">
                             <span class="input-group-text" id="inputGroupPrepend">Rp.</span>

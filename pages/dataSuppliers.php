@@ -159,7 +159,7 @@ if(isset($_SESSION['alert_update'])) {
 
               <!-- tabel Supplier -->
               <div class="card mb-4">
-                  <div class="card-header"><h3 class="card-title">Table Costumers</h3></div>
+                  <div class="card-header"><h3 class="card-title">Table Suppliers</h3></div>
                   <!-- button create -->
                     <div class="mt-3 mx-3">
                       <a href="<?= BASE_URL?>pages/createSuppliers.php" class="btn btn-primary btn-sm"><i class="bi bi-plus-circle me-1"></i>Create New</a>

@@ -92,14 +92,22 @@ else if (isset($_GET['detail_costumer'])) {
 // Hapus costumer
 else if (isset($_GET['delete_costumer'])) {
     $id = $_GET['delete_costumer'];
-    $costumerModel->delete($id);
 
+     if($costumerModel->isUsedId($id)){
+        $_SESSION['alert_delete'] = [
+            'type' => 'danger',
+            'message' => 'Customer tidak dapat dihapus karena masih digunakan di invoice, atau items customers.'
+        ];
+     } else {
+    $costumerModel->delete($id);
 
     // simpan alert_delete ke session
     $_SESSION['alert_delete'] = [
       'type' => 'success',
       'message' => 'Costumer berhasil dihapus!'  
     ];
+}
+
     header('Location:' . BASE_URL . 'pages/dataCostumer.php');
     exit();
 }

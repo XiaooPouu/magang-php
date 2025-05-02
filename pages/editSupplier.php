@@ -122,6 +122,9 @@ require_once __DIR__ . '/../config/env.php';
                   <input type="hidden" name="id" value="<?= $formUpdate['id'] ?>">
                   <!--begin::Body-->
                   <div class="card-body">
+                    <div class="row">
+
+                    <div class="col-md-6">
                     <div class="input-group mb-3">
                       <span class="input-group-text" id="basic-addon1">Ref_No</span>
                       <input
@@ -136,12 +139,11 @@ require_once __DIR__ . '/../config/env.php';
                         value="<?= htmlspecialchars($formUpdate['ref_no'])?>"
                       />
                     </div>
+                    </div>
+
+                    <div class="col-md-6">
                     <div class="mb-3">
-                      <label for="basic-url" class="form-label">Nama Supplier</label>
                       <div class="input-group">
-                        <span class="input-group-text" id="basic-addon3"
-                          >Nama Supplier</span
-                        >
                         <input
                           type="text"
                           class="form-control"
@@ -150,12 +152,16 @@ require_once __DIR__ . '/../config/env.php';
                           required
                           aria-describedby="basic-addon3 basic-addon4"
                           value="<?= htmlspecialchars($formUpdate['name'])?>"
+                          placeholder="Nama Supplier"
                         />
                       </div>
                       <div class="form-text" id="basic-addon4">
                         Isi nama Supplier di atas
                       </div>
+                      </div>
                     </div>
+                    </div>
+                  </div>
                   <!--end::Body-->
                   <!--begin::Footer-->
                   <div class="card-footer d-flex justify-content-end">

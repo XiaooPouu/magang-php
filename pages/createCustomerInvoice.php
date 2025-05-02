@@ -84,15 +84,15 @@ $customers = $customersModel->getAll();
                   </div>
                   <form action="<?= BASE_URL ?>controllers/invoiceController.php" method="POST">
                     <div class="card-body row g-3">
-                      <div class="col-md-6">
+                      <div class="col-md-4">
                         <label for="invoice_code" class="form-label">Kode Invoice</label>
-                        <input type="text" name="kode_inv" class="form-control" id="invoice_code" required value="<?= htmlspecialchars($formData['kode_inv'])?>">
+                        <input type="text" name="kode_inv" class="form-control" id="invoice_code" required value="<?= htmlspecialchars($formData['kode_inv'])?>" placeholder="Kode Invoice">
                       </div>
-                      <div class="col-md-6">
+                      <div class="col-md-4">
                         <label for="invoice_date" class="form-label">Tanggal Invoice</label>
                         <input type="date" name="tgl_inv" class="form-control" id="invoice_date" required value="<?= htmlspecialchars($formData['tgl_inv'])?>">
                       </div>
-                      <div class="col-md-6">
+                      <div class="col-md-4">
                         <label for="customer_id" class="form-label">Customer</label>
                         <select name="customers_id" class="form-select" id="customer_id" required>
                           <option value="">-- Pilih Customer --</option>

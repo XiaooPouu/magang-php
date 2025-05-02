@@ -120,6 +120,8 @@ require_once __DIR__ . '/../config/env.php';
                   <input type="hidden" name="id" value="<?= $formUpdate['id'] ?>">
                   <!--begin::Body-->
                   <div class="card-body">
+                    <div class="row">
+                    <div class="col-md-4">
                     <div class="input-group mb-3">
                       <span class="input-group-text" id="basic-addon1">Ref_No</span>
                       <input
@@ -134,12 +136,11 @@ require_once __DIR__ . '/../config/env.php';
                         value="<?= htmlspecialchars($formUpdate['ref_no'])?>"
                       />
                     </div>
+                    </div>
+
+                    <div class="col-md-4">
                     <div class="mb-3">
-                      <label for="basic-url" class="form-label">Nama Items</label>
                       <div class="input-group">
-                        <span class="input-group-text" id="basic-addon3"
-                          >Nama Items</span
-                        >
                         <input
                           type="text"
                           class="form-control"
@@ -147,6 +148,7 @@ require_once __DIR__ . '/../config/env.php';
                           id="item_name"
                           required
                           aria-describedby="basic-addon3 basic-addon4"
+                          placeholder="Nama Items"
                           value="<?= htmlspecialchars($formUpdate['name'])?>"
                         />
                       </div>
@@ -154,6 +156,9 @@ require_once __DIR__ . '/../config/env.php';
                         Isi nama items di atas
                       </div>
                     </div>
+                    </div>
+
+                    <div class="col-md-4">
                     <div class="input-group mb-3">
                       <span class="input-group-text">Rp.</span>
                       <input
@@ -166,6 +171,8 @@ require_once __DIR__ . '/../config/env.php';
                         value="<?= htmlspecialchars($formUpdate['price'])?>"
                       />
                       <span class="input-group-text">.00</span>
+                    </div>
+                    </div>
                     </div>
                   <!--end::Body-->
                   <!--begin::Footer-->

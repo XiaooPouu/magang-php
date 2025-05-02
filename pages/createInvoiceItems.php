@@ -95,7 +95,7 @@ $invoiceItemsModel = new InvoiceItems($db);
                       <!--begin::Row-->
                       <div class="row g-3">
                        <!--begin::Col-->
-                       <div class="col-md-6">
+                       <div class="col-md-4">
                        <label for="item" class="form-label">Items</label>
                     <select name="items_id" class="form-select" required>
                         <option value="">-- Pilih Item --</option>
@@ -109,14 +109,14 @@ $invoiceItemsModel = new InvoiceItems($db);
                         </div>
                         <!--end::Col-->
                         <!--begin::Col-->
-                        <div class="col-md-6">
+                        <div class="col-md-4">
                         <label for="qty" class="form-label">Qty</label>
                     <input type="number" name="qty" class="form-control" min="1" value="1" required>
                           <div class="invalid-feedback">Please select a valid state.</div>
                         </div>
                         <!--end::Col-->
                         <!--begin::Col-->
-                        <div class="col-md-6">
+                        <div class="col-md-4">
                           <label for="price" class="form-label">Harga (Opsional)</label>
                           <div class="input-group has-validation">
                             <span class="input-group-text" id="inputGroupPrepend">Rp.</span>

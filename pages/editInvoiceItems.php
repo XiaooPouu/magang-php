@@ -100,7 +100,7 @@ if (!$itemData) {
                       <!--begin::Row-->
                       <div class="row g-3">
                        <!--begin::Col-->
-                       <div class="col-md-6">
+                       <div class="col-md-4">
                        <label for="items_id" class="form-label">Nama Item</label>
                     <select name="items_id" id="items_id" class="form-select" required>
                       <?php foreach ($items as $item): ?>
@@ -113,13 +113,13 @@ if (!$itemData) {
                         </div>
                         <!--end::Col-->
                         <!--begin::Col-->
-                        <div class="col-md-6">
+                        <div class="col-md-4">
                         <label for="qty" class="form-label">Qty</label>
                     <input type="number" name="qty" id="qty" value="<?= $itemData['qty'] ?>" class="form-control" required>
                         </div>
                         <!--end::Col-->
                         <!--begin::Col-->
-                        <div class="col-md-6">
+                        <div class="col-md-4">
                           <label for="price" class="form-label">Harga (Opsional)</label>
                           <div class="input-group has-validation">
                             <span class="input-group-text" id="inputGroupPrepend">Rp.</span>

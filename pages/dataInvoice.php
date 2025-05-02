@@ -24,16 +24,21 @@ $totalPages = ceil($total_invoice / $perPage);
 
 $keyword = $_GET['search'] ?? '';
 
-if (isset($_SESSION['search_data'])) {
-  $data = $_SESSION['search_data'];
-  unset($_SESSION['search_data']); // biar gak nyangkut terus
+// Jika tombol reset ditekan, bersihkan semua session pencarian
+if (isset($_GET['reset'])) {
+  unset($_SESSION['search_data']);
   unset($_SESSION['search_keyword']);
   unset($_SESSION['search_customer']);
   unset($_SESSION['search_tgl_dari']);
   unset($_SESSION['search_tgl_ke']);
+}
+
+if (isset($_SESSION['search_data'])) {
+  $data = $_SESSION['search_data'];
 } else {
   $data = $invoiceModel->getWithLimit($offset, $perPage); // ambil data();
 }
+
 
 // hapus notifikasi
 if(isset($_SESSION['alert_delete'])) {
@@ -175,7 +180,7 @@ if(isset($_SESSION['alert_delete'])) {
     <input type="date" name="tgl_ke" class="form-control me-2 mb-2" value="<?= $_SESSION['search_tgl_ke'] ?? '' ?>" placeholder="Tanggal Ke">
     
     <button class="btn btn-primary m-2" type="submit">Search</button>
-    <a href="<?= BASE_URL ?>pages/dataInvoice.php" class="btn btn-secondary m-2">Reset</a>
+    <a href="<?= BASE_URL ?>pages/dataInvoice.php?reset=true" class="btn btn-secondary m-2">Reset</a>
 </form>
 <!-- end search form -->
 

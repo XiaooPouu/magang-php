@@ -29,6 +29,13 @@ class Item {
         return $this->db->get("items", "*", ["ref_no" => $ref_no]);
     }
 
+    public function isUseId($id){
+        $isUsedinInvoiceItems = $this->db->has("inv_items", ["items_id" => $id]);
+        $isUsedinItemsCustomers = $this->db->has("items_customers", ["id_items" => $id]);
+
+        return $isUsedinInvoiceItems || $isUsedinItemsCustomers;
+    }
+
     public function update($id, $ref_no, $name, $price) {
         return $this->db->update("items", [
             "ref_no" => $ref_no,

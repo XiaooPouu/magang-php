@@ -120,6 +120,9 @@ include BASE_PATH. 'models/costumer.php';
                   <input type="hidden" name="id" value="<?= $formUpdate['id'] ?>">
                   <!--begin::Body-->
                   <div class="card-body">
+                    <div class="row">
+
+                    <div class="col-md-6">
                     <div class="input-group mb-3">
                       <span class="input-group-text" id="basic-addon1">Ref_No</span>
                       <input
@@ -134,12 +137,11 @@ include BASE_PATH. 'models/costumer.php';
                         value="<?= htmlspecialchars($formUpdate['ref_no'])?>"
                       />
                     </div>
+                    </div>
+
+                    <div class="col-md-6">
                     <div class="mb-3">
-                      <label for="basic-url" class="form-label">Nama Costumer</label>
                       <div class="input-group">
-                        <span class="input-group-text" id="basic-addon3"
-                          >Nama Costumer</span
-                        >
                         <input
                           type="text"
                           class="form-control"
@@ -148,12 +150,16 @@ include BASE_PATH. 'models/costumer.php';
                           required
                           aria-describedby="basic-addon3 basic-addon4"
                           value="<?= htmlspecialchars($formUpdate['name'])?>"
+                          placeholder="Nama Costumer"
                         />
                       </div>
                       <div class="form-text" id="basic-addon4">
                         Isi nama Costumer di atas
                       </div>
                     </div>
+                    </div>
+                    </div>
+                  </div>
                   <!--end::Body-->
                   <!--begin::Footer-->
                   <div class="card-footer d-flex justify-content-end">

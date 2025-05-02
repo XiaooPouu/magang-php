@@ -165,7 +165,7 @@ if(isset($_SESSION['alert_update'])) {
                 </div>
                 <!-- button create -->
             <div class="mx-3 mt-3">
-              <a href="<?= BASE_URL?>pages/createCustomerInvoice.php" class="btn btn-primary btn-sm">
+              <a href="<?= BASE_URL?>pages/createCostumer.php" class="btn btn-primary btn-sm">
               <i class="bi bi-plus-circle me-1"></i> Create New</a>
             </div>
             <!-- end button create -->

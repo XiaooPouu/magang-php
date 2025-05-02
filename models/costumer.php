@@ -35,6 +35,13 @@ class Costumer {
         ]);
     }
 
+    public function isUsedId($id){
+        $isUsedInInvoice = $this->db->has("invoice", ["customers_id" => $id]);
+        $isUsedInItemsCustomers = $this->db->has("items_customers", ["id_customers" => $id]);
+
+        return $isUsedInInvoice || $isUsedInItemsCustomers;
+    }
+
     public function getById($id) {
         return $this->db->get("customers", "*", ["id" => $id]);
     }

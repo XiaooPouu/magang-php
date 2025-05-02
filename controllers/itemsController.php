@@ -85,11 +85,21 @@ else if (isset($_GET['detail_item'])) {
 // Hapus item
 else if (isset($_GET['delete_item'])) {
     $id = $_GET['delete_item'];
-    $itemModel->delete($id);
-    $_SESSION['alert_delete'] = [
-        'type' => 'success',
-        'message' => 'Item berhasil dihapus!'
-    ];
+
+    if($itemModel->isUseId($id)){
+        $_SESSION['alert_delete'] = [
+            'type' => 'danger',
+            'message' => 'Item tidak dapat dihapus karena masih digunakan di invoice items, atau items customers.'
+        ];
+    }
+    else{
+        $itemModel->delete($id);
+        $_SESSION['alert_delete'] = [
+            'type' => 'success',
+            'message' => 'Item berhasil dihapus!'
+        ];
+    }
+    
     header('Location:' . BASE_URL . 'pages/dataItems.php');
     exit();
 }

@@ -100,55 +100,62 @@ $alert = isset ($_SESSION['alert']);
                   <!--end::Header-->
                   <form action="<?= BASE_URL?>controllers/itemsController.php" method="POST">
                   <!--begin::Body-->
-                  <div class="card-body">
-                    <div class="input-group mb-3">
-                      <span class="input-group-text" id="basic-addon1">Ref_No</span>
-                      <input
-                        type="text"
-                        class="form-control"
-                        placeholder="Kode Items"
-                        aria-label="Ref_No"
-                        name="ref_no"
-                        id="item_ref_no"
-                        aria-describedby="basic-addon1"
-                        required
-                        value="<?= htmlspecialchars($formData['ref_no'])?>"
-                      />
-                    </div>
-                    <div class="mb-3">
-                      <label for="basic-url" class="form-label">Nama Items</label>
-                      <div class="input-group">
-                        <span class="input-group-text" id="basic-addon3"
-                          >Nama Items</span
-                        >
-                        <input
-                          type="text"
-                          class="form-control"
-                          name="name"
-                          id="item_name"
-                          required
-                          aria-describedby="basic-addon3 basic-addon4"
-                          value="<?= htmlspecialchars($formData['name'])?>"
-                        />
+                    <div class="card-body">
+                      <div class="row">
+                        <div class="col-md-4">
+                          <div class="input-group mb-3">
+                            <span class="input-group-text" id="basic-addon1">Ref_No</span>
+                            <input
+                              type="text"
+                              class="form-control"
+                              placeholder="Kode Items"
+                              aria-label="Ref_No"
+                              name="ref_no"
+                              id="item_ref_no"
+                              aria-describedby="basic-addon1"
+                              required
+                              value="<?= htmlspecialchars($formData['ref_no'])?>"
+                            />
+                          </div>
+                        </div>
+
+                        <div class="col-md-4">
+                          <div class="mb-3">
+                            <input
+                              type="text"
+                              class="form-control"
+                              name="name"
+                              id="item_name"
+                              required
+                              aria-describedby="basic-addon3 basic-addon4"
+                              placeholder="Nama Items"
+                              value="<?= htmlspecialchars($formData['name'])?>"
+                            />
+                            <div class="form-text" id="basic-addon4">
+                              Isi nama items di atas
+                            </div>
+                          </div>
+                        </div>
+
+                        <div class="col-md-4">
+                          <div class="input-group mb-3">
+                            <span class="input-group-text">Rp.</span>
+                            <input
+                              type="number"
+                              class="form-control"
+                              aria-label="Amount (to the nearest dollar)"
+                              name="price"
+                              id="item_price"
+                              required 
+                              value="<?= htmlspecialchars($formData['price'])?>"
+                            />
+                            <span class="input-group-text">.00</span>
+                          </div>
+                        </div>
                       </div>
-                      <div class="form-text" id="basic-addon4">
-                        Isi nama items di atas
-                      </div>
                     </div>
-                    <div class="input-group mb-3">
-                      <span class="input-group-text">Rp.</span>
-                      <input
-                        type="number"
-                        class="form-control"
-                        aria-label="Amount (to the nearest dollar)"
-                        name="price"
-                        id="item_price"
-                        required 
-                        value="<?= htmlspecialchars($formData['price'])?>"
-                      />
-                      <span class="input-group-text">.00</span>
-                    </div>
-                  <!--end::Body-->
+                    <!--end::Body-->
+
                   <!--begin::Footer-->
                   <div class="card-footer d-flex justify-content-end">
                     <button type="submit" class="btn btn-success mx-2" name="add_item">Submit</button>
