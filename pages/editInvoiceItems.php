@@ -142,11 +142,11 @@ if (!$itemData) {
                     </div>
                     <!--end::Body-->
                     <!--begin::Footer-->
-                    <div class="card-footer d-flex justify-content-end">
-                      <button type="submit" class="btn btn-info">
-                      <i class="bi bi-save me-1"></i> Simpan
+                    <div class="card-footer d-flex align-items-center">
+                    <a href="<?= BASE_URL ?>pages/dataInvoiceItems.php?id_inv=<?= $id_inv ?>" class="btn btn-secondary">← Cancel</a>
+                    <button type="submit" class="btn btn-info ms-auto">
+                      <i class="bi bi-save me-1"></i> Submit
                     </button>
-                    <a href="<?= BASE_URL ?>pages/dataInvoiceItems.php?id_inv=<?= $id_inv ?>" class="btn btn-secondary ms-2">← Kembali</a>
                     </div>
                     <!--end::Footer-->
                   </form>

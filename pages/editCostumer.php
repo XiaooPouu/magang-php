@@ -90,7 +90,7 @@ include BASE_PATH. 'models/costumer.php';
           <div class="container-fluid mb-4">
             <!--begin::Row-->
             <div class="row">
-              <div class="col-sm-6"><h3 class="mb-0">Form Costumers</h3></div>
+              <div class="col-sm-6"><h3 class="mb-0">Costumers Form</h3></div>
               <div class="col-sm-6">
                 <ol class="breadcrumb float-sm-end">
                   <li class="breadcrumb-item"><a href="<?= BASE_URL?>pages/dataCostumer.php">Data Costumer</a></li>
@@ -114,7 +114,8 @@ include BASE_PATH. 'models/costumer.php';
                 <!--begin::Input Group-->
                 <div class="card card-success card-outline mb-4">
                   <!--begin::Header-->
-                  <div class="card-header"><div class="card-title">Edit Costumer</div></div>
+                  <div class="card-header"><div class="card-title">Edit Costumer</div>
+                  </div>
                   <!--end::Header-->
                   <form action="<?= BASE_URL?>controllers/costumersController.php" method="POST">
                   <input type="hidden" name="id" value="<?= $formUpdate['id'] ?>">
@@ -123,6 +124,7 @@ include BASE_PATH. 'models/costumer.php';
                     <div class="row">
 
                     <div class="col-md-6">
+                    <label for="costumer_ref_no" class="form-label">Kode Costumer</label>
                     <div class="input-group mb-3">
                       <span class="input-group-text" id="basic-addon1">Ref_No</span>
                       <input
@@ -131,7 +133,7 @@ include BASE_PATH. 'models/costumer.php';
                         placeholder="Kode Costumer"
                         aria-label="Ref_No"
                         name="ref_no"
-                        id="item_ref_no"
+                        id="costumer_ref_no"
                         aria-describedby="basic-addon1"
                         required
                         value="<?= htmlspecialchars($formUpdate['ref_no'])?>"
@@ -140,13 +142,14 @@ include BASE_PATH. 'models/costumer.php';
                     </div>
 
                     <div class="col-md-6">
+                      <label for="costumer_name" class="form-label">Nama Costumer</label>
                     <div class="mb-3">
                       <div class="input-group">
                         <input
                           type="text"
                           class="form-control"
                           name="name"
-                          id="item_name"
+                          id="costumer_name"
                           required
                           aria-describedby="basic-addon3 basic-addon4"
                           value="<?= htmlspecialchars($formUpdate['name'])?>"
@@ -162,9 +165,9 @@ include BASE_PATH. 'models/costumer.php';
                   </div>
                   <!--end::Body-->
                   <!--begin::Footer-->
-                  <div class="card-footer d-flex justify-content-end">
-                    <button type="submit" class="btn btn-success mx-2" name="update_costumer">Submit</button>
+                  <div class="card-footer d-flex align-items-center">
                     <a href="<?= BASE_URL?>pages/dataCostumer.php" class="btn btn-secondary">Cancel</a>
+                    <button type="submit" class="btn btn-success ms-auto" name="update_costumer">Submit</button>
                   </div>
                   </form>
                   <!--end::Footer-->

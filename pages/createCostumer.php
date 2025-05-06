@@ -102,6 +102,7 @@ $alert = isset($_SESSION['alert']);
                   <div class="card-body">
                   <div class="row">
                   <div class="col-md-6">
+                    <label for="costumer_ref_no" class="form-label">Kode Costumer</label>
                     <div class="input-group mb-3">
                       <span class="input-group-text" id="basic-addon1">Ref_No</span>
                       <input
@@ -110,7 +111,7 @@ $alert = isset($_SESSION['alert']);
                         placeholder="Kode Costumer"
                         aria-label="Ref_No"
                         name="ref_no"
-                        id="item_ref_no"
+                        id="costumer_ref_no"
                         aria-describedby="basic-addon1"
                         required
                         value="<?= htmlspecialchars($formData['ref_no'])?>"
@@ -119,13 +120,14 @@ $alert = isset($_SESSION['alert']);
                     </div>
 
                     <div class="col-md-6">
+                    <label for="costumer_name" class="form-label">Nama Costumer</label>
                     <div class="mb-3">
                       <div class="input-group">
                         <input
                           type="text"
                           class="form-control"
                           name="name"
-                          id="item_name"
+                          id="costumer_name"
                           required
                           aria-describedby="basic-addon3 basic-addon4"
                           value="<?= htmlspecialchars($formData['name'])?>"
@@ -141,9 +143,9 @@ $alert = isset($_SESSION['alert']);
                   </div>
                   <!--end::Body-->
                   <!--begin::Footer-->
-                  <div class="card-footer d-flex justify-content-end">
-                    <button type="submit" class="btn btn-success mx-2" name="add_costumer">Submit</button>
+                  <div class="card-footer d-flex align-items-center">
                     <a href="<?= BASE_URL?>pages/dataCostumer.php" class="btn btn-secondary">Cancel</a>
+                    <button type="submit" class="btn btn-success ms-auto" name="add_costumer">Submit</button>
                   </div>
                   </form>
                   <!--end::Footer-->

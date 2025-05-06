@@ -118,13 +118,14 @@ require_once __DIR__ . '/../config/env.php';
                   <!--begin::Header-->
                   <div class="card-header"><div class="card-title">Edit Supplier</div></div>
                   <!--end::Header-->
-                  <form action="<?= BASE_URL?>controllers/costumersController.php" method="POST">
+                  <form action="<?= BASE_URL?>controllers/suppliersController.php" method="POST">
                   <input type="hidden" name="id" value="<?= $formUpdate['id'] ?>">
                   <!--begin::Body-->
                   <div class="card-body">
                     <div class="row">
 
                     <div class="col-md-6">
+                      <label for="supplier_ref_no" class="form-label">Kode Supplier</label>
                     <div class="input-group mb-3">
                       <span class="input-group-text" id="basic-addon1">Ref_No</span>
                       <input
@@ -133,7 +134,7 @@ require_once __DIR__ . '/../config/env.php';
                         placeholder="Kode Supplier"
                         aria-label="Ref_No"
                         name="ref_no"
-                        id="item_ref_no"
+                        id="supplier_ref_no"
                         aria-describedby="basic-addon1"
                         required
                         value="<?= htmlspecialchars($formUpdate['ref_no'])?>"
@@ -142,13 +143,14 @@ require_once __DIR__ . '/../config/env.php';
                     </div>
 
                     <div class="col-md-6">
+                      <label for="supplier_name" class="form-label">Nama Supplier</label>
                     <div class="mb-3">
                       <div class="input-group">
                         <input
                           type="text"
                           class="form-control"
                           name="name"
-                          id="item_name"
+                          id="supplier_name"
                           required
                           aria-describedby="basic-addon3 basic-addon4"
                           value="<?= htmlspecialchars($formUpdate['name'])?>"
@@ -164,9 +166,9 @@ require_once __DIR__ . '/../config/env.php';
                   </div>
                   <!--end::Body-->
                   <!--begin::Footer-->
-                  <div class="card-footer d-flex justify-content-end">
-                    <button type="submit" class="btn btn-success mx-2" name="update_supplier">Submit</button>
+                  <div class="card-footer d-flex align-items-center">
                     <a href="<?= BASE_URL?>pages/dataSuppliers.php" class="btn btn-secondary">Cancel</a>
+                    <button type="submit" class="btn btn-success ms-auto" name="update_supplier">Submit</button>
                   </div>
                   </form>
                   <!--end::Footer-->

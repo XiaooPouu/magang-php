@@ -54,11 +54,11 @@ $customers = $customersModel->getAll();
           <div class="container-fluid mb-4">
             <!--begin::Row-->
             <div class="row">
-              <div class="col-sm-6"><h3 class="mb-0">Data Invoice</h3></div>
+              <div class="col-sm-6"><h3 class="mb-0">Form Invoice</h3></div>
               <div class="col-sm-6">
                 <ol class="breadcrumb float-sm-end">
                   <li class="breadcrumb-item"><a href="<?= BASE_URL?>pages/dataInvoice.php">Data Invoice</a></li>
-                  <li class="breadcrumb-item active" aria-current="page">Table Invoices</li>
+                  <li class="breadcrumb-item active" aria-current="page">Create Form</li>
                 </ol>
               </div>
             </div>
@@ -104,9 +104,9 @@ $customers = $customersModel->getAll();
                         </select>
                       </div>
                     </div>
-                    <div class="card-footer d-flex justify-content-end mx-2">
-                      <button type="submit" name="save_invoice" class="btn btn-primary mx-1">Save Invoice</button>
-                      <a href="<?= BASE_URL ?>pages/dataInvoice.php" class="btn btn-secondary mx-1">Cancel</a>
+                    <div class="card-footer d-flex align-items-center">
+                      <a href="<?= BASE_URL ?>pages/dataInvoice.php" class="btn btn-secondary">Cancel</a>
+                      <button type="submit" name="save_invoice" class="btn btn-primary ms-auto">Submit</button>
                     </div>
                   </form>
                 </div>

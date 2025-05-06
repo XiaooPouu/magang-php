@@ -96,13 +96,15 @@ $alert = isset ($_SESSION['alert']);
                 <!--begin::Input Group-->
                 <div class="card card-success card-outline mb-4">
                   <!--begin::Header-->
-                  <div class="card-header"><div class="card-title">Input Items</div></div>
+                  <div class="card-header"><div class="card-title">Input Items</div>
+                </div>
                   <!--end::Header-->
                   <form action="<?= BASE_URL?>controllers/itemsController.php" method="POST">
                   <!--begin::Body-->
                     <div class="card-body">
                       <div class="row">
                         <div class="col-md-4">
+                          <label for="item_ref_no" class="form-label">Kode Items</label>
                           <div class="input-group mb-3">
                             <span class="input-group-text" id="basic-addon1">Ref_No</span>
                             <input
@@ -120,6 +122,7 @@ $alert = isset ($_SESSION['alert']);
                         </div>
 
                         <div class="col-md-4">
+                        <label for="item_name" class="form-label">Nama Items</label>
                           <div class="mb-3">
                             <input
                               type="text"
@@ -138,6 +141,7 @@ $alert = isset ($_SESSION['alert']);
                         </div>
 
                         <div class="col-md-4">
+                        <label for="item_price" class="form-label">Harga Items</label>
                           <div class="input-group mb-3">
                             <span class="input-group-text">Rp.</span>
                             <input
@@ -157,13 +161,14 @@ $alert = isset ($_SESSION['alert']);
                     <!--end::Body-->
 
                   <!--begin::Footer-->
-                  <div class="card-footer d-flex justify-content-end">
-                    <button type="submit" class="btn btn-success mx-2" name="add_item">Submit</button>
-                    <a href="<?= BASE_URL?>pages/dataItems.php" class="btn btn-secondary">Cancel</a>
-                  </div>
+                  <div class="card-footer d-flex align-items-center">
+                          <a href="<?= BASE_URL?>pages/dataItems.php" class="btn btn-secondary">Cancel</a>
+                          <button type="submit" class="btn btn-success ms-auto" name="add_item">Submit</button>
+                    </div>
                   </form>
                   <!--end::Footer-->
                   </div>
+                  <!--end::Input Group-->
                   <!--end::JavaScript -->
                 </div>
                 <!--end::Form Validation-->

@@ -42,7 +42,7 @@ $customers = $costumerModel->getAll();
           <div class="container-fluid mb-4">
             <!--begin::Row-->
             <div class="row">
-              <div class="col-sm-6"><h3 class="mb-0">Input Items Costumers</h3></div>
+              <div class="col-sm-6"><h3 class="mb-0">Form Items Costumers</h3></div>
               <div class="col-sm-6">
                 <ol class="breadcrumb float-sm-end">
                   <li class="breadcrumb-item"><a href="<?= BASE_URL?>pages/dataItems_Costumer.php">Data Items Costumers</a></li>
@@ -68,7 +68,7 @@ $customers = $costumerModel->getAll();
                 <!--begin::Form Validation-->
                 <div class="card card-info card-outline mb-4">
                   <!--begin::Header-->
-                  <div class="card-header"><div class="card-title">Form Items Costumer</div></div>
+                  <div class="card-header"><div class="card-title">Input Items Costumer</div></div>
                   <!--end::Header-->
                   <!--begin::Form-->
                   <form action="<?= BASE_URL ?>controllers/items_costumersController.php" method="POST">
@@ -122,11 +122,11 @@ $customers = $costumerModel->getAll();
                     </div>
                     <!--end::Body-->
                     <!--begin::Footer-->
-                    <div class="card-footer d-flex justify-content-end">
-                      <button type="submit" name="add_item_customer" class="btn btn-info">
-                      <i class="bi bi-save me-1"></i> Simpan
+                    <div class="card-footer d-flex align-items-center">
+                    <a href="<?= BASE_URL ?>pages/dataItems_Costumer.php" class="btn btn-secondary">← Cancel</a>
+                    <button type="submit" name="add_item_customer" class="btn btn-info ms-auto">
+                      <i class="bi bi-save me-1"></i> Submit
                     </button>
-                    <a href="<?= BASE_URL ?>pages/dataItems_Costumer.php" class="btn btn-secondary ms-2">← Kembali</a>
                     </div>
                     <!--end::Footer-->
                   </form>

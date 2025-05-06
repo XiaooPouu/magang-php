@@ -114,14 +114,18 @@ require_once __DIR__ . '/../config/env.php';
                 <!--begin::Input Group-->
                 <div class="card card-success card-outline mb-4">
                   <!--begin::Header-->
-                  <div class="card-header"><div class="card-title">Input Items</div></div>
+                  <div class="card-header"><div class="card-title">Input Items</div>
                   <!--end::Header-->
+                  </div>
                   <form action="<?= BASE_URL?>controllers/itemsController.php" method="POST">
                   <input type="hidden" name="id" value="<?= $formUpdate['id'] ?>">
+                  
+
                   <!--begin::Body-->
                   <div class="card-body">
                     <div class="row">
                     <div class="col-md-4">
+                      <label for="item_ref_no" class="form-label">Kode Items</label>
                     <div class="input-group mb-3">
                       <span class="input-group-text" id="basic-addon1">Ref_No</span>
                       <input
@@ -139,6 +143,7 @@ require_once __DIR__ . '/../config/env.php';
                     </div>
 
                     <div class="col-md-4">
+                    <label for="item_name" class="form-label">Nama Items</label>
                     <div class="mb-3">
                       <div class="input-group">
                         <input
@@ -159,6 +164,7 @@ require_once __DIR__ . '/../config/env.php';
                     </div>
 
                     <div class="col-md-4">
+                    <label for="item_price" class="form-label">Harga Items</label>
                     <div class="input-group mb-3">
                       <span class="input-group-text">Rp.</span>
                       <input
@@ -174,11 +180,12 @@ require_once __DIR__ . '/../config/env.php';
                     </div>
                     </div>
                     </div>
+                  </div>
                   <!--end::Body-->
                   <!--begin::Footer-->
-                  <div class="card-footer d-flex justify-content-end">
-                    <button type="submit" class="btn btn-success mx-2" name="update_item">Submit</button>
+                  <div class="card-footer d-flex align-items-center">
                     <a href="<?= BASE_URL?>pages/dataItems.php" class="btn btn-secondary">Cancel</a>
+                    <button type="submit" class="btn btn-success ms-auto" name="update_item">Submit</button>
                   </div>
                   </form>
                   <!--end::Footer-->
