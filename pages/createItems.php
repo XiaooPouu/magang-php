@@ -69,8 +69,8 @@ $alert = isset ($_SESSION['alert']);
           <div class="container-fluid mb-4">
             <!--begin::Row-->
             <div class="row">
-              <div class="col-sm-6"><h3 class="mb-0">Items Form</h3></div>
-              <div class="col-sm-6">
+              <div class="col-md-6"><h3 class="mb-0">Items Form</h3></div>
+              <div class="col-md-6">
                 <ol class="breadcrumb float-sm-end">
                   <li class="breadcrumb-item"><a href="<?= BASE_URL?>pages/dataItems.php">Data Items</a></li>
                   <li class="breadcrumb-item active" aria-current="page">Input Form</li>
@@ -106,11 +106,10 @@ $alert = isset ($_SESSION['alert']);
                         <div class="col-md-4">
                           <label for="item_ref_no" class="form-label">Kode Items</label>
                           <div class="input-group mb-3">
-                            <span class="input-group-text" id="basic-addon1">Ref_No</span>
                             <input
                               type="text"
                               class="form-control"
-                              placeholder="Kode Items"
+                              placeholder="Contoh: ITM001"
                               aria-label="Ref_No"
                               name="ref_no"
                               id="item_ref_no"
@@ -131,12 +130,9 @@ $alert = isset ($_SESSION['alert']);
                               id="item_name"
                               required
                               aria-describedby="basic-addon3 basic-addon4"
-                              placeholder="Nama Items"
+                              placeholder="Masukkan Nama Item Dengan Jelas"
                               value="<?= htmlspecialchars($formData['name'])?>"
                             />
-                            <div class="form-text" id="basic-addon4">
-                              Isi nama items di atas
-                            </div>
                           </div>
                         </div>
 
@@ -150,10 +146,10 @@ $alert = isset ($_SESSION['alert']);
                               aria-label="Amount (to the nearest dollar)"
                               name="price"
                               id="item_price"
-                              required 
+                              required
+                              placeholder="Masukkan Angka Tanpa Pemisah Ribuan" 
                               value="<?= htmlspecialchars($formData['price'])?>"
                             />
-                            <span class="input-group-text">.00</span>
                           </div>
                         </div>
                       </div>
@@ -162,8 +158,10 @@ $alert = isset ($_SESSION['alert']);
 
                   <!--begin::Footer-->
                   <div class="card-footer d-flex align-items-center">
-                          <a href="<?= BASE_URL?>pages/dataItems.php" class="btn btn-secondary">Cancel</a>
-                          <button type="submit" class="btn btn-success ms-auto" name="add_item">Submit</button>
+                          <a href="<?= BASE_URL?>pages/dataItems.php" class="btn btn-secondary" style="padding: 8px 16px;">
+                            <i class="bi bi-x-circle me-1"></i> Cancel</a>
+                          <button type="submit" class="btn btn-success ms-auto" style="padding: 8px 16px;" name="add_item">
+                            <i class="bi bi-check-circle-fill me-1"></i> Submit</button>
                     </div>
                   </form>
                   <!--end::Footer-->

@@ -64,14 +64,12 @@ $alert = isset($_SESSION['alert']);
       <main class="app-main">
         <!--begin::App Content Header-->
         <div class="app-content-header">
-          <!--begin::Container-->
-          <div class="container-fluid">
             <!--begin::Container-->
           <div class="container-fluid mb-4">
             <!--begin::Row-->
             <div class="row">
-              <div class="col-sm-6"><h3 class="mb-0">Costumer Form</h3></div>
-              <div class="col-sm-6">
+              <div class="col-md-6"><h3 class="mb-0">Costumer Form</h3></div>
+              <div class="col-md-6">
                 <ol class="breadcrumb float-sm-end">
                   <li class="breadcrumb-item"><a href="<?= BASE_URL?>pages/dataCostumer.php">Data Costumers</a></li>
                   <li class="breadcrumb-item active" aria-current="page">Input Form</li>
@@ -81,6 +79,8 @@ $alert = isset($_SESSION['alert']);
             <!--end::Row-->
           </div>
           <!--end::Container-->
+          <!--begin::Container-->
+          <div class="container-fluid">
           <div class="row g-4">
       <div class="col-md-12">
 
@@ -104,11 +104,10 @@ $alert = isset($_SESSION['alert']);
                   <div class="col-md-6">
                     <label for="costumer_ref_no" class="form-label">Kode Costumer</label>
                     <div class="input-group mb-3">
-                      <span class="input-group-text" id="basic-addon1">Ref_No</span>
                       <input
                         type="text"
                         class="form-control"
-                        placeholder="Kode Costumer"
+                        placeholder="Contoh: CUS001"
                         aria-label="Ref_No"
                         name="ref_no"
                         id="costumer_ref_no"
@@ -131,11 +130,8 @@ $alert = isset($_SESSION['alert']);
                           required
                           aria-describedby="basic-addon3 basic-addon4"
                           value="<?= htmlspecialchars($formData['name'])?>"
-                          placeholder="Nama Costumer"
+                          placeholder="Masukkan Nama Customer Dengan Jelas"
                         />
-                      </div>
-                      <div class="form-text" id="basic-addon4">
-                        Isi nama Costumer di atas
                       </div>
                     </div>
                     </div>
@@ -144,8 +140,10 @@ $alert = isset($_SESSION['alert']);
                   <!--end::Body-->
                   <!--begin::Footer-->
                   <div class="card-footer d-flex align-items-center">
-                    <a href="<?= BASE_URL?>pages/dataCostumer.php" class="btn btn-secondary">Cancel</a>
-                    <button type="submit" class="btn btn-success ms-auto" name="add_costumer">Submit</button>
+                    <a href="<?= BASE_URL?>pages/dataCostumer.php" class="btn btn-secondary" style="padding: 8px 16px;">
+                      <i class="bi bi-x-circle me-1"></i> Cancel</a>
+                    <button type="submit" class="btn btn-success ms-auto" name="add_costumer" style="padding: 8px 16px;">
+                      <i class="bi bi-check-circle-fill me-1"></i> Submit</button>
                   </div>
                   </form>
                   <!--end::Footer-->
@@ -181,6 +179,7 @@ $alert = isset($_SESSION['alert']);
                 </div>
                 <!--end::Form Validation-->
               </div>
+              
               <!--end::Col-->
             </div>
             <!--end::Row-->

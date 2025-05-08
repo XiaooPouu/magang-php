@@ -85,8 +85,6 @@ require_once __DIR__ . '/../config/env.php';
       <main class="app-main">
         <!--begin::App Content Header-->
         <div class="app-content-header">
-          <!--begin::Container-->
-          <div class="container-fluid">
             <!--begin::Container-->
           <div class="container-fluid mb-4">
             <!--begin::Row-->
@@ -102,6 +100,8 @@ require_once __DIR__ . '/../config/env.php';
             <!--end::Row-->
           </div>
           <!--end::Container-->
+          <!--begin::Container-->
+          <div class="container-fluid">
           <div class="row g-4">
       <div class="col-md-12">
 
@@ -127,11 +127,10 @@ require_once __DIR__ . '/../config/env.php';
                     <div class="col-md-6">
                       <label for="supplier_ref_no" class="form-label">Kode Supplier</label>
                     <div class="input-group mb-3">
-                      <span class="input-group-text" id="basic-addon1">Ref_No</span>
                       <input
                         type="text"
                         class="form-control"
-                        placeholder="Kode Supplier"
+                        placeholder="Contoh: SUP001"
                         aria-label="Ref_No"
                         name="ref_no"
                         id="supplier_ref_no"
@@ -154,11 +153,8 @@ require_once __DIR__ . '/../config/env.php';
                           required
                           aria-describedby="basic-addon3 basic-addon4"
                           value="<?= htmlspecialchars($formUpdate['name'])?>"
-                          placeholder="Nama Supplier"
+                          placeholder="Masukkan Nama Supplier Dengan Jelas"
                         />
-                      </div>
-                      <div class="form-text" id="basic-addon4">
-                        Isi nama Supplier di atas
                       </div>
                       </div>
                     </div>
@@ -167,8 +163,10 @@ require_once __DIR__ . '/../config/env.php';
                   <!--end::Body-->
                   <!--begin::Footer-->
                   <div class="card-footer d-flex align-items-center">
-                    <a href="<?= BASE_URL?>pages/dataSuppliers.php" class="btn btn-secondary">Cancel</a>
-                    <button type="submit" class="btn btn-success ms-auto" name="update_supplier">Submit</button>
+                    <a href="<?= BASE_URL?>pages/dataSuppliers.php" class="btn btn-secondary" style="padding: 8px 16px;">
+                      <i class="bi bi-x-circle me-1"></i> Cancel</a>
+                    <button type="submit" class="btn btn-success ms-auto" name="update_supplier" style="padding: 8px 16px;">
+                      <i class="bi bi-check-circle-fill me-1"></i> Submit</button>
                   </div>
                   </form>
                   <!--end::Footer-->

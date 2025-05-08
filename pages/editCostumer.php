@@ -79,21 +79,19 @@ include BASE_PATH. 'models/costumer.php';
         <!--begin::Header-->
         <?php include BASE_PATH . 'includes/header.php'?>
         <!--end::Header-->
-          <?php  include BASE_PATH . 'includes/sidebar.php'  ?>
-            <!--begin::App Main-->
+        <?php  include BASE_PATH . 'includes/sidebar.php'  ?>
+        <!--begin::App Main-->
       <main class="app-main">
         <!--begin::App Content Header-->
         <div class="app-content-header">
-          <!--begin::Container-->
-          <div class="container-fluid">
             <!--begin::Container-->
           <div class="container-fluid mb-4">
             <!--begin::Row-->
             <div class="row">
-              <div class="col-sm-6"><h3 class="mb-0">Costumers Form</h3></div>
-              <div class="col-sm-6">
+              <div class="col-md-6"><h3 class="mb-0">Costumer Form</h3></div>
+              <div class="col-md-6">
                 <ol class="breadcrumb float-sm-end">
-                  <li class="breadcrumb-item"><a href="<?= BASE_URL?>pages/dataCostumer.php">Data Costumer</a></li>
+                  <li class="breadcrumb-item"><a href="<?= BASE_URL?>pages/dataCostumer.php">Data Costumers</a></li>
                   <li class="breadcrumb-item active" aria-current="page">Edit Form</li>
                 </ol>
               </div>
@@ -101,36 +99,35 @@ include BASE_PATH. 'models/costumer.php';
             <!--end::Row-->
           </div>
           <!--end::Container-->
+          <!--begin::Container-->
+          <div class="container-fluid">
           <div class="row g-4">
+      <div class="col-md-12">
 
-          <?php if ($alert): ?>
-  <div class="alert alert-<?= $_SESSION['alert_update']['type'] ?> alert-dismissible fade show" role="alert">
-    <?= $_SESSION['alert_update']['message'] ?>
+      <?php if ($alert): ?>
+  <div class="alert alert-<?= $_SESSION['alert']['type'] ?> alert-dismissible fade show" role="alert">
+    <?= $_SESSION['alert']['message'] ?>
     <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
   </div>
   <?php unset($_SESSION['alert']); ?>
 <?php endif; ?>
-
-                <!--begin::Input Group-->
-                <div class="card card-success card-outline mb-4">
+    <!--begin::Input Group-->
+    <div class="card card-success card-outline mb-4">
                   <!--begin::Header-->
-                  <div class="card-header"><div class="card-title">Edit Costumer</div>
-                  </div>
+                  <div class="card-header"><div class="card-title">Edit Costumer</div></div>
                   <!--end::Header-->
                   <form action="<?= BASE_URL?>controllers/costumersController.php" method="POST">
-                  <input type="hidden" name="id" value="<?= $formUpdate['id'] ?>">
                   <!--begin::Body-->
+                  
                   <div class="card-body">
-                    <div class="row">
-
-                    <div class="col-md-6">
+                  <div class="row">
+                  <div class="col-md-6">
                     <label for="costumer_ref_no" class="form-label">Kode Costumer</label>
                     <div class="input-group mb-3">
-                      <span class="input-group-text" id="basic-addon1">Ref_No</span>
                       <input
                         type="text"
                         class="form-control"
-                        placeholder="Kode Costumer"
+                        placeholder="Contoh: CUS001"
                         aria-label="Ref_No"
                         name="ref_no"
                         id="costumer_ref_no"
@@ -142,7 +139,7 @@ include BASE_PATH. 'models/costumer.php';
                     </div>
 
                     <div class="col-md-6">
-                      <label for="costumer_name" class="form-label">Nama Costumer</label>
+                    <label for="costumer_name" class="form-label">Nama Costumer</label>
                     <div class="mb-3">
                       <div class="input-group">
                         <input
@@ -153,11 +150,8 @@ include BASE_PATH. 'models/costumer.php';
                           required
                           aria-describedby="basic-addon3 basic-addon4"
                           value="<?= htmlspecialchars($formUpdate['name'])?>"
-                          placeholder="Nama Costumer"
+                          placeholder="Masukkan Nama Customer Dengan Jelas"
                         />
-                      </div>
-                      <div class="form-text" id="basic-addon4">
-                        Isi nama Costumer di atas
                       </div>
                     </div>
                     </div>
@@ -166,11 +160,14 @@ include BASE_PATH. 'models/costumer.php';
                   <!--end::Body-->
                   <!--begin::Footer-->
                   <div class="card-footer d-flex align-items-center">
-                    <a href="<?= BASE_URL?>pages/dataCostumer.php" class="btn btn-secondary">Cancel</a>
-                    <button type="submit" class="btn btn-success ms-auto" name="update_costumer">Submit</button>
+                    <a href="<?= BASE_URL?>pages/dataCostumer.php" class="btn btn-secondary" style="padding: 8px 16px;">
+                      <i class="bi bi-x-circle me-1"></i> Cancel</a>
+                    <button type="submit" class="btn btn-success ms-auto" name="update_costumer" style="padding: 8px 16px;">
+                      <i class="bi bi-check-circle-fill me-1"></i> Submit</button>
                   </div>
                   </form>
                   <!--end::Footer-->
+                  </div>
 </div>
                   <!-- begin::JavaScript-->
                   <!-- <script>
@@ -202,6 +199,7 @@ include BASE_PATH. 'models/costumer.php';
                 </div>
                 <!--end::Form Validation-->
               </div>
+              
               <!--end::Col-->
             </div>
             <!--end::Row-->

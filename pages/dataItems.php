@@ -128,23 +128,30 @@ if(isset($_SESSION['alert_update'])) {
       <main class="app-main">
         <!--begin::App Content Header-->
         <div class="app-content-header">
-          <!--begin::Container-->
-          <div class="container-fluid">
              <!--begin::Container-->
           <div class="container-fluid mb-4">
             <!--begin::Row-->
             <div class="row">
-              <div class="col-sm-6"><h3 class="mb-0">Data Items</h3></div>
-              <div class="col-sm-6">
+              <div class="col-md-6"><h3 class="mb-4">Data Items</h3></div>
+              <div class="col-md-6">
                 <ol class="breadcrumb float-sm-end">
                   <li class="breadcrumb-item"><a href="<?= BASE_URL?>pages/dataItems.php">Data Items</a></li>
                   <li class="breadcrumb-item active" aria-current="page">Tabel Items</li>
                 </ol>
               </div>
+
+              <form action="<?= BASE_URL ?>controllers/itemsController.php" method="GET" class="d-flex mt-md-3">
+                  <input type="hidden" name="page" value="<?= $page ?>">
+                  <input type="text" name="search" class="form-control me-2 mb-2" placeholder="Search">
+                  <button class="btn btn-primary me-2 mb-2" type="submit">Search</button>
+                  <a href="<?= BASE_URL ?>pages/dataItems.php" class="btn btn-secondary me-2 mb-2">Reset</a>
+                </form>
             </div>
             <!--end::Row-->
           </div>
           <!--end::Container-->
+          <!--begin::Container-->
+          <div class="container-fluid">
           <div class="row g-4">
       <div class="col-md-12">
          <!-- Alert Message -->
@@ -152,13 +159,7 @@ if(isset($_SESSION['alert_update'])) {
     <?= isset($edit) ? $edit : '' ?>
     <?= isset($hapus) ? $hapus : '' ?>
   </div>
-  
-  <form action="<?= BASE_URL ?>controllers/itemsController.php" method="GET" class="d-flex mb-3">
-  <input type="hidden" name="page" value="<?= $page ?>">
-  <input type="text" name="search" class="form-control me-2" placeholder="Search">
-  <button class="btn btn-primary m-2" type="submit">Search</button>
-  <a href="<?= BASE_URL ?>pages/dataItems.php" class="btn btn-secondary m-2">Reset</a>
-</form>
+
 
                 <!-- Table Items -->
                 <div class="card mb-4">
@@ -166,7 +167,7 @@ if(isset($_SESSION['alert_update'])) {
                   <!-- button create -->
                     <div class="mt-3 mx-3">
                       <a href="<?= BASE_URL ?>pages/createItems.php" class="btn btn-primary btn-sm">
-                        <i class="bi bi-plus-circle me-1"></i>Create New</a>
+                        <i class="bi bi-plus-circle me-1"></i> Create New</a>
                     </div>
                     <!-- end button create -->
                   <!-- /.card-header -->
@@ -174,10 +175,10 @@ if(isset($_SESSION['alert_update'])) {
                     <table class="table table-bordered">
                       <thead>
                         <tr>
-                          <th style="width: 10px">Ref_No</th>
-                          <th style="width: 40px;">Nama Barang</th>
-                          <th style="width: 40px;">Harga</th>
-                          <th style="width: 10px;">Action</th>
+                          <th style="width: 10px">Kode Items</th>
+                          <th style="width: 40px;">Nama Items</th>
+                          <th style="width: 40px;" class="text-end">Harga Items</th>
+                          <th style="width: 10px;" class="text-center">Action</th>
                         </tr>
                       </thead>
                       <?php foreach ($items as $item): ?>
@@ -185,10 +186,10 @@ if(isset($_SESSION['alert_update'])) {
                         <tr class="align-middle">
                           <td><?= htmlspecialchars($item['ref_no'])?></td>
                           <td><?= htmlspecialchars($item['name'])?></td>
-                          <td>
+                          <td class="text-end">
                           <?= htmlspecialchars('Rp. ' . number_format($item['price'], 0,',','.'))?>
                           </td>
-                          <td>
+                          <td class="text-center">
                           <a href="<?= BASE_URL?>pages/editItems.php?id=<?= $item['id']?>" class="btn btn-sm btn-warning me-1">
                             <i class="bi bi-pencil-square me-1"></i>Edit</a>
                 <a href="<?= BASE_URL ?>controllers/itemsController.php?delete_item=<?= $item['id']?>" class="btn btn-sm btn-danger" onclick="return confirm('Are you sure?')">

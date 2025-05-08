@@ -66,22 +66,32 @@ $alert = isset($_SESSION['alert_delete']);
 
       <main class="app-main">
         <div class="app-content-header">
-          <div class="container-fluid">
              <!--begin::Container-->
           <div class="container-fluid mb-4">
             <!--begin::Row-->
             <div class="row">
-              <div class="col-sm-6"><h3 class="mb-0">Data Items Costumers</h3></div>
+              <div class="col-sm-6"><h3 class="mb-4">Data Items Costumers</h3></div>
               <div class="col-sm-6">
                 <ol class="breadcrumb float-sm-end">
                   <li class="breadcrumb-item"><a href="<?= BASE_URL?>pages/dataItems_Costumer.php">Data Items Costumers</a></li>
                   <li class="breadcrumb-item active" aria-current="page">Tabel Items Costumers</li>
                 </ol>
               </div>
+
+              <!-- Search Form -->
+              <form action="<?= BASE_URL ?>controllers/items_costumersController.php" method="GET" class="d-flex mt-md-3">
+                <input type="text" name="search" class="form-control me-2 mb-2" placeholder="Search" value="<?= $_SESSION['search_keyword'] ?? '' ?>">
+                <input type="hidden" name="page" value="<?= $page ?>">
+                <button class="btn btn-primary me-2 mb-2" type="submit">
+                  Search</button>
+                <a href="<?= BASE_URL ?>pages/dataItems_Costumer.php" class="btn btn-secondary me-2 mb-2">Reset</a>
+              </form>
+
             </div>
             <!--end::Row-->
           </div>
           <!--end::Container-->
+          <div class="container-fluid">
             <div class="row g-4">
               <!-- untuk notif -->
               <div class="col-md-12">
@@ -117,15 +127,6 @@ $alert = isset($_SESSION['alert_delete']);
               </div>
                 <!-- end untuk notif -->
 
-              <!-- Search Form -->
-              <form action="<?= BASE_URL ?>controllers/items_costumersController.php" method="GET" class="d-flex mb-3">
-                <input type="text" name="search" class="form-control me-2" placeholder="Search" value="<?= $_SESSION['search_keyword'] ?? '' ?>">
-                <input type="hidden" name="page" value="<?= $page ?>">
-                <button class="btn btn-primary m-2" type="submit">
-                  Search</button>
-                <a href="<?= BASE_URL ?>pages/dataItems_Costumer.php" class="btn btn-secondary m-2">Reset</a>
-              </form>
-
               <!-- Table Items -->
                 <div class="card mb-4">
                   <div class="card-header"><h3 class="card-title">Table Items Costumers</h3>
@@ -134,7 +135,7 @@ $alert = isset($_SESSION['alert_delete']);
                  <!-- Button Create -->
               <div class="mt-3 mx-3">
                 <a href="<?= BASE_URL ?>pages/createItemsCostumer.php" class="btn btn-primary btn-sm">
-                  <i class="bi bi-plus-circle me-1"></i>Create New</a>
+                  <i class="bi bi-plus-circle me-1"></i> Create New</a>
               </div>
                   <!-- /.card-header -->
                   <div class="card-body">
@@ -143,8 +144,8 @@ $alert = isset($_SESSION['alert_delete']);
                         <tr>
                           <th>Items</th>
                           <th>Nama Customers</th>
-                          <th>Harga</th>
-                          <th >Action</th>
+                          <th class="text-end">Harga</th>
+                          <th class="text-center">Action</th>
                         </tr>
                       </thead>
                       <?php foreach ($data as $row): ?>
@@ -152,15 +153,15 @@ $alert = isset($_SESSION['alert_delete']);
                         <tr class="align-middle">
                           <td><?= htmlspecialchars($row['items_name'])?></td>
                           <td><?= htmlspecialchars($row['customers_name'])?></td>
-                          <td>
+                          <td class="text-end">
                           <?= htmlspecialchars('Rp. ' . number_format($row['price'], 0,',','.'))?>
                           </td>
-                          <td>
+                          <td class="text-center">
                           <?php if (isset($row['id_ic'])): ?>
                           <a href="<?= BASE_URL ?>pages/editItemsCostumer.php?id_ic=<?= htmlspecialchars($row['id_ic']) ?>" class="btn btn-sm btn-warning me-1">
-                            <i class="bi bi-pencil-square"></i>Edit</a>
+                            <i class="bi bi-pencil-square"></i> Edit</a>
                           <a href="<?= BASE_URL ?>controllers/items_costumersController.php?delete_ic=<?= htmlspecialchars($row['id_ic']) ?>" class="btn btn-sm btn-danger" onclick="return confirm('Are you sure?')">
-                            <i class="bi bi-trash"></i>Delete</a>
+                            <i class="bi bi-trash"></i> Delete</a>
                         <?php else: ?>
                           <span class="text-danger">ID not found</span>
                         <?php endif; ?>

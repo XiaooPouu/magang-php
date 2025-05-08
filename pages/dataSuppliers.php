@@ -126,23 +126,30 @@ if(isset($_SESSION['alert_update'])) {
       <main class="app-main">
         <!--begin::App Content Header-->
         <div class="app-content-header">
-          <!--begin::Container-->
-          <div class="container-fluid">
              <!--begin::Container-->
           <div class="container-fluid mb-4">
             <!--begin::Row-->
             <div class="row">
-              <div class="col-sm-6"><h3 class="mb-0">Data Suppliers</h3></div>
+              <div class="col-sm-6"><h3 class="mb-4">Data Suppliers</h3></div>
               <div class="col-sm-6">
                 <ol class="breadcrumb float-sm-end">
                   <li class="breadcrumb-item"><a href="<?= BASE_URL?>pages/dataSuppliers.php">Data Suppliers</a></li>
                   <li class="breadcrumb-item active" aria-current="page">Tabel Suppliers</li>
                 </ol>
               </div>
+
+              <form action="<?= BASE_URL ?>controllers/suppliersController.php" method="GET" class="d-flex mt-md-3">
+                <input type="hidden" name="page" value="<?= $page ?>">
+                <input type="text" name="search" class="form-control me-2 mb-2" placeholder="Search">
+                <button class="btn btn-primary me-2 mb-2" type="submit">Search</button>
+                <a href="<?= BASE_URL ?>pages/dataSuppliers.php" class="btn btn-secondary me-2 mb-2">Reset</a>
+              </form>
             </div>
             <!--end::Row-->
           </div>
           <!--end::Container-->
+          <!--begin::Container-->
+          <div class="container-fluid">
           <div class="row g-4">
       <div class="col-md-12">
         <!-- Alert Message -->
@@ -150,19 +157,13 @@ if(isset($_SESSION['alert_update'])) {
     <?= isset($edit) ? $edit : '' ?>
     <?= isset($hapus) ? $hapus : '' ?>
   </div>
-  
-  <form action="<?= BASE_URL ?>controllers/suppliersController.php" method="GET" class="d-flex mb-3">
-  <input type="text" name="search" class="form-control me-2" placeholder="Search">
-  <button class="btn btn-primary m-2" type="submit">Search</button>
-  <a href="<?= BASE_URL ?>pages/dataSuppliers.php" class="btn btn-secondary m-2">Reset</a>
-</form>
 
               <!-- tabel Supplier -->
               <div class="card mb-4">
                   <div class="card-header"><h3 class="card-title">Table Suppliers</h3></div>
                   <!-- button create -->
                     <div class="mt-3 mx-3">
-                      <a href="<?= BASE_URL?>pages/createSuppliers.php" class="btn btn-primary btn-sm"><i class="bi bi-plus-circle me-1"></i>Create New</a>
+                      <a href="<?= BASE_URL?>pages/createSuppliers.php" class="btn btn-primary btn-sm"><i class="bi bi-plus-circle me-1"></i> Create New</a>
                     </div>
                     <!-- end button create -->
                   <!-- /.card-header -->
@@ -170,9 +171,9 @@ if(isset($_SESSION['alert_update'])) {
                     <table class="table table-bordered">
                       <thead>
                         <tr>
-                          <th>Ref_No</th>
+                          <th>Kode Suppliers</th>
                           <th>Nama Suppliers</th>
-                          <th>Aciton</th>
+                          <th class="text-center">Action</th>
                         </tr>
                       </thead>
                       <?php foreach ($suppliers as $sp):?>
@@ -180,7 +181,7 @@ if(isset($_SESSION['alert_update'])) {
                         <tr class="align-middle">
                           <td><?= htmlspecialchars($sp['ref_no'])?></td>
                           <td><?= htmlspecialchars($sp['name'])?></td>
-                          <td><a href="<?= BASE_URL?>pages/editSupplier.php?id=<?=$sp['id']?>" class="btn btn-sm btn-warning me-1">
+                          <td class="text-center"><a href="<?= BASE_URL?>pages/editSupplier.php?id=<?=$sp['id']?>" class="btn btn-sm btn-warning me-1">
                             <i class="bi bi-pencil-square me-1"></i>Edit</a>
                            <a href="<?= BASE_URL ?>controllers/suppliersController.php?delete_supplier=<?= $sp['id']?>" class="btn btn-sm btn-danger" onclick="return confirm('Are you sure?')">
                             <i class="bi bi-trash me-1"></i>Delete</a>

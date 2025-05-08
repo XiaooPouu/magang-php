@@ -120,30 +120,35 @@ if(isset($_SESSION['alert_update'])) {
         <!--begin::Header-->
         <?php include BASE_PATH . 'includes/header.php' ?>
         <!--end::Header-->
-          <?php  include BASE_PATH .'includes/sidebar.php'  ?>
+          <?php  include BASE_PATH . 'includes/sidebar.php'  ?>
             <!--begin::App Main-->
       <main class="app-main">
         <!--begin::App Content Header-->
         <div class="app-content-header">
-          <!--begin::Container-->
-          <div class="container-fluid">
-            <!--begin::Container-->
-          <div class="container-fluid">
              <!--begin::Container-->
           <div class="container-fluid mb-4">
             <!--begin::Row-->
             <div class="row">
-              <div class="col-sm-6"><h3 class="mb-0">Data Costumers</h3></div>
-              <div class="col-sm-6">
+              <div class="col-md-6"><h3 class="mb-4">Data Costumers</h3></div>
+              <div class="col-md-6">
                 <ol class="breadcrumb float-sm-end">
-                  <li class="breadcrumb-item"><a href="<?= BASE_URL?>pages/dataCostumer.php">Data Costumer</a></li>
+                  <li class="breadcrumb-item"><a href="<?= BASE_URL?>pages/dataCostumer.php">Data Costumers</a></li>
                   <li class="breadcrumb-item active" aria-current="page">Tabel Costumers</li>
                 </ol>
               </div>
+
+              <form action="<?= BASE_URL ?>controllers/costumersController.php" method="GET" class="d-flex mt-md-3">
+                  <input type="hidden" name="page" value="<?= $page ?>">
+                  <input type="text" name="search" class="form-control me-2 mb-2" placeholder="Search">
+                  <button class="btn btn-primary me-2 mb-2" type="submit">Search</button>
+                  <a href="<?= BASE_URL ?>pages/dataCostumer.php" class="btn btn-secondary me-2 mb-2">Reset</a>
+                </form>
             </div>
             <!--end::Row-->
           </div>
           <!--end::Container-->
+          <!--begin::Container-->
+          <div class="container-fluid">
           <div class="row g-4">
       <div class="col-md-12">
         <!-- Alert Message -->
@@ -152,31 +157,22 @@ if(isset($_SESSION['alert_update'])) {
     <?= isset($hapus) ? $hapus : '' ?>
   </div>
 
-  <form action="<?= BASE_URL ?>controllers/costumersController.php" method="GET" class="d-flex mb-3">
-  <input type="hidden" name="page" value="<?= $page ?>">
-  <input type="text" name="search" class="form-control me-2" placeholder="Search">
-  <button class="btn btn-primary m-2" type="submit">Search</button>
-  <a href="<?= BASE_URL ?>pages/dataCostumer.php" class="btn btn-secondary m-2">Reset</a>
-</form>
-
-              <!-- tabel costumer -->
-                <div class="card mb-4">
-                  <div class="card-header"><h3 class="card-title">Table Costumers</h3>
-                </div>
-                <!-- button create -->
-            <div class="mx-3 mt-3">
-              <a href="<?= BASE_URL?>pages/createCostumer.php" class="btn btn-primary btn-sm">
-              <i class="bi bi-plus-circle me-1"></i> Create New</a>
-            </div>
-            <!-- end button create -->
+              <!-- tabel Supplier -->
+              <div class="card mb-4">
+                  <div class="card-header"><h3 class="card-title">Table Costumers</h3></div>
+                  <!-- button create -->
+                    <div class="mt-3 mx-3">
+                      <a href="<?= BASE_URL?>pages/createCostumer.php" class="btn btn-primary btn-sm"><i class="bi bi-plus-circle me-1"></i> Create New</a>
+                    </div>
+                    <!-- end button create -->
                   <!-- /.card-header -->
                   <div class="card-body">
                     <table class="table table-bordered">
                       <thead>
                         <tr>
-                          <th>Ref_No</th>
+                          <th>Kode Costumers</th>
                           <th>Nama Costumers</th>
-                          <th>Aciton</th>
+                          <th class="text-center">Action</th>
                         </tr>
                       </thead>
                       <?php foreach ($customers as $cs):?>
@@ -184,7 +180,7 @@ if(isset($_SESSION['alert_update'])) {
                         <tr class="align-middle">
                           <td><?= htmlspecialchars($cs['ref_no'])?></td>
                           <td><?= htmlspecialchars($cs['name'])?></td>
-                          <td><a href="<?= BASE_URL?>pages/editCostumer.php?id=<?=$cs['id']?>" class="btn btn-sm btn-warning me-1">
+                          <td class="text-center"><a href="<?= BASE_URL?>pages/editCostumer.php?id=<?=$cs['id']?>" class="btn btn-sm btn-warning me-1">
                             <i class="bi bi-pencil-square me-1"></i>Edit</a>
                            <a href="<?= BASE_URL ?>controllers/costumersController.php?delete_costumer=<?= $cs['id']?>" class="btn btn-sm btn-danger" onclick="return confirm('Are you sure?')">
                             <i class="bi bi-trash me-1"></i>Delete</a>
@@ -195,6 +191,7 @@ if(isset($_SESSION['alert_update'])) {
                     </table>
                   </div>
                   <!-- /.card-body -->
+                    <!-- /.card-body -->
                   <div class="card-footer clearfix">
                     <ul class="pagination pagination-sm m-0 float-end">
                       <?php if ($page > 1): ?>
@@ -254,7 +251,7 @@ if(isset($_SESSION['alert_update'])) {
         <!--end::App Content-->
       </main>
       <!--end::App Main-->
-      <?php include BASE_PATH . 'includes/footer.php'?>
+      <?php include BASE_PATH .'includes/footer.php'?>
     </div>
     <!--end::App Wrapper-->
     <!--begin::Script-->

@@ -77,19 +77,19 @@ require_once __DIR__ . '/../config/env.php';
     <!--begin::App Wrapper-->
       <div class="app-wrapper">
         <!--begin::Header-->
-        <?php include BASE_PATH . 'includes/header.php'  ?>
+        <?php  include BASE_PATH . 'includes/header.php'  ?>
         <!--end::Header-->
-          <?php  include  BASE_PATH . 'includes/sidebar.php'  ?>
+          <?php  include BASE_PATH . 'includes/sidebar.php'  ?>
             <!--begin::App Main-->
       <main class="app-main">
         <!--begin::App Content Header-->
         <div class="app-content-header">
           <!--begin::Container-->
-          <div class="container-fluid mb-3">
+          <div class="container-fluid mb-4">
             <!--begin::Row-->
             <div class="row">
-              <div class="col-sm-6"><h3 class="mb-0">Items Form</h3></div>
-              <div class="col-sm-6">
+              <div class="col-md-6"><h3 class="mb-0">Items Form</h3></div>
+              <div class="col-md-6">
                 <ol class="breadcrumb float-sm-end">
                   <li class="breadcrumb-item"><a href="<?= BASE_URL?>pages/dataItems.php">Data Items</a></li>
                   <li class="breadcrumb-item active" aria-current="page">Edit Form</li>
@@ -99,125 +99,94 @@ require_once __DIR__ . '/../config/env.php';
             <!--end::Row-->
           </div>
           <!--end::Container-->
-          <!--begin::Container Edit-->
+          <!--begin::Container Input-->
           <div class="container-fluid">
           <div class="row g-4">
+      <div class="col-md-12">
 
-          <?php if ($alert): ?>
-  <div class="alert alert-<?= $_SESSION['alert_update']['type'] ?> alert-dismissible fade show" role="alert">
-    <?= $_SESSION['alert_update']['message'] ?>
+      <?php if ($alert): ?>
+  <div class="alert alert-<?= $_SESSION['alert']['type'] ?> alert-dismissible fade show" role="alert">
+    <?= $_SESSION['alert']['message'] ?>
     <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
   </div>
   <?php unset($_SESSION['alert']); ?>
 <?php endif; ?>
-
+      
                 <!--begin::Input Group-->
                 <div class="card card-success card-outline mb-4">
                   <!--begin::Header-->
-                  <div class="card-header"><div class="card-title">Input Items</div>
+                  <div class="card-header"><div class="card-title">Edit Items</div>
+                </div>
                   <!--end::Header-->
-                  </div>
                   <form action="<?= BASE_URL?>controllers/itemsController.php" method="POST">
                   <input type="hidden" name="id" value="<?= $formUpdate['id'] ?>">
-                  
-
                   <!--begin::Body-->
-                  <div class="card-body">
-                    <div class="row">
-                    <div class="col-md-4">
-                      <label for="item_ref_no" class="form-label">Kode Items</label>
-                    <div class="input-group mb-3">
-                      <span class="input-group-text" id="basic-addon1">Ref_No</span>
-                      <input
-                        type="text"
-                        class="form-control"
-                        placeholder="Kode Items"
-                        aria-label="Ref_No"
-                        name="ref_no"
-                        id="item_ref_no"
-                        aria-describedby="basic-addon1"
-                        required
-                        value="<?= htmlspecialchars($formUpdate['ref_no'])?>"
-                      />
-                    </div>
-                    </div>
+                    <div class="card-body">
+                      <div class="row">
+                        <div class="col-md-4">
+                          <label for="item_ref_no" class="form-label">Kode Items</label>
+                          <div class="input-group mb-3">
+                            <input
+                              type="text"
+                              class="form-control"
+                              placeholder="Contoh: ITM001"
+                              aria-label="Ref_No"
+                              name="ref_no"
+                              id="item_ref_no"
+                              aria-describedby="basic-addon1"
+                              required
+                              value="<?= htmlspecialchars($formUpdate['ref_no'])?>"
+                            />
+                          </div>
+                        </div>
 
-                    <div class="col-md-4">
-                    <label for="item_name" class="form-label">Nama Items</label>
-                    <div class="mb-3">
-                      <div class="input-group">
-                        <input
-                          type="text"
-                          class="form-control"
-                          name="name"
-                          id="item_name"
-                          required
-                          aria-describedby="basic-addon3 basic-addon4"
-                          placeholder="Nama Items"
-                          value="<?= htmlspecialchars($formUpdate['name'])?>"
-                        />
-                      </div>
-                      <div class="form-text" id="basic-addon4">
-                        Isi nama items di atas
-                      </div>
-                    </div>
-                    </div>
+                        <div class="col-md-4">
+                        <label for="item_name" class="form-label">Nama Items</label>
+                          <div class="mb-3">
+                            <input
+                              type="text"
+                              class="form-control"
+                              name="name"
+                              id="item_name"
+                              required
+                              aria-describedby="basic-addon3 basic-addon4"
+                              placeholder="Masukkan Nama Item Dengan Jelas"
+                              value="<?= htmlspecialchars($formUpdate['name'])?>"
+                            />
+                          </div>
+                        </div>
 
-                    <div class="col-md-4">
-                    <label for="item_price" class="form-label">Harga Items</label>
-                    <div class="input-group mb-3">
-                      <span class="input-group-text">Rp.</span>
-                      <input
-                        type="number"
-                        class="form-control"
-                        aria-label="Amount (to the nearest dollar)"
-                        name="price"
-                        id="item_price"
-                        required 
-                        value="<?= htmlspecialchars($formUpdate['price'])?>"
-                      />
-                      <span class="input-group-text">.00</span>
+                        <div class="col-md-4">
+                        <label for="item_price" class="form-label">Harga Items</label>
+                          <div class="input-group mb-3">
+                            <span class="input-group-text">Rp.</span>
+                            <input
+                              type="number"
+                              class="form-control"
+                              aria-label="Amount (to the nearest dollar)"
+                              name="price"
+                              id="item_price"
+                              required
+                              placeholder="Masukkan Angka Tanpa Pemisah Ribuan" 
+                              value="<?= htmlspecialchars($formUpdate['price'])?>"
+                            />
+                          </div>
+                        </div>
+                      </div>
                     </div>
-                    </div>
-                    </div>
-                  </div>
-                  <!--end::Body-->
+                    <!--end::Body-->
+
                   <!--begin::Footer-->
                   <div class="card-footer d-flex align-items-center">
-                    <a href="<?= BASE_URL?>pages/dataItems.php" class="btn btn-secondary">Cancel</a>
-                    <button type="submit" class="btn btn-success ms-auto" name="update_item">Submit</button>
-                  </div>
+                          <a href="<?= BASE_URL?>pages/dataItems.php" class="btn btn-secondary" style="padding: 8px 16px;">
+                            <i class="bi bi-x-circle me-1"></i> Cancel</a>
+                          <button type="submit" class="btn btn-success ms-auto" style="padding: 8px 16px;" name="update_item">
+                            <i class="bi bi-check-circle-fill me-1"></i> Submit</button>
+                    </div>
                   </form>
                   <!--end::Footer-->
                   </div>
-                <!--end::Input Group-->
-</div>
-                  <!-- begin::JavaScript-->
-                  <!-- <script>
-                    // Example starter JavaScript for disabling form submissions if there are invalid fields
-                    (() => {
-                      'use strict';
-
-                      // Fetch all the forms we want to apply custom Bootstrap validation styles to
-                      const forms = document.querySelectorAll('.needs-validation');
-
-                      // Loop over them and prevent submission
-                      Array.from(forms).forEach((form) => {
-                        form.addEventListener(
-                          'submit',
-                          (event) => {
-                            if (!form.checkValidity()) {
-                              event.preventDefault();
-                              event.stopPropagation();
-                            }
-
-                            form.classList.add('was-validated');
-                          },
-                          false,
-                        );
-                      });
-                    })();
-                  </script> -->
+                  <!--end::Input Group-->
                   <!--end::JavaScript -->
                 </div>
                 <!--end::Form Validation-->

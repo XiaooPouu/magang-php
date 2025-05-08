@@ -10,11 +10,11 @@ if (!defined('BASE_PATH')) {
   <div class="sidebar-brand">
     <a href="<?= BASE_URL ?>index.php" class="brand-link">
       <img
-        src="<?= BASE_URL ?>dist/assets/img/AdminLTELogo.png"
+        src="<?= BASE_URL ?>src/img/AdminLTELogo.png"
         alt="AdminLTE Logo"
         class="brand-image opacity-75 shadow"
       />
-      <span class="brand-text fw-light">AdminLTE 4</span>
+      <span class="brand-text fw-light">Wevelope</span>
     </a>
   </div>
   <!--end::Sidebar Brand-->

@@ -30,7 +30,7 @@ else if (isset($_GET['delete_ic'])){
     $success = $model->delete($id_ic);
     $_SESSION['alert_delete'] = [
         'type' => 'success',
-        'message' => 'Item berhasil dihapus!'
+        'message' => 'Item Costumer berhasil dihapus!'
     ];
     header('Location: ' . BASE_URL . 'pages/dataItems_Costumer.php');
     exit();
@@ -46,7 +46,7 @@ else if(isset($_POST['update_ic'])){
     $success = $model->update($id_ic, $item_id, $customer_id, $price);
     $_SESSION['alert_update'] = [
         'type' => 'success',
-        'message' => 'Item berhasil diupdate!'
+        'message' => 'Item Costumer berhasil diupdate!'
     ];
     header('Location: ' . BASE_URL . 'pages/dataItems_Costumer.php');
     exit();

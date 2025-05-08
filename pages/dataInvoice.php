@@ -115,25 +115,48 @@ if(isset($_SESSION['alert_delete'])) {
       <main class="app-main">
         <!--begin::App Content Header-->
         <div class="app-content-header">
-          <!--begin::Container-->
-          <div class="container-fluid">
             <!--begin::Container-->
           <div class="container-fluid mb-4">
             <!--begin::Row-->
             <div class="row">
-              <div class="col-sm-6"><h3 class="mb-0">Data Invoice</h3></div>
+              <div class="col-sm-6"><h3 class="mb-4">Data Invoice</h3></div>
               <div class="col-sm-6">
                 <ol class="breadcrumb float-sm-end">
                   <li class="breadcrumb-item"><a href="<?= BASE_URL?>pages/dataInvoice.php">Data Invoice</a></li>
                   <li class="breadcrumb-item active" aria-current="page">Table Invoices</li>
                 </ol>
               </div>
+
+              <!-- search form -->
+      <form action="<?= BASE_URL ?>controllers/invoiceController.php" method="GET" class="d-flex mt-md-3">
+      <input type="hidden" name="page" value="<?= $page ?>">
+    <input type="text" name="search" class="form-control me-2 mb-2" value="<?= $_SESSION['search_keyword'] ?? '' ?>" placeholder="Search">
+    
+    <select name="customer" class="form-control me-2 mb-2">
+        <option value="">-- Pilih Customer --</option>
+        <?php
+        // Menampilkan list customer berdasarkan data yang ada di model atau tabel
+        foreach ($customers as $customer) {
+            $selected = ($_SESSION['search_customer'] ?? '') == $customer['id'] ? 'selected' : '';
+            echo '<option value="' . $customer['id'] . '" ' . $selected . '>' . htmlspecialchars($customer['name']) . '</option>';
+        }
+        ?>
+    </select>
+    
+    <input type="date" name="tgl_dari" class="form-control me-2 mb-2" value="<?= $_SESSION['search_tgl_dari'] ?? '' ?>" placeholder="Tanggal Dari">
+    <input type="date" name="tgl_ke" class="form-control me-2 mb-2" value="<?= $_SESSION['search_tgl_ke'] ?? '' ?>" placeholder="Tanggal Ke">
+    
+    <button class="btn btn-primary me-2 mb-2" type="submit">Search</button>
+    <a href="<?= BASE_URL ?>pages/dataInvoice.php?reset=true" class="btn btn-secondary me-2 mb-2">Reset</a>
+</form>
+<!-- end search form -->
             </div>
             <!--end::Row-->
           </div>
           <!--end::Container-->
+          <!--begin::Container-->
+          <div class="container-fluid">
           <div class="row g-4">
-             
       <div class="col-md-12">
         <!-- allert hapus -->
   <?= isset($hapus) ? $hapus : '' ?>
@@ -160,30 +183,6 @@ if(isset($_SESSION['alert_delete'])) {
 <!-- end notifikasi update -->
       </div>
 
-      <!-- search form -->
-      <form action="<?= BASE_URL ?>controllers/invoiceController.php" method="GET" class="d-flex mb-3">
-      <input type="hidden" name="page" value="<?= $page ?>">
-    <input type="text" name="search" class="form-control me-2 mb-2" value="<?= $_SESSION['search_keyword'] ?? '' ?>" placeholder="Search">
-    
-    <select name="customer" class="form-control me-2 mb-2">
-        <option value="">-- Pilih Customer --</option>
-        <?php
-        // Menampilkan list customer berdasarkan data yang ada di model atau tabel
-        foreach ($customers as $customer) {
-            $selected = ($_SESSION['search_customer'] ?? '') == $customer['id'] ? 'selected' : '';
-            echo '<option value="' . $customer['id'] . '" ' . $selected . '>' . htmlspecialchars($customer['name']) . '</option>';
-        }
-        ?>
-    </select>
-    
-    <input type="date" name="tgl_dari" class="form-control me-2 mb-2" value="<?= $_SESSION['search_tgl_dari'] ?? '' ?>" placeholder="Tanggal Dari">
-    <input type="date" name="tgl_ke" class="form-control me-2 mb-2" value="<?= $_SESSION['search_tgl_ke'] ?? '' ?>" placeholder="Tanggal Ke">
-    
-    <button class="btn btn-primary m-2" type="submit">Search</button>
-    <a href="<?= BASE_URL ?>pages/dataInvoice.php?reset=true" class="btn btn-secondary m-2">Reset</a>
-</form>
-<!-- end search form -->
-
   <!-- Table Items -->
   <div class="card mb-4">
                   <div class="card-header"><h3 class="card-title">Table Invoice</h3>
@@ -203,7 +202,7 @@ if(isset($_SESSION['alert_delete'])) {
                           <th>Kode Invoice</th>
                           <th>Tanggal Invoice</th>
                           <th>Costumers</th>
-                          <th>Action</th>
+                          <th class="text-center">Action</th>
                         </tr>
                       </thead>
                       <?php foreach ($data as $row): ?>
@@ -214,7 +213,7 @@ if(isset($_SESSION['alert_delete'])) {
                           <td>
                           <?= htmlspecialchars($row['name'])?>
                           </td>
-                          <td>
+                          <td class="text-center">
                           <a href="<?= BASE_URL?>pages/editInvoice.php?id_inv=<?=$row['id_inv']?>" class="btn btn-sm btn-warning me-1">
               <i class="bi bi-pencil-square me-1"></i>Edit</a>
               <a href="<?= BASE_URL?>pages/dataInvoiceItems.php?id_inv=<?=$row['id_inv']?>" class="btn btn-sm btn-primary me-1">

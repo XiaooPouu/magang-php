@@ -52,16 +52,6 @@ else if (isset($_POST['update_item'])) {
         'name' => $name,
         'price' => $price
     ];
-
-    $existingItem = $itemModel->getByRefNo($ref_no);
-    if ($existingItem && $existingItem['id'] != $id) {
-        $_SESSION['alert_update'] = [
-            'type' => 'danger',
-            'message' => 'Ref No sudah ada, silahkan coba lagi!'
-        ];
-        header('Location:' . BASE_URL . 'pages/editItems.php?id=' . $id);
-        exit();
-    } else {
         $itemModel->update($id, $ref_no, $name, $price);
         $_SESSION['alert_update'] = [
             'type' => 'success',
@@ -70,7 +60,7 @@ else if (isset($_POST['update_item'])) {
         unset($_SESSION['form_update']);
         header('Location:' . BASE_URL . 'pages/dataItems.php');
         exit();
-    }
+    
 }
 
 // Detail item (jika digunakan)
