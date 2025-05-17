@@ -5,8 +5,8 @@ require_once BASE_PATH . 'config/database.php';
 include BASE_PATH . 'models/items_costumer.php';
 include BASE_PATH . 'models/items.php';
 include BASE_PATH . 'models/costumer.php';
+require_once BASE_PATH . 'function/baseurl.php';
 
-$db = (new Database())->getConnection();
 $itemsCostumerModel = new ItemsCostumer($db);
 
 $keyword = $_GET['search'] ?? '';
@@ -56,44 +56,38 @@ $alert = isset($_SESSION['alert_delete']);
       href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css"
       crossorigin="anonymous"
     />
-    <link rel="stylesheet" href="<?= BASE_URL ?>src/css/adminlte.css" />
+    <link rel="stylesheet" href="<?= $BaseUrl->getUrlCSS();?>" />
   </head>
   <body class="layout-fixed sidebar-expand-lg bg-body-tertiary">
     <div class="app-wrapper">
     <?php include BASE_PATH . 'includes/header.php' ?>
 
-      <?php include BASE_PATH . 'includes/sidebar.php' ?>
+      <?php include_once BASE_PATH . 'includes/sidebar.php' ?>
 
       <main class="app-main">
         <div class="app-content-header">
              <!--begin::Container-->
-          <div class="container-fluid mb-4">
+          <div class="container-fluid">
             <!--begin::Row-->
-            <div class="row">
+            <div class="row mb-4">
               <div class="col-sm-6"><h3 class="mb-4">Data Items Costumers</h3></div>
               <div class="col-sm-6">
                 <ol class="breadcrumb float-sm-end">
-                  <li class="breadcrumb-item"><a href="<?= BASE_URL?>pages/dataItems_Costumer.php">Data Items Costumers</a></li>
+                  <li class="breadcrumb-item"><a href="<?= $BaseUrl->getUrlDataItemsCostumer();?>">Data Items Costumers</a></li>
                   <li class="breadcrumb-item active" aria-current="page">Tabel Items Costumers</li>
                 </ol>
               </div>
 
               <!-- Search Form -->
-              <form action="<?= BASE_URL ?>controllers/items_costumersController.php" method="GET" class="d-flex mt-md-3">
+              <form action="<?= $BaseUrl->getUrlControllerItemsCostumer(); ?>" method="GET" class="d-flex mt-md-3">
                 <input type="text" name="search" class="form-control me-2 mb-2" placeholder="Search" value="<?= $_SESSION['search_keyword'] ?? '' ?>">
                 <input type="hidden" name="page" value="<?= $page ?>">
                 <button class="btn btn-primary me-2 mb-2" type="submit">
                   Search</button>
-                <a href="<?= BASE_URL ?>pages/dataItems_Costumer.php" class="btn btn-secondary me-2 mb-2">Reset</a>
+                <a href="<?= $BaseUrl->getUrlDataItemsCostumer(); ?>" class="btn btn-secondary me-2 mb-2">Reset</a>
               </form>
-
             </div>
-            <!--end::Row-->
-          </div>
-          <!--end::Container-->
-          <div class="container-fluid">
-            <div class="row g-4">
-              <!-- untuk notif -->
+            <!-- untuk notif -->
               <div class="col-md-12">
                 <!-- notif tambah -->
               <?php if (isset($_SESSION['alert'])): ?>
@@ -134,7 +128,7 @@ $alert = isset($_SESSION['alert_delete']);
 
                  <!-- Button Create -->
               <div class="mt-3 mx-3">
-                <a href="<?= BASE_URL ?>pages/createItemsCostumer.php" class="btn btn-primary btn-sm">
+                <a href="<?= $BaseUrl->getUrlformItemsCostumer(); ?>" class="btn btn-primary btn-sm">
                   <i class="bi bi-plus-circle me-1"></i> Create New</a>
               </div>
                   <!-- /.card-header -->
@@ -158,9 +152,9 @@ $alert = isset($_SESSION['alert_delete']);
                           </td>
                           <td class="text-center">
                           <?php if (isset($row['id_ic'])): ?>
-                          <a href="<?= BASE_URL ?>pages/editItemsCostumer.php?id_ic=<?= htmlspecialchars($row['id_ic']) ?>" class="btn btn-sm btn-warning me-1">
+                          <a href="<?= $BaseUrl->getUrlFormItemsCostumer($row['id_ic']) ?>" class="btn btn-sm btn-warning me-1">
                             <i class="bi bi-pencil-square"></i> Edit</a>
-                          <a href="<?= BASE_URL ?>controllers/items_costumersController.php?delete_ic=<?= htmlspecialchars($row['id_ic']) ?>" class="btn btn-sm btn-danger" onclick="return confirm('Are you sure?')">
+                          <a href="<?= $BaseUrl->getUrlControllerDeleteItemsCostumer($row['id_ic']) ?>" class="btn btn-sm btn-danger" onclick="return confirm('Are you sure?')">
                             <i class="bi bi-trash"></i> Delete</a>
                         <?php else: ?>
                           <span class="text-danger">ID not found</span>
@@ -191,8 +185,13 @@ $alert = isset($_SESSION['alert_delete']);
                   </div>
                 </div>
                 <!-- /.card -->
-            </div>
+            <!--end::Row-->
           </div>
+          <!--end::Container-->
+        
+              
+            
+          
         </div>
       </main>
 

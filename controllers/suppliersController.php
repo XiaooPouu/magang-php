@@ -3,20 +3,22 @@ session_start();
 require_once __DIR__ . '/../config/env.php';
 require_once BASE_PATH . 'config/database.php';
 require_once BASE_PATH . 'models/suppliers.php';
+require_once BASE_PATH . 'function/baseurl.php';
 
-$db = (new Database())->getConnection();
 $supplierModel = new Supplier($db);
 
-// Tambah supplier
-if (isset($_POST['add_supplier'])) {
-    $ref_no = $_POST['ref_no'];
-    $name = $_POST['name'];
+$id = $_POST['id'] ?? null;
+$ref_no = $_POST['ref_no'] ?? null;
+$name = $_POST['name'] ?? null;
 
-    // Simpan alert ke session
+// Simpan alert ke session
     $_SESSION['form_data'] = [
         'ref_no' => $ref_no,
         'name' => $name
     ];
+
+// Tambah supplier
+if (isset($_POST['add_supplier'])) {
 
     $existingSupplier = $supplierModel->getByRefNo($ref_no);
     // cek apakah ref no sudah ada
@@ -26,7 +28,7 @@ if (isset($_POST['add_supplier'])) {
             'type' => 'danger',
             'message' => 'Ref No sudah ada, silahkan coba lagi!'
         ];
-        header('Location:' . BASE_URL . 'pages/createSuppliers.php');
+        header('Location:' . $BaseUrl->getUrlFormSupplier());
         exit();
     } else {
         // Simpan alert ke session
@@ -38,47 +40,31 @@ if (isset($_POST['add_supplier'])) {
 
         // unset session
         unset($_SESSION['form_data']);
-        header('Location:' . BASE_URL . 'pages/dataSuppliers.php');
+        header('Location:' . $BaseUrl->getUrlDataSupplier());
     exit();
     }
 }
 
 // Update supplier
 else if (isset($_POST['update_supplier'])) {
-    $id = $_POST['id'];
-    $ref_no = $_POST['ref_no'];
-    $name = $_POST['name'];
 
-    $_SESSION['form_update'] = [
-        'id' => $id,
-        'ref_no' => $ref_no,
-        'name' => $name
-    ];
-
-    $existingSupplier = $supplierModel->getByRefNo($ref_no);
-    // cek apakah ref no sudah ada
-    if($existingSupplier){
-        // jika sudah ada maka notif error muncul
-        $_SESSION['alert_update'] = [
-            'type' => 'danger',
-            'message' => 'Ref No sudah ada, silahkan coba lagi!'
-        ];
-
-        header('Location:' . BASE_URL . 'pages/editSupplier.php' . '?id=' . $id);
-        exit();
-    } else {
-        // Simpan alert ke session
+    if($id && $ref_no && $name){
         $supplierModel->update($id, $ref_no, $name);
         $_SESSION['alert_update'] = [
             'type' => 'success',
             'message' => 'Supplier berhasil diupdate!'
         ];
-
-        // unset session
-        unset($_SESSION['form_update']);
-        header('Location:' . BASE_URL . 'pages/dataSuppliers.php');
+        unset($_SESSION['form_data']);
+        header('Location:' . $BaseUrl->getUrlDataSupplier());
         exit();
- }
+    } else {
+        $_SESSION['alert_update'] = [
+            'type' => 'danger',
+            'message' => 'Data tidak lengkap untuk update supplier!'
+        ];
+        header('Location:' . $BaseUrl->getUrlFormSupplier());
+        exit();
+    }
 }
 
 // Detail supplier
@@ -97,7 +83,7 @@ else if (isset($_GET['delete_supplier'])) {
             'type' => 'success',
             'message' => 'Supplier berhasil dihapus!'
         ];
-    header('Location:' . BASE_URL . 'pages/dataSuppliers.php');
+    header('Location:' . $BaseUrl->getUrlDataSupplier());
     exit();
 }
 
@@ -105,10 +91,11 @@ else if (isset($_GET['search'])) {
     $keyword = $_GET['search'];
     $results = $supplierModel->search($keyword);
     $_SESSION['suppliers_data'] = $results;
-    header('Location:' . BASE_URL . 'pages/dataSuppliers.php');
+    header('Location:' . $BaseUrl->getUrlDataSupplier());
     exit();
 }
 
 else {
-    header('Location:' . BASE_URL . 'pages/dataSuppliers.php');
+    header('Location:' . $BaseUrl->getUrlDataSupplier());
+    exit();
 }

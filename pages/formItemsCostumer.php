@@ -7,25 +7,23 @@ include BASE_PATH . 'models/items.php';
 include BASE_PATH . 'models/costumer.php';
 require_once BASE_PATH . 'function/baseurl.php';
 
+$itemModel = new Item($db);
 $costumerModel = new Costumer($db);
-$itemsCustomerModel = new ItemsCostumer($db);
 
 $items = $itemModel->getAll();
 $customers = $costumerModel->getAll();
 
-if (!isset($_GET['id_ic']) || empty($_GET['id_ic'])) {
-    $_SESSION['alert'] = ['type' => 'danger', 'message' => 'ID tidak ditemukan.'];
-    header('Location: ' . BASE_URL . 'pages/dataItems_Costumer.php');
-    exit;
-}
+$isEdit = false; // Variabel untuk menandakan mode edit
+$itemsCostumer = null;
 
-$id = $_GET['id_ic'];
-$data = $itemsCustomerModel->getById($id);
-
-if (!$data) {
-    $_SESSION['alert'] = ['type' => 'danger', 'message' => 'Data tidak ditemukan.'];
-    header('Location: ' . BASE_URL . 'pages/dataItems_Costumer.php');
-    exit;
+// Mengecek apakah ada parameter 'id' pada URL
+if (isset($_GET['id_ic'])) {
+  $id = $_GET['id_ic'];
+  $itemsCostumerModel = new ItemsCostumer($db);
+  $itemsCostumer = $itemsCostumerModel->getById($id); // Mengambil data items_costumer berdasarkan id
+  if ($itemsCostumer) {
+    $isEdit = true; // Menandakan form ini untuk edit
+  }
 }
 ?>
 
@@ -34,7 +32,7 @@ if (!$data) {
   <!--begin::Head-->
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title>AdminLTE 4 | General Form Elements</title>
+    <title>Form Items Costumer</title>
     <!--begin::Primary Meta Tags-->
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="title" content="AdminLTE 4 | General Form Elements" />
@@ -97,7 +95,7 @@ if (!$data) {
               <div class="col-md-6">
                 <ol class="breadcrumb float-sm-end">
                   <li class="breadcrumb-item"><a href="<?= $BaseUrl->getUrlDataItemsCostumer();?>">Data Items Costumers</a></li>
-                  <li class="breadcrumb-item active" aria-current="page">Edit Form</li>
+                  <li class="breadcrumb-item active" aria-current="page"><?= $isEdit ? 'Edit Form' : 'Input Form'?></li>
                 </ol>
               </div>
             </div>
@@ -119,13 +117,15 @@ if (!$data) {
                 <?php endif; ?>
       
                  <!--begin::Form Validation-->
-              <div class="card card-info card-outline mb-4">
+                 <div class="card card-info card-outline mb-4">
                   <!--begin::Header-->
-                  <div class="card-header"><div class="card-title">Edit Items Costumer</div></div>
+                  <div class="card-header"><div class="card-title"><?= $isEdit ? 'Edit Items Costumers' : 'Input Items Costumers'?></div></div>
                   <!--end::Header-->
                   <!--begin::Form-->
                   <form action="<?= $BaseUrl->getUrlControllerItemsCostumer(); ?>" method="POST">
-                  <input type="hidden" name="id_ic" value="<?= $data['id_ic'] ?>">
+                    <?php if ($isEdit && $itemsCostumer): ?>
+                      <input type="hidden" name="id_ic" value="<?= $itemsCostumer['id_ic']; ?>">
+                    <?php endif; ?>
                     <!--begin::Body-->
                     <div class="card-body">
                       <!--begin::Row-->
@@ -134,13 +134,14 @@ if (!$data) {
                        <div class="col-md-4">
                           <label for="items_id" class="form-label">Nama Items</label>
                           <select class="form-select" name="items_id" id="items_id" required>
-                          <option value="" disabled>-- Pilih Item --</option>
-                    <?php foreach ($items as $item): ?>
-                      <option value="<?= $item['id'] ?>" <?= ($data['id_items'] == $item['id']) ? 'selected' : '' ?>>
-                        <?= $item['name'] ?>
-                      </option>
-                    <?php endforeach; ?>
-                          </select>
+                          <option value="" disabled <?= !$isEdit ? 'selected' : '' ?>>-- Pilih Item --</option>
+                          <?php foreach ($items as $item): ?>
+                            <option value="<?= $item['id'] ?>" <?= $isEdit && $itemsCostumer['id_items'] == $item['id'] ? 'selected' : '' ?>>
+                              <?= $item['name'] ?>
+                            </option>
+                          <?php endforeach; ?>
+                        </select>
+
                           <div class="invalid-feedback">Please select a valid state.</div>
                         </div>
                         <!--end::Col-->
@@ -148,13 +149,14 @@ if (!$data) {
                         <div class="col-md-4">
                           <label for="customers_id" class="form-label">Nama Costumers</label>
                           <select class="form-select" name="customers_id" id="customers_id" required>
-                          <option value="" disabled>-- Pilih Customer --</option>
-                    <?php foreach ($customers as $cust): ?>
-                      <option value="<?= $cust['id'] ?>" <?= ($data['id_customers'] == $cust['id']) ? 'selected' : '' ?>>
-                        <?= $cust['name'] ?>
-                      </option>
-                    <?php endforeach; ?>
-                          </select>
+                          <option value="" disabled <?= !$isEdit ? 'selected' : '' ?>>-- Pilih Customer --</option>
+                          <?php foreach ($customers as $cust): ?>
+                            <option value="<?= $cust['id'] ?>" <?= $isEdit && $itemsCostumer['id_customers'] == $cust['id'] ? 'selected' : '' ?>>
+                              <?= $cust['name'] ?>
+                            </option>
+                          <?php endforeach; ?>
+                        </select>
+
                           <div class="invalid-feedback">Please select a valid state.</div>
                         </div>
                         <!--end::Col-->
@@ -164,15 +166,17 @@ if (!$data) {
                           <div class="input-group has-validation">
                             <span class="input-group-text" id="inputGroupPrepend">Rp.</span>
                             <input
-                              type="number"
-                              class="form-control"
-                              id="price"
-                              aria-describedby="inputGroupPrepend"
-                              required
-                              name="price"
-                              value="<?=htmlspecialchars($data['price']);?>"
-                              placeholder="Masukkan Angka Tanpa Pemisah Ribuan"
+                                type="number"
+                                class="form-control"
+                                id="price"
+                                aria-describedby="inputGroupPrepend"
+                                required
+                                name="price"
+                                placeholder="Masukkan Angka Tanpa Pemisah Ribuan"
+                                value="<?= $isEdit && $itemsCostumer ? $itemsCostumer['price'] : '' ?>"
                             />
+
+
                             <div class="invalid-feedback">Please choose a username.</div>
                           </div>
                         </div>
@@ -184,7 +188,7 @@ if (!$data) {
                     <!--begin::Footer-->
                     <div class="card-footer d-flex align-items-center">
                     <a href="<?= $BaseUrl->getUrlDataItemsCostumer(); ?>" class="btn btn-secondary" style="padding: 8px 16px;"><i class="bi bi-x-circle me-1"></i> Cancel</a>
-                    <button type="submit" name="update_ic" class="btn btn-info ms-auto text-white" style="padding: 8px 16px;">
+                    <button type="submit" name="<?= $isEdit ? 'update_ic' : 'add_ic'?>" class="btn btn-info ms-auto text-white" style="padding: 8px 16px;">
                       <i class="bi bi-check-circle-fill me-1"></i> Submit
                     </button>
                     </div>

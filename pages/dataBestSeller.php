@@ -1,16 +1,23 @@
 <?php
-session_start();
 require_once __DIR__ . '/../config/env.php';
-$formData = isset($_SESSION['form_data']) ? $_SESSION['form_data'] : ['ref_no' => '', 'name' => '', 'price' => ''];
-$alert = isset ($_SESSION['alert']);
+require_once BASE_PATH . 'config/database.php';
+require_once BASE_PATH . 'function/baseurl.php';
+include_once BASE_PATH . 'models/bestseller.php';
+
+$db = (new Database())->getConnection();
+$modelBestSeller = new Bestseller($db);
+
+$BestSeller = $modelBestSeller->getBestSeller();
 ?>
+
+
 
 <!doctype html>
 <html lang="en">
   <!--begin::Head-->
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title>AdminLTE 4 | General Form Elements</title>
+    <title>Data Best Seller</title>
     <!--begin::Primary Meta Tags-->
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="title" content="AdminLTE 4 | General Form Elements" />
@@ -49,7 +56,7 @@ $alert = isset ($_SESSION['alert']);
     />
     <!--end::Third Party Plugin(Bootstrap Icons)-->
     <!--begin::Required Plugin(AdminLTE)-->
-    <link rel="stylesheet" href="<?= BASE_URL?>src/css/adminlte.css" />
+    <link rel="stylesheet" href="<?= $BaseUrl->getUrlCSS();?>" />
     <!--end::Required Plugin(AdminLTE)-->
   </head>
   <!--end::Head-->
@@ -58,117 +65,118 @@ $alert = isset ($_SESSION['alert']);
     <!--begin::App Wrapper-->
       <div class="app-wrapper">
         <!--begin::Header-->
-        <?php  include BASE_PATH . 'includes/header.php'  ?>
+        <?php include BASE_PATH . 'includes/header.php' ?>
         <!--end::Header-->
-          <?php  include BASE_PATH . 'includes/sidebar.php'  ?>
+          <?php  include_once BASE_PATH . 'includes/sidebar.php'  ?>
             <!--begin::App Main-->
       <main class="app-main">
         <!--begin::App Content Header-->
         <div class="app-content-header">
-          <!--begin::Container-->
-          <div class="container-fluid mb-4">
+             <!--begin::Container-->
+          <div class="container-fluid">
             <!--begin::Row-->
             <div class="row">
-              <div class="col-md-6"><h3 class="mb-0">Items Form</h3></div>
+              <div class="col-md-6"><h3 class="mb-5">Data Best Seller</h3></div>
               <div class="col-md-6">
                 <ol class="breadcrumb float-sm-end">
-                  <li class="breadcrumb-item"><a href="<?= BASE_URL?>pages/dataItems.php">Data Items</a></li>
-                  <li class="breadcrumb-item active" aria-current="page">Input Form</li>
+                  <li class="breadcrumb-item"><a href="<?= $BaseUrl->getUrlDataBestSeller();?>">Data Best Seller</a></li>
+                  <li class="breadcrumb-item active" aria-current="page">Tabel Best Sellers</li>
                 </ol>
               </div>
             </div>
             <!--end::Row-->
+             <div class="card mb-4">
+          <div class="card-header">
+            <h3 class="card-title">Cari Data Best Seller</h3>
+          </div>
+          <div class="card-body">
+            <div class="tab-content">
+              <div class="tab-pane fade show active" id="harian">
+                <div class="row mb-3">
+                  <div class="col-md-12">
+                    <div>
+            <form action="<?= BASE_URL ?>controllers/itemsController.php" method="GET" class="d-flex my-2">
+              <input type="text" name="search" class="form-control me-2 mb-2" placeholder="Search">
+              <button class="btn btn-primary me-2 mb-2" type="submit">Search</button>
+              <a href="<?= BASE_URL ?>pages/dataItems.php" class="btn btn-secondary me-2 mb-2">Reset</a>
+            </form>
+                    </div>
+                  </div>
+
+                  <div class="card-header"><h3 class="card-title">Best Seller Table</h3></div>
+                  <!-- /.card-header -->
+                  <div class="card-body">
+                  <table class="table table-bordered">
+                    <thead>
+                        <tr>
+                        <th style="width: 10px;">No.</th>
+                        <th>Kode Items</th>
+                        <th>Nama Items</th>
+                        <th class="text-end">Qty</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <?php $i = 0; foreach ($BestSeller as $row):?>
+                        <tr>
+                            <td><?= ++$i ?>.</td>
+                            <td><?= htmlspecialchars($row['kode'])?></td>
+                            <td><?= htmlspecialchars($row['nama'])?></td>
+                            <td class="text-end"><?= htmlspecialchars($row['total_qty'])?></td>
+                        </tr>
+                        <?php endforeach; ?>
+                    </tbody>
+                    </table>
+                  </div>
+                  <!-- /.card-body -->
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- footer card -->
+        <div class="card-footer clearfix">
+            <ul class="pagination pagination-sm m-0 float-end">
+                <li class="page-item"><a class="page-link" href="#">«</a></li>
+                <li class="page-item"><a class="page-link" href="#">1</a></li>
+                <li class="page-item"><a class="page-link" href="#">2</a></li>
+                <li class="page-item"><a class="page-link" href="#">3</a></li>
+                <li class="page-item"><a class="page-link" href="#">»</a></li>
+            </ul>
+        </div> 
+    <!-- end footer card -->
+      </div>
           </div>
           <!--end::Container-->
-          <!--begin::Container Input-->
-          <div class="container-fluid">
-          <div class="row g-4">
-      <div class="col-md-12">
-
-      <?php if ($alert): ?>
-  <div class="alert alert-<?= $_SESSION['alert']['type'] ?> alert-dismissible fade show" role="alert">
-    <?= $_SESSION['alert']['message'] ?>
-    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
   </div>
-  <?php unset($_SESSION['alert']); ?>
-<?php endif; ?>
-      
-                <!--begin::Input Group-->
-                <div class="card card-success card-outline mb-4">
-                  <!--begin::Header-->
-                  <div class="card-header"><div class="card-title">Input Items</div>
-                </div>
-                  <!--end::Header-->
-                  <form action="<?= BASE_URL?>controllers/itemsController.php" method="POST">
-                  <!--begin::Body-->
-                    <div class="card-body">
-                      <div class="row">
-                        <div class="col-md-4">
-                          <label for="item_ref_no" class="form-label">Kode Items</label>
-                          <div class="input-group mb-3">
-                            <input
-                              type="text"
-                              class="form-control"
-                              placeholder="Contoh: ITM001"
-                              aria-label="Ref_No"
-                              name="ref_no"
-                              id="item_ref_no"
-                              aria-describedby="basic-addon1"
-                              required
-                              value="<?= htmlspecialchars($formData['ref_no'])?>"
-                            />
-                          </div>
-                        </div>
 
-                        <div class="col-md-4">
-                        <label for="item_name" class="form-label">Nama Items</label>
-                          <div class="mb-3">
-                            <input
-                              type="text"
-                              class="form-control"
-                              name="name"
-                              id="item_name"
-                              required
-                              aria-describedby="basic-addon3 basic-addon4"
-                              placeholder="Masukkan Nama Item Dengan Jelas"
-                              value="<?= htmlspecialchars($formData['name'])?>"
-                            />
-                          </div>
-                        </div>
 
-                        <div class="col-md-4">
-                        <label for="item_price" class="form-label">Harga Items</label>
-                          <div class="input-group mb-3">
-                            <span class="input-group-text">Rp.</span>
-                            <input
-                              type="number"
-                              class="form-control"
-                              aria-label="Amount (to the nearest dollar)"
-                              name="price"
-                              id="item_price"
-                              required
-                              placeholder="Masukkan Angka Tanpa Pemisah Ribuan" 
-                              value="<?= htmlspecialchars($formData['price'])?>"
-                            />
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                    <!--end::Body-->
+                  <!-- begin::JavaScript-->
+                  <!-- <script>
+                    // Example starter JavaScript for disabling form submissions if there are invalid fields
+                    (() => {
+                      'use strict';
 
-                  <!--begin::Footer-->
-                  <div class="card-footer d-flex align-items-center">
-                          <a href="<?= BASE_URL?>pages/dataItems.php" class="btn btn-secondary" style="padding: 8px 16px;">
-                            <i class="bi bi-x-circle me-1"></i> Cancel</a>
-                          <button type="submit" class="btn btn-success ms-auto" style="padding: 8px 16px;" name="add_item">
-                            <i class="bi bi-check-circle-fill me-1"></i> Submit</button>
-                    </div>
-                  </form>
-                  <!--end::Footer-->
-                  </div>
-                  <!--end::Input Group-->
+                      // Fetch all the forms we want to apply custom Bootstrap validation styles to
+                      const forms = document.querySelectorAll('.needs-validation');
+
+                      // Loop over them and prevent submission
+                      Array.from(forms).forEach((form) => {
+                        form.addEventListener(
+                          'submit',
+                          (event) => {
+                            if (!form.checkValidity()) {
+                              event.preventDefault();
+                              event.stopPropagation();
+                            }
+
+                            form.classList.add('was-validated');
+                          },
+                          false,
+                        );
+                      });
+                    })();
+                  </script> -->
                   <!--end::JavaScript -->
-                </div>
+                
                 <!--end::Form Validation-->
               </div>
               <!--end::Col-->
@@ -235,6 +243,3 @@ $alert = isset ($_SESSION['alert']);
   </body>
   <!--end::Body-->
 </html>
-
-
-

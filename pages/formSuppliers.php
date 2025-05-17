@@ -2,27 +2,33 @@
 session_start();
 require_once __DIR__ . '/../config/env.php';
 require_once BASE_PATH . 'config/database.php';
-include BASE_PATH . 'models/invoice.php';
-include BASE_PATH . 'models/costumer.php';
+include_once BASE_PATH . 'models/suppliers.php';
+require_once BASE_PATH . 'function/baseurl.php';
 
-$formData = isset($_SESSION['form_data']) ? $_SESSION['form_data'] : ['kode_inv' => '', 'tgl_inv' => '', 'customers_id' => ''];
+$formData = isset($_SESSION['form_data']) ? $_SESSION['form_data'] : ['ref_no' => '', 'name' => ''];
 $alert = isset($_SESSION['alert']);
 
+$isEdit = false;
+$supplier = null;
 
-$db = (new Database())->getConnection();
-
-$model = new Invoice($db);
-$customersModel = new Costumer($db); // Ambil data customer
-
-$customers = $customersModel->getAll();
-
+if(isset($_GET['id'])){
+  $id = $_GET['id'];
+  $supplierModel = new Supplier($db);
+  $supplier = $supplierModel->getById($id); // Mengambil data supplier berdasarkan id
+  if ($supplier) {
+    $formData = [
+      'ref_no' => $supplier['ref_no'],
+      'name' => $supplier['name']
+    ];
+  }
+}
 ?>
 <!doctype html>
 <html lang="en">
   <!--begin::Head-->
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title>AdminLTE 4 | General Form Elements</title>
+    <title>Form Suppliers</title>
     <!--begin::Primary Meta Tags-->
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="title" content="AdminLTE 4 | General Form Elements" />
@@ -61,7 +67,7 @@ $customers = $customersModel->getAll();
     />
     <!--end::Third Party Plugin(Bootstrap Icons)-->
     <!--begin::Required Plugin(AdminLTE)-->
-    <link rel="stylesheet" href="<?= BASE_URL?>src/css/adminlte.css" />
+    <link rel="stylesheet" href="<?= $BaseUrl->getUrlCSS();?>" />
     <!--end::Required Plugin(AdminLTE)-->
   </head>
   <!--end::Head-->
@@ -70,80 +76,129 @@ $customers = $customersModel->getAll();
     <!--begin::App Wrapper-->
       <div class="app-wrapper">
         <!--begin::Header-->
-        <?php  include BASE_PATH . 'includes/header.php'  ?>
+        <?php include BASE_PATH . 'includes/header.php'?>
         <!--end::Header-->
-          <?php  include BASE_PATH . 'includes/sidebar.php'  ?>
-            <!--begin::App Main-->
+        <?php  include BASE_PATH . 'includes/sidebar.php'  ?>
+        <!--begin::App Main-->
       <main class="app-main">
         <!--begin::App Content Header-->
         <div class="app-content-header">
-          <!--begin::Container-->
+            <!--begin::Container-->
           <div class="container-fluid mb-4">
             <!--begin::Row-->
             <div class="row">
-              <div class="col-md-6"><h3 class="mb-0">Invoice Form</h3></div>
-              <div class="col-md-6">
+              <div class="col-sm-6"><h3 class="mb-0">Form Suppliers</h3></div>
+              <div class="col-sm-6">
                 <ol class="breadcrumb float-sm-end">
-                  <li class="breadcrumb-item"><a href="<?= BASE_URL?>pages/dataInvoice.php">Data Invoice</a></li>
-                  <li class="breadcrumb-item active" aria-current="page">Input Form</li>
+                  <li class="breadcrumb-item"><a href="<?= $BaseUrl->getUrlDataSupplier();?>">Data Suppliers</a></li>
+                  <li class="breadcrumb-item active" aria-current="page"><?= $isEdit ? 'Edit Form' : 'Input Form'?></li>
                 </ol>
               </div>
             </div>
             <!--end::Row-->
           </div>
           <!--end::Container-->
-          <!--begin::Container Input-->
-          <div class="container-fluid">
+           <!--begin::Container-->
+           <div class="container-fluid">
           <div class="row g-4">
       <div class="col-md-12">
 
-      <!-- notifikasi -->
-  <?php if ($alert): ?>
+      <?php if ($alert): ?>
   <div class="alert alert-<?= $_SESSION['alert']['type'] ?> alert-dismissible fade show" role="alert">
     <?= $_SESSION['alert']['message'] ?>
     <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
   </div>
   <?php unset($_SESSION['alert']); ?>
 <?php endif; ?>
-<!-- end notifikasi -->
 
-      
-                <!-- Form Invoice -->
-              <div class="card card-primary card-outline mb-4">
-                  <div class="card-header">
-                    <div class="card-title">Create Invoice</div>
-                  </div>
-                  <form action="<?= BASE_URL ?>controllers/invoiceController.php" method="POST">
-                    <div class="card-body row g-3">
-                      <div class="col-md-4">
-                        <label for="invoice_code" class="form-label">Kode Invoice</label>
-                        <input type="text" name="kode_inv" class="form-control" id="invoice_code" required value="<?= htmlspecialchars($formData['kode_inv'])?>" placeholder="Contoh: INV001">
-                      </div>
-                      <div class="col-md-4">
-                        <label for="invoice_date" class="form-label">Tanggal Invoice</label>
-                        <input type="date" name="tgl_inv" class="form-control" id="invoice_date" required value="<?= htmlspecialchars($formData['tgl_inv'])?>">
-                      </div>
-                      <div class="col-md-4">
-                        <label for="customer_id" class="form-label">Customer</label>
-                        <select name="customers_id" class="form-select" id="customer_id" required>
-                          <option value="">-- Pilih Customer --</option>
-                          <?php foreach ($customers as $customer): ?>
-                            <option value="<?= $customer['id'] ?>">
-                              <?= htmlspecialchars($customer['name']) ?>
-                            </option>
-                          <?php endforeach; ?>
-                        </select>
-                      </div>
-                    </div>
-                    <div class="card-footer d-flex align-items-center">
-                      <a href="<?= BASE_URL ?>pages/dataInvoice.php" class="btn btn-secondary" style="padding: 8px 16px;">
-                        <i class="bi bi-x-circle me-1"></i> Cancel</a>
-                      <button type="submit" name="save_invoice" class="btn btn-primary ms-auto" style="padding: 8px 16px;"><i class="bi bi-check-circle-fill me-1"></i> Submit</button>
-                    </div>
-                  </form>
+                <!--begin::Input Suppliers Group-->
+                <div class="card card-success card-outline mb-4">
+                  <!--begin::Header-->
+                  <div class="card-header"><div class="card-title"><?= $isEdit ? 'Edit Supplier' : 'Input Supplier'?></div>
                 </div>
-                <!-- End Form Invoice -->
-                  <!--end::Input Group-->
+                  <!--end::Header-->
+                  <form action="<?= $BaseUrl->getUrlControllerSupplier();?>" method="POST">
+                    <?php if ($isEdit): ?>
+                      <input type="hidden" name="id" value="<?= htmlspecialchars($supplier['id']) ?>">
+                      <?php endif;?>
+                  <!--begin::Body-->
+                  <div class="card-body">
+                    <div class="row">
+
+                    <div class="col-md-6">
+                      <label for="suppliers_ref_no" class="form-label">Kode Supplier</label>
+                    <div class="input-group mb-3">
+                      <input
+                        type="text"
+                        class="form-control"
+                        placeholder="Contoh: SUP001"
+                        aria-label="Ref_No"
+                        name="ref_no"
+                        id="suppliers_ref_no"
+                        aria-describedby="basic-addon1"
+                        required
+                        value="<?= htmlspecialchars($formData['ref_no'])?>"
+                      />
+                    </div>
+                    </div>
+
+                    <div class="col-md-6">
+                      <label for="suppliers_name" class="form-label">Nama Supplier</label>
+                    <div class="mb-3">
+                      <div class="input-group">
+                        <input
+                          type="text"
+                          class="form-control"
+                          name="name"
+                          id="suppliers_name"
+                          required
+                          aria-describedby="basic-addon3 basic-addon4"
+                          value="<?= htmlspecialchars($formData['name'])?>"
+                          placeholder="Masukkan Nama Supplier Dengan Jelas"
+                        />
+                      </div>
+                    </div>
+                    </div>
+                    </div>
+                  </div>
+                  <!--end::Body-->
+                  <!--begin::Footer-->
+                  <div class="card-footer d-flex align-items-center">
+                    <a href="<?= $BaseUrl->getUrlDataSupplier();?>" class="btn btn-secondary" style="padding: 8px 16px;">
+                      <i class="bi bi-x-circle me-1"></i> Cancel</a>
+                    <button type="submit" class="btn btn-success ms-auto" name="<?= $isEdit ? 'update_supplier' : 'add_supplier'?>" style="padding: 8px 16px;">
+                      <i class="bi bi-check-circle-fill me-1"></i> Submit</button>
+                  </div>
+                  </form>
+                  <!--end::Footer-->
+                  </div>
+</div>
+                  <!-- begin::JavaScript-->
+                  <!-- <script>
+                    // Example starter JavaScript for disabling form submissions if there are invalid fields
+                    (() => {
+                      'use strict';
+
+                      // Fetch all the forms we want to apply custom Bootstrap validation styles to
+                      const forms = document.querySelectorAll('.needs-validation');
+
+                      // Loop over them and prevent submission
+                      Array.from(forms).forEach((form) => {
+                        form.addEventListener(
+                          'submit',
+                          (event) => {
+                            if (!form.checkValidity()) {
+                              event.preventDefault();
+                              event.stopPropagation();
+                            }
+
+                            form.classList.add('was-validated');
+                          },
+                          false,
+                        );
+                      });
+                    })();
+                  </script> -->
                   <!--end::JavaScript -->
                 </div>
                 <!--end::Form Validation-->
@@ -212,5 +267,3 @@ $customers = $customersModel->getAll();
   </body>
   <!--end::Body-->
 </html>
-
-<?php unset($_SESSION['form_data']);?>

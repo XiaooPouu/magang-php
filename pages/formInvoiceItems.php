@@ -2,16 +2,36 @@
 session_start();
 require_once __DIR__ . '/../config/env.php';
 require_once BASE_PATH . 'config/database.php';
-include BASE_PATH . 'models/items_costumer.php';
+include BASE_PATH . 'models/invoice_items.php';
+include BASE_PATH . 'models/invoice.php';
 include BASE_PATH . 'models/items.php';
-include BASE_PATH . 'models/costumer.php';
+require_once BASE_PATH . 'function/baseurl.php';
 
-$db = (new Database())->getConnection();
-$itemModel = new Item($db);
-$costumerModel = new Costumer($db);
+$invoice_id = $_GET['id_inv'] ?? null;
 
-$items = $itemModel->getAll();
-$customers = $costumerModel->getAll();
+$model = new Invoice($db);
+$invoiceData = $model->getById($invoice_id);
+$itemsModel = new Item($db);
+$items = $itemsModel->getAll();
+
+// Validasi invoice
+if (!$invoice_id || !$invoiceData) {
+    die("Invoice tidak ditemukan.");
+}
+
+// Set session invoice_id
+if (!isset($_SESSION['invoice_id']) && $invoice_id) {
+    $_SESSION['invoice_id'] = $invoice_id;
+}
+
+$isEdit = false;
+$InvoiceItems = null;
+
+if(isset($_GET['id_inv']) && isset($_GET['id']) && isset($invoice_id)) {
+    $invoiceItemsModel = new InvoiceItems($db);
+    $InvoiceItems = $invoiceItemsModel->getById($_GET['id']); // Gantilah parameter
+    $isEdit = true;
+}
 ?>
 
 <!doctype html>
@@ -19,7 +39,7 @@ $customers = $costumerModel->getAll();
   <!--begin::Head-->
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title>AdminLTE 4 | General Form Elements</title>
+    <title>Form Invoice Items</title>
     <!--begin::Primary Meta Tags-->
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="title" content="AdminLTE 4 | General Form Elements" />
@@ -58,7 +78,7 @@ $customers = $costumerModel->getAll();
     />
     <!--end::Third Party Plugin(Bootstrap Icons)-->
     <!--begin::Required Plugin(AdminLTE)-->
-    <link rel="stylesheet" href="<?= BASE_URL?>src/css/adminlte.css" />
+    <link rel="stylesheet" href="<?= $BaseUrl->getUrlCSS();?>" />
     <!--end::Required Plugin(AdminLTE)-->
   </head>
   <!--end::Head-->
@@ -69,7 +89,7 @@ $customers = $costumerModel->getAll();
         <!--begin::Header-->
         <?php  include BASE_PATH . 'includes/header.php'  ?>
         <!--end::Header-->
-          <?php  include BASE_PATH . 'includes/sidebar.php'  ?>
+          <?php  include_once BASE_PATH . 'includes/sidebar.php'  ?>
             <!--begin::App Main-->
       <main class="app-main">
         <!--begin::App Content Header-->
@@ -78,10 +98,10 @@ $customers = $costumerModel->getAll();
           <div class="container-fluid mb-4">
             <!--begin::Row-->
             <div class="row">
-              <div class="col-md-6"><h3 class="mb-0">Items Costumers Form</h3></div>
+              <div class="col-md-6"><h3 class="mb-0">Detail Invoice Form</h3></div>
               <div class="col-md-6">
                 <ol class="breadcrumb float-sm-end">
-                  <li class="breadcrumb-item"><a href="<?= BASE_URL?>pages/dataItems_Costumer.php">Data Items Costumers</a></li>
+                  <li class="breadcrumb-item"><a href="<?= $BaseUrl->getUrlDetailInvoice($invoice_id);?>">Detail Invoice</a></li>
                   <li class="breadcrumb-item active" aria-current="page">Input Form</li>
                 </ol>
               </div>
@@ -101,57 +121,55 @@ $customers = $costumerModel->getAll();
                     <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                   </div>
                   <?php unset($_SESSION['alert']); ?>
-                <?php endif; ?>
+                <?php endif; ?> 
       
                  <!--begin::Form Validation-->
-                 <div class="card card-info card-outline mb-4">
+                <div class="card card-info card-outline mb-4">
                   <!--begin::Header-->
-                  <div class="card-header"><div class="card-title">Input Items Costumer</div></div>
+                  <div class="card-header"><div class="card-title">Input Invoice Items</div></div>
                   <!--end::Header-->
                   <!--begin::Form-->
-                  <form action="<?= BASE_URL ?>controllers/items_costumersController.php" method="POST">
+                  <form action="<?= $BaseUrl->getUrlControllerInvoiceItems(); ?>" method="POST">
+                  <input type="hidden" name="action" value="<?= $isEdit ? 'update' : 'create' ?>">
+                  <input type="hidden" name="id" value="<?= $itemData['id'] ?>">
+                  <input type="hidden" name="invoice_id" value="<?= $invoice_id ?>">
+                  <?php if ($isEdit): ?>
+                    <input type="hidden" name="id" value="<?= $isEdit ? $InvoiceItems['id'] : '' ?>">
+                  <?php endif; ?>
                     <!--begin::Body-->
                     <div class="card-body">
                       <!--begin::Row-->
                       <div class="row g-3">
                        <!--begin::Col-->
                        <div class="col-md-4">
-                          <label for="items_id" class="form-label">Nama Items</label>
-                          <select class="form-select" name="items_id" id="items_id" required>
-                          <option value="" selected disabled>-- Pilih Item --</option>
-                      <?php foreach ($items as $item): ?>
-                        <option value="<?= $item['id'] ?>"><?= $item['name'] ?></option>
-                      <?php endforeach; ?>
-                          </select>
+                       <label for="item" class="form-label">Items</label>
+                    <select name="items_id" class="form-select" required>
+                        <option value="">-- Pilih Item --</option>
+                        <?php foreach ($items as $item): ?>
+                            <option value="<?= $item['id'] ?>" <?= $isEdit && $InvoiceItems['items_id'] == $item['id'] ? 'selected' : '' ?>>
+                            <?= htmlspecialchars($item['name']) ?>
+                                </option>
+                        <?php endforeach; ?>
+                    </select>
                           <div class="invalid-feedback">Please select a valid state.</div>
                         </div>
                         <!--end::Col-->
                         <!--begin::Col-->
                         <div class="col-md-4">
-                          <label for="customers_id" class="form-label">Nama Costumers</label>
-                          <select class="form-select" name="customers_id" id="customers_id" required>
-                          <option value="" selected disabled>-- Pilih Customer --</option>
-                      <?php foreach ($customers as $cust): ?>
-                        <option value="<?= $cust['id'] ?>"><?= $cust['name'] ?></option>
-                      <?php endforeach; ?>
-                          </select>
+                        <label for="qty" class="form-label">Qty</label>
+                   <input type="number" name="qty" class="form-control" min="1"
+                      value="<?= $isEdit ? $InvoiceItems['qty'] : 1 ?>" required>
                           <div class="invalid-feedback">Please select a valid state.</div>
                         </div>
                         <!--end::Col-->
                         <!--begin::Col-->
                         <div class="col-md-4">
-                          <label for="price" class="form-label">Harga</label>
+                          <label for="price" class="form-label">Harga (Opsional)</label>
                           <div class="input-group has-validation">
                             <span class="input-group-text" id="inputGroupPrepend">Rp.</span>
-                            <input
-                              type="number"
-                              class="form-control"
-                              id="price"
-                              aria-describedby="inputGroupPrepend"
-                              required
-                              name="price"
-                              placeholder="Masukkan Angka Tanpa Pemisah Ribuan"
-                            />
+                            <input type="number" class="form-control" id="price"
+                            name="price" placeholder="Kosongkan untuk default harga item"
+                            value="<?= $isEdit ? $InvoiceItems['price'] : null ?>">
                             <div class="invalid-feedback">Please choose a username.</div>
                           </div>
                         </div>
@@ -162,8 +180,9 @@ $customers = $costumerModel->getAll();
                     <!--end::Body-->
                     <!--begin::Footer-->
                     <div class="card-footer d-flex align-items-center">
-                    <a href="<?= BASE_URL ?>pages/dataItems_Costumer.php" class="btn btn-secondary" style="padding: 8px 16px;"><i class="bi bi-x-circle me-1"></i> Cancel</a>
-                    <button type="submit" name="add_item_customer" class="btn btn-info ms-auto text-white" style="padding: 8px 16px;">
+                    <a href="<?= $BaseUrl->getUrlDetailInvoice($invoice_id); ?>" class="btn btn-secondary" style="padding: 8px 16px;">
+                      <i class="bi bi-x-circle me-1"></i> Cancel</a>
+                    <button type="submit" class="btn btn-info ms-auto text-white" style="padding: 8px 16px;">
                       <i class="bi bi-check-circle-fill me-1"></i> Submit
                     </button>
                     </div>
@@ -171,6 +190,7 @@ $customers = $costumerModel->getAll();
                   </form>
                   <!--end::Form-->
               </div>
+
 
                   <!--end::Input Group-->
                   <!--end::JavaScript -->

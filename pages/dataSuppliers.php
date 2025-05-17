@@ -3,9 +3,8 @@ session_start();
 require_once __DIR__ . '/../config/env.php';
 require_once BASE_PATH . 'config/database.php';
 include BASE_PATH . 'models/suppliers.php';
+require_once BASE_PATH . 'function/baseurl.php';
 
-$database = new Database();
-$db = $database->getConnection();
 $supplierModel = new Supplier($db);
 
 $search = $_SESSION['suppliers_data'] ?? [];
@@ -71,7 +70,7 @@ if(isset($_SESSION['alert_update'])) {
   <!--begin::Head-->
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title>AdminLTE 4 | General Form Elements</title>
+    <title>Data Suppliers</title>
     <!--begin::Primary Meta Tags-->
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="title" content="AdminLTE 4 | General Form Elements" />
@@ -110,7 +109,7 @@ if(isset($_SESSION['alert_update'])) {
     />
     <!--end::Third Party Plugin(Bootstrap Icons)-->
     <!--begin::Required Plugin(AdminLTE)-->
-    <link rel="stylesheet" href="<?= BASE_URL?>src/css/adminlte.css" />
+    <link rel="stylesheet" href="<?= $BaseUrl->getUrlCSS();?>" />
     <!--end::Required Plugin(AdminLTE)-->
   </head>
   <!--end::Head-->
@@ -121,37 +120,32 @@ if(isset($_SESSION['alert_update'])) {
         <!--begin::Header-->
         <?php include BASE_PATH . 'includes/header.php' ?>
         <!--end::Header-->
-          <?php  include BASE_PATH . 'includes/sidebar.php'  ?>
+          <?php  include_once BASE_PATH . 'includes/sidebar.php'  ?>
             <!--begin::App Main-->
       <main class="app-main">
         <!--begin::App Content Header-->
         <div class="app-content-header">
              <!--begin::Container-->
-          <div class="container-fluid mb-4">
+          <div class="container-fluid">
             <!--begin::Row-->
-            <div class="row">
+            <div class="row mb-4">
               <div class="col-sm-6"><h3 class="mb-4">Data Suppliers</h3></div>
               <div class="col-sm-6">
                 <ol class="breadcrumb float-sm-end">
-                  <li class="breadcrumb-item"><a href="<?= BASE_URL?>pages/dataSuppliers.php">Data Suppliers</a></li>
+                  <li class="breadcrumb-item"><a href="<?= $BaseUrl->getUrlDataSupplier();?>">Data Suppliers</a></li>
                   <li class="breadcrumb-item active" aria-current="page">Tabel Suppliers</li>
                 </ol>
               </div>
 
-              <form action="<?= BASE_URL ?>controllers/suppliersController.php" method="GET" class="d-flex mt-md-3">
+              <form action="<?= $BaseUrl->getUrlControllerSupplier(); ?>" method="GET" class="d-flex mt-md-3">
                 <input type="hidden" name="page" value="<?= $page ?>">
                 <input type="text" name="search" class="form-control me-2 mb-2" placeholder="Search">
                 <button class="btn btn-primary me-2 mb-2" type="submit">Search</button>
-                <a href="<?= BASE_URL ?>pages/dataSuppliers.php" class="btn btn-secondary me-2 mb-2">Reset</a>
+                <a href="<?= $BaseUrl->getUrlDataSupplier(); ?>" class="btn btn-secondary me-2 mb-2">Reset</a>
               </form>
             </div>
-            <!--end::Row-->
-          </div>
-          <!--end::Container-->
-          <!--begin::Container-->
-          <div class="container-fluid">
-          <div class="row g-4">
-      <div class="col-md-12">
+
+            <div class="col-md-12">
         <!-- Alert Message -->
     <?= isset($input) ? $input : '' ?>
     <?= isset($edit) ? $edit : '' ?>
@@ -163,7 +157,7 @@ if(isset($_SESSION['alert_update'])) {
                   <div class="card-header"><h3 class="card-title">Table Suppliers</h3></div>
                   <!-- button create -->
                     <div class="mt-3 mx-3">
-                      <a href="<?= BASE_URL?>pages/createSuppliers.php" class="btn btn-primary btn-sm"><i class="bi bi-plus-circle me-1"></i> Create New</a>
+                      <a href="<?= $BaseUrl->getUrlFormSupplier();?>" class="btn btn-primary btn-sm"><i class="bi bi-plus-circle me-1"></i> Create New</a>
                     </div>
                     <!-- end button create -->
                   <!-- /.card-header -->
@@ -181,9 +175,9 @@ if(isset($_SESSION['alert_update'])) {
                         <tr class="align-middle">
                           <td><?= htmlspecialchars($sp['ref_no'])?></td>
                           <td><?= htmlspecialchars($sp['name'])?></td>
-                          <td class="text-center"><a href="<?= BASE_URL?>pages/editSupplier.php?id=<?=$sp['id']?>" class="btn btn-sm btn-warning me-1">
+                          <td class="text-center"><a href="<?= $BaseUrl->getUrlFormSupplier($sp['id'])?>" class="btn btn-sm btn-warning me-1">
                             <i class="bi bi-pencil-square me-1"></i>Edit</a>
-                           <a href="<?= BASE_URL ?>controllers/suppliersController.php?delete_supplier=<?= $sp['id']?>" class="btn btn-sm btn-danger" onclick="return confirm('Are you sure?')">
+                           <a href="<?= $BaseUrl->getUrlControllerDeleteSupplier($sp['id']) ?>" class="btn btn-sm btn-danger" onclick="return confirm('Are you sure?')">
                             <i class="bi bi-trash me-1"></i>Delete</a>
                           </td>
                         </tr>
@@ -212,7 +206,11 @@ if(isset($_SESSION['alert_update'])) {
                   </div>
                 </div>
                 <!-- /.card -->
-</div>
+            <!--end::Row-->
+          </div>
+          <!--end::Container-->
+      
+
                   <!-- begin::JavaScript-->
                   <!-- <script>
                     // Example starter JavaScript for disabling form submissions if there are invalid fields
@@ -240,7 +238,7 @@ if(isset($_SESSION['alert_update'])) {
                     })();
                   </script> -->
                   <!--end::JavaScript -->
-                </div>
+               
                 <!--end::Form Validation-->
               </div>
               <!--end::Col-->

@@ -3,20 +3,21 @@ session_start();
 require_once __DIR__ . '/../config/env.php';
 require_once BASE_PATH . 'config/database.php';
 require_once BASE_PATH . 'models/invoice_items.php';
+require_once BASE_PATH . 'function/baseurl.php';
 
-$db = (new Database())->getConnection();
 $model = new InvoiceItems($db);
 
 // Tangkap aksi dari POST/GET
 $action = $_POST['action'] ?? $_GET['action'] ?? null;
 
+    $id = $_POST['id'] ?? null;
+    $invoice_id = $_POST['invoice_id'] ?? null;
+    $items_id = $_POST['items_id'] ?? null;
+    $qty = $_POST['qty'] ?? 1;
+    $price = $_POST['price'] ?? 0;
+
 switch ($action) {
     case 'create':
-        $invoice_id = $_POST['invoice_id'] ?? null;
-        $items_id   = $_POST['items_id'] ?? null;
-        $qty        = $_POST['qty'] ?? 1;
-        $price      = $_POST['price'] ?? 0;
-
 
         if ($invoice_id && $items_id && $qty) {
             $model->insert($invoice_id, $items_id, $qty, $price);
@@ -30,7 +31,7 @@ switch ($action) {
             ];
 
             // ✅ Redirect ke halaman dengan parameter yang sesuai
-            header('Location:' . BASE_URL . 'pages/dataInvoiceItems.php?id_inv=' . $invoice_id);
+            header('Location:' . $BaseUrl->getUrlDetailInvoice($invoice_id));
             exit;
         } else {
             echo "Data tidak lengkap.";
@@ -51,7 +52,7 @@ switch ($action) {
                         'type' => 'success',
                         'message' => 'Items berhasil dihapus!'
                     ];
-                    header('Location:' . BASE_URL . 'pages/dataInvoiceItems.php?id_inv=' . $invoice_id);
+                    header('Location:' . $BaseUrl->getUrlDetailInvoice($invoice_id));
                     exit;
                 } else {
                     echo "Gagal menghapus data.";
@@ -62,16 +63,16 @@ switch ($action) {
             break;
 
         case 'update':
-            $id = $_POST['id'] ?? null;
-            $invoice_id = $_POST['invoice_id'] ?? null;
-            $items_id = $_POST['items_id'] ?? null;
-            $qty = $_POST['qty'] ?? 1;
-            $price = $_POST['price'] ?? 0;
             
             if($id && $invoice_id && $items_id && $qty){
                 $model->update($id, $invoice_id, $items_id, $qty, $price);
                 unset($_SESSION['invoice_id']);
-                header('Location: ' . BASE_URL . 'pages/dataInvoiceItems.php?id_inv=' . $invoice_id);
+
+                $_SESSION['alert'] = [
+                    'type' => 'success',
+                    'message' => 'Items berhasil diupdate!'
+                ];
+                header('Location: ' . $BaseUrl->getUrlDetailInvoice($invoice_id));
                 exit;
             }
             break;
@@ -94,7 +95,7 @@ if (isset($_GET['search'])) {
         $_SESSION['search_keyword'] = $keyword;
 
         // Redirect ke halaman dataInvoiceItems.php dengan parameter id_inv
-        header('Location:' . BASE_URL . 'pages/dataInvoiceItems.php?id_inv=' . $invoice_id);
+        header('Location:' . $BaseUrl->getUrlDetailInvoice($invoice_id));
         exit;
     } else {
         // Jika keyword atau invoice_id tidak ditemukan

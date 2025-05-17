@@ -2,11 +2,9 @@
 session_start();
 require_once __DIR__ . '/../config/env.php';
 require_once BASE_PATH . 'config/database.php';
-include BASE_PATH . 'models/items.php';
+include_once BASE_PATH . 'models/items.php';
+require_once BASE_PATH . 'function/baseurl.php';
 
-
-$database = new Database();
-$db = $database->getConnection();
 $itemModel = new Item($db);
 
 // Ambil data dari session kalau ada
@@ -73,7 +71,7 @@ if(isset($_SESSION['alert_update'])) {
   <!--begin::Head-->
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title>AdminLTE 4 | General Form Elements</title>
+    <title>Data Items</title>
     <!--begin::Primary Meta Tags-->
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="title" content="AdminLTE 4 | General Form Elements" />
@@ -112,7 +110,7 @@ if(isset($_SESSION['alert_update'])) {
     />
     <!--end::Third Party Plugin(Bootstrap Icons)-->
     <!--begin::Required Plugin(AdminLTE)-->
-    <link rel="stylesheet" href="<?= BASE_URL?>src/css/adminlte.css" />
+    <link rel="stylesheet" href="<?= $BaseUrl->getUrlCSS();?>" />
     <!--end::Required Plugin(AdminLTE)-->
   </head>
   <!--end::Head-->
@@ -129,30 +127,24 @@ if(isset($_SESSION['alert_update'])) {
         <!--begin::App Content Header-->
         <div class="app-content-header">
              <!--begin::Container-->
-          <div class="container-fluid mb-4">
+          <div class="container-fluid">
             <!--begin::Row-->
-            <div class="row">
+            <div class="row mb-4">
               <div class="col-md-6"><h3 class="mb-4">Data Items</h3></div>
               <div class="col-md-6">
                 <ol class="breadcrumb float-sm-end">
-                  <li class="breadcrumb-item"><a href="<?= BASE_URL?>pages/dataItems.php">Data Items</a></li>
+                  <li class="breadcrumb-item"><a href="<?= $BaseUrl->getUrlDataItems();?>">Data Items</a></li>
                   <li class="breadcrumb-item active" aria-current="page">Tabel Items</li>
                 </ol>
               </div>
 
-              <form action="<?= BASE_URL ?>controllers/itemsController.php" method="GET" class="d-flex mt-md-3">
-                  <input type="hidden" name="page" value="<?= $page ?>">
-                  <input type="text" name="search" class="form-control me-2 mb-2" placeholder="Search">
-                  <button class="btn btn-primary me-2 mb-2" type="submit">Search</button>
-                  <a href="<?= BASE_URL ?>pages/dataItems.php" class="btn btn-secondary me-2 mb-2">Reset</a>
-                </form>
+              <form action="<?= $BaseUrl->getUrlControllerItems(); ?>" method="GET" class="d-flex mt-md-3">
+              <input type="hidden" name="page" value="<?= $page ?>">
+              <input type="text" name="search" class="form-control me-2 mb-2" placeholder="Search">
+              <button class="btn btn-primary me-2 mb-2" type="submit">Search</button>
+              <a href="<?= $BaseUrl->getUrlDataItems(); ?>" class="btn btn-secondary me-2 mb-2">Reset</a>
+            </form>
             </div>
-            <!--end::Row-->
-          </div>
-          <!--end::Container-->
-          <!--begin::Container-->
-          <div class="container-fluid">
-          <div class="row g-4">
       <div class="col-md-12">
          <!-- Alert Message -->
     <?= isset($input) ? $input : '' ?>
@@ -160,14 +152,13 @@ if(isset($_SESSION['alert_update'])) {
     <?= isset($hapus) ? $hapus : '' ?>
   </div>
 
-
                 <!-- Table Items -->
                 <div class="card mb-4">
                   <div class="card-header"><h3 class="card-title">Table Items</h3></div>
                   <!-- button create -->
                     <div class="mt-3 mx-3">
-                      <a href="<?= BASE_URL ?>pages/createItems.php" class="btn btn-primary btn-sm">
-                        <i class="bi bi-plus-circle me-1"></i> Create New</a>
+                      <a href="<?= $BaseUrl->getUrlFormItems(); ?>" class="btn btn-primary btn-sm">
+                        <i class="bi bi-plus-circle me-1"></i>Create New</a>
                     </div>
                     <!-- end button create -->
                   <!-- /.card-header -->
@@ -175,10 +166,10 @@ if(isset($_SESSION['alert_update'])) {
                     <table class="table table-bordered">
                       <thead>
                         <tr>
-                          <th style="width: 10px">Kode Items</th>
-                          <th style="width: 40px;">Nama Items</th>
-                          <th style="width: 40px;" class="text-end">Harga Items</th>
-                          <th style="width: 10px;" class="text-center">Action</th>
+                          <th>Kode Items</th>
+                          <th>Nama Barang</th>
+                          <th class="text-end">Harga</th>
+                          <th class="text-center">Action</th>
                         </tr>
                       </thead>
                       <?php foreach ($items as $item): ?>
@@ -190,13 +181,13 @@ if(isset($_SESSION['alert_update'])) {
                           <?= htmlspecialchars('Rp. ' . number_format($item['price'], 0,',','.'))?>
                           </td>
                           <td class="text-center">
-                          <a href="<?= BASE_URL?>pages/editItems.php?id=<?= $item['id']?>" class="btn btn-sm btn-warning me-1">
+                          <a href="<?= $BaseUrl->getUrlFormItems($item['id']) ?>" class="btn btn-sm btn-warning me-1">
                             <i class="bi bi-pencil-square me-1"></i>Edit</a>
-                <a href="<?= BASE_URL ?>controllers/itemsController.php?delete_item=<?= $item['id']?>" class="btn btn-sm btn-danger" onclick="return confirm('Are you sure?')">
+                <a href="<?= $BaseUrl->getUrlControllerDelete($item['id']) ?>" class="btn btn-sm btn-danger" onclick="return confirm('Are you sure?')">
                             <i class="bi bi-trash me-1"></i>Delete</a>
                           </td>
                         </tr>
-                        <?php endforeach;?>
+                        <?php endforeach;?> 
                       </tbody>
                     </table>
                   </div>
@@ -220,7 +211,11 @@ if(isset($_SESSION['alert_update'])) {
                   </div>
                 </div>
                 <!-- /.card -->
-</div>
+            <!--end::Row-->
+          </div>
+          <!--end::Container-->
+          
+          
                   <!-- begin::JavaScript-->
                   <!-- <script>
                     // Example starter JavaScript for disabling form submissions if there are invalid fields
@@ -248,7 +243,7 @@ if(isset($_SESSION['alert_update'])) {
                     })();
                   </script> -->
                   <!--end::JavaScript -->
-                </div>
+                
                 <!--end::Form Validation-->
               </div>
               <!--end::Col-->

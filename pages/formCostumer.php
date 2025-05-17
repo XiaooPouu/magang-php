@@ -2,76 +2,35 @@
 session_start();
 require_once __DIR__ . '/../config/env.php';
 require_once BASE_PATH . 'config/database.php';
-include BASE_PATH . 'models/costumer.php';
+include_once BASE_PATH . 'models/costumer.php';
 require_once BASE_PATH . 'function/baseurl.php';
 
+$formData = isset($_SESSION['form_data']) ? $_SESSION['form_data'] : ['ref_no' => '', 'name' => ''];
+$alert = isset($_SESSION['alert']);
 
-$costumerModel = new Costumer($db);
+$isEdit = false; // Variabel untuk menandakan mode edit
+$costumer = null;
 
-$search = $_SESSION['costumers_data'] ?? [];
-
-unset($_SESSION['costumers_data']);
-
-$page = isset($_GET['page']) ? $_GET['page'] : 1;
-$perPage = 5;
-$offset = ($page - 1) * $perPage;
-
-// hitung total data
-$totalCostumers = $costumerModel->getCount();
-
-// hitung total halaman
-$totalPages = ceil($totalCostumers / $perPage);
-
-
-if (!empty($search)) {
-  $customers = $search; // hasil dari session
-} else {
-  $customers = $costumerModel->getWhitLimit($perPage, $offset);
+// Mengecek apakah ada parameter 'id' pada URL
+if (isset($_GET['id'])) {
+  $id = $_GET['id'];
+  $costumerModel = new Costumer($db);
+  $costumer = $costumerModel->getById($id); // Mengambil data costumer berdasarkan id
+  if ($costumer) {
+    $formData = [
+      'ref_no' => $costumer['ref_no'],
+      'name' => $costumer['name']
+    ];
+    $isEdit = true; // Menandakan form ini untuk edit
+  }
 }
-
-if(isset($_SESSION['alert'])) {
-  $type = $_SESSION['alert']['type'];
-  $message = $_SESSION['alert']['message'];
-  $input = "<div class='alert alert-{$type} alert-dismissible fade show' role='alert'>
-      {$message}
-      <button type='button' class='btn-close' data-bs-dismiss='alert' aria-label='Close'></button>
-      </div>";
-  
-  unset($_SESSION['alert']); // agar hanya tampil sekali
-}
-
-if(isset($_SESSION['alert_delete'])) {
-  $type = $_SESSION['alert_delete']['type'];
-  $message = $_SESSION['alert_delete']['message'];
-  $hapus = "<div class='alert alert-{$type} alert-dismissible fade show' role='alert'>
-      {$message}
-      <button type='button' class='btn-close' data-bs-dismiss='alert' aria-label='Close'></button>
-      </div>";
-  
-  unset($_SESSION['alert_delete']); // agar hanya tampil sekali
-}
-
-if(isset($_SESSION['alert_update'])) {
-  $type = $_SESSION['alert_update']['type'];
-  $message = $_SESSION['alert_update']['message'];
-  $edit = "<div class='alert alert-{$type} alert-dismissible fade show' role='alert'>
-      {$message}
-      <button type='button' class='btn-close' data-bs-dismiss='alert' aria-label='Close'></button>
-      </div>";
-  
-  unset($_SESSION['alert_update']); // agar hanya tampil sekali
-}
-
 ?>
-
-
-
 <!doctype html>
 <html lang="en">
   <!--begin::Head-->
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title>Data Costumers</title>
+    <title>Create Costumer</title>
     <!--begin::Primary Meta Tags-->
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="title" content="AdminLTE 4 | General Form Elements" />
@@ -119,100 +78,101 @@ if(isset($_SESSION['alert_update'])) {
     <!--begin::App Wrapper-->
       <div class="app-wrapper">
         <!--begin::Header-->
-        <?php include BASE_PATH . 'includes/header.php' ?>
+        <?php include BASE_PATH . 'includes/header.php'?>
         <!--end::Header-->
-          <?php  include BASE_PATH . 'includes/sidebar.php'  ?>
-            <!--begin::App Main-->
+        <?php  include_once BASE_PATH . 'includes/sidebar.php'  ?>
+        <!--begin::App Main-->
       <main class="app-main">
         <!--begin::App Content Header-->
         <div class="app-content-header">
-             <!--begin::Container-->
-          <div class="container-fluid">
+            <!--begin::Container-->
+          <div class="container-fluid mb-4">
             <!--begin::Row-->
-            <div class="row mb-4">
-              <div class="col-md-6"><h3 class="mb-4">Data Costumers</h3></div>
+            <div class="row">
+              <div class="col-md-6"><h3 class="mb-0">Costumer Form</h3></div>
               <div class="col-md-6">
                 <ol class="breadcrumb float-sm-end">
                   <li class="breadcrumb-item"><a href="<?= $BaseUrl->getUrlDataCostumer();?>">Data Costumers</a></li>
-                  <li class="breadcrumb-item active" aria-current="page">Tabel Costumers</li>
+                  <li class="breadcrumb-item active" aria-current="page"><?= $isEdit ? 'Edit Form' : 'Input Form'?></li>
                 </ol>
               </div>
-
-              <form action="<?= $BaseUrl->getUrlControllerCostumer(); ?>" method="GET" class="d-flex mt-md-3">
-                  <input type="hidden" name="page" value="<?= $page ?>">
-                  <input type="text" name="search" class="form-control me-2 mb-2" placeholder="Search">
-                  <button class="btn btn-primary me-2 mb-2" type="submit">Search</button>
-                  <a href="<?= $BaseUrl->getUrlDataCostumer(); ?>" class="btn btn-secondary me-2 mb-2">Reset</a>
-                </form>
-            </div>
-                <div class="col-md-12">
-        <!-- Alert Message -->
-    <?= isset($input) ? $input : '' ?>
-    <?= isset($edit) ? $edit : '' ?>
-    <?= isset($hapus) ? $hapus : '' ?>
-  </div>
-
-              <!-- tabel Supplier -->
-              <div class="card mb-4">
-                  <div class="card-header"><h3 class="card-title">Table Costumers</h3></div>
-                  <!-- button create -->
-                    <div class="mt-3 mx-3">
-                      <a href="<?= $BaseUrl->getUrlFormCostumer();?>" class="btn btn-primary btn-sm"><i class="bi bi-plus-circle me-1"></i> Create New</a>
-                    </div>
-                    <!-- end button create -->
-                  <!-- /.card-header -->
-                  <div class="card-body">
-                    <table class="table table-bordered">
-                      <thead>
-                        <tr>
-                          <th>Kode Costumers</th>
-                          <th>Nama Costumers</th>
-                          <th class="text-center">Action</th>
-                        </tr>
-                      </thead>
-                      <?php foreach ($customers as $cs):?>
-                      <tbody>
-                        <tr class="align-middle">
-                          <td><?= htmlspecialchars($cs['ref_no'])?></td>
-                          <td><?= htmlspecialchars($cs['name'])?></td>
-                          <td class="text-center"><a href="<?= $BaseUrl->getUrlFormCostumer($cs['id'])?>" class="btn btn-sm btn-warning me-1">
-                            <i class="bi bi-pencil-square me-1"></i>Edit</a>
-                           <a href="<?= $BaseUrl->getUrlControllerDeleteCostumer($cs['id']) ?>" class="btn btn-sm btn-danger" onclick="return confirm('Are you sure?')">
-                            <i class="bi bi-trash me-1"></i>Delete</a>
-                          </td>
-                        </tr>
-                      </tbody>
-                      <?php endforeach;?>
-                    </table>
-                  </div>
-                  <!-- /.card-body -->
-                    <!-- /.card-body -->
-                  <div class="card-footer clearfix">
-                    <ul class="pagination pagination-sm m-0 float-end">
-                      <?php if ($page > 1): ?>
-                        <li class="page-item"><a class="page-link" href="?page=<?= $page - 1 ?>">&laquo;</a></li>
-                      <?php endif; ?>
-
-                      <?php for ($i = 1; $i <= $totalPages; $i++): ?>
-                        <li class="page-item <?= $i == $page ? 'active' : '' ?>">
-                          <a class="page-link" href="?page=<?= $i ?>"><?= $i ?></a>
-                        </li>
-                      <?php endfor; ?>
-
-                      <?php if ($page < $totalPages): ?>
-                        <li class="page-item"><a class="page-link" href="?page=<?= $page + 1 ?>">&raquo;</a></li>
-                      <?php endif; ?>
-                    </ul>
-                  </div>
-                </div>
-                <!-- /.card -->
             </div>
             <!--end::Row-->
           </div>
           <!--end::Container-->
-          
-      
+          <!--begin::Container-->
+          <div class="container-fluid">
+          <div class="row g-4">
+      <div class="col-md-12">
 
+      <?php if ($alert): ?>
+  <div class="alert alert-<?= $_SESSION['alert']['type'] ?> alert-dismissible fade show" role="alert">
+    <?= $_SESSION['alert']['message'] ?>
+    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+  </div>
+  <?php unset($_SESSION['alert']); ?>
+<?php endif; ?>
+    <!--begin::Input Group-->
+    <div class="card card-success card-outline mb-4">
+                  <!--begin::Header-->
+                  <div class="card-header"><div class="card-title"><?= $isEdit ? 'Edit Costumer' : 'Input Costumer'?></div></div>
+                  <!--end::Header-->
+                  <form action="<?= $BaseUrl->getUrlControllerCostumer();?>" method="POST">
+                    <?php if ($isEdit): ?>
+                      <input type="hidden" name="id" value="<?= htmlspecialchars($costumer['id']) ?>">
+                      <?php endif;?>
+                  <!--begin::Body-->
+                  
+                  <div class="card-body">
+                  <div class="row">
+                  <div class="col-md-6">
+                    <label for="costumer_ref_no" class="form-label">Kode Costumer</label>
+                    <div class="input-group mb-3">
+                      <input
+                        type="text"
+                        class="form-control"
+                        placeholder="Contoh: CUS001"
+                        aria-label="Ref_No"
+                        name="ref_no"
+                        id="costumer_ref_no"
+                        aria-describedby="basic-addon1"
+                        required
+                        value="<?= htmlspecialchars($formData['ref_no'])?>"
+                      />
+                    </div>
+                    </div>
+
+                    <div class="col-md-6">
+                    <label for="costumer_name" class="form-label">Nama Costumer</label>
+                    <div class="mb-3">
+                      <div class="input-group">
+                        <input
+                          type="text"
+                          class="form-control"
+                          name="name"
+                          id="costumer_name"
+                          required
+                          aria-describedby="basic-addon3 basic-addon4"
+                          value="<?= htmlspecialchars($formData['name'])?>"
+                          placeholder="Masukkan Nama Customer Dengan Jelas"
+                        />
+                      </div>
+                    </div>
+                    </div>
+                    </div>
+                  </div>
+                  <!--end::Body-->
+                  <!--begin::Footer-->
+                  <div class="card-footer d-flex align-items-center">
+                    <a href="<?= $BaseUrl->getUrlDataCostumer();?>" class="btn btn-secondary" style="padding: 8px 16px;">
+                      <i class="bi bi-x-circle me-1"></i> Cancel</a>
+                    <button type="submit" class="btn btn-success ms-auto" name="<?= $isEdit ? 'update_costumer' : 'add_costumer'?>" style="padding: 8px 16px;">
+                      <i class="bi bi-check-circle-fill me-1"></i> Submit</button>
+                  </div>
+                  </form>
+                  <!--end::Footer-->
+                  </div>
+</div>
                   <!-- begin::JavaScript-->
                   <!-- <script>
                     // Example starter JavaScript for disabling form submissions if there are invalid fields
@@ -240,9 +200,10 @@ if(isset($_SESSION['alert_update'])) {
                     })();
                   </script> -->
                   <!--end::JavaScript -->
-              
+                </div>
                 <!--end::Form Validation-->
               </div>
+              
               <!--end::Col-->
             </div>
             <!--end::Row-->
@@ -252,7 +213,7 @@ if(isset($_SESSION['alert_update'])) {
         <!--end::App Content-->
       </main>
       <!--end::App Main-->
-      <?php include BASE_PATH .'includes/footer.php'?>
+      <?php include BASE_PATH . 'includes/footer.php'?>
     </div>
     <!--end::App Wrapper-->
     <!--begin::Script-->
@@ -307,3 +268,5 @@ if(isset($_SESSION['alert_update'])) {
   </body>
   <!--end::Body-->
 </html>
+
+<?php unset($_SESSION['form_data']);?>

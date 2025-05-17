@@ -6,8 +6,8 @@ include BASE_PATH . "models/invoice.php";
 include BASE_PATH . 'models/invoice_items.php';
 include BASE_PATH . 'models/costumer.php';
 include BASE_PATH . 'models/items.php';
+require_once BASE_PATH . 'function/baseurl.php';
 
-$db = (new Database())->getConnection();
 
 $id_inv = $_GET['id_inv'] ?? $_SESSION['invoice_id'] ?? null;
 $invoiceItemsModel = new InvoiceItems($db);
@@ -56,7 +56,7 @@ $items = $itemsModel->getAll();
   <!--begin::Head-->
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title>AdminLTE 4 | General Form Elements</title>
+    <title>Data Invoice Items</title>
     <!--begin::Primary Meta Tags-->
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="title" content="AdminLTE 4 | General Form Elements" />
@@ -95,7 +95,7 @@ $items = $itemsModel->getAll();
     />
     <!--end::Third Party Plugin(Bootstrap Icons)-->
     <!--begin::Required Plugin(AdminLTE)-->
-    <link rel="stylesheet" href="<?= BASE_URL?>src/css/adminlte.css" />
+    <link rel="stylesheet" href="<?= $BaseUrl->getUrlCSS();?>" />
     <!--end::Required Plugin(AdminLTE)-->
   </head>
   <!--end::Head-->
@@ -106,7 +106,7 @@ $items = $itemsModel->getAll();
         <!--begin::Header-->
         <?php include BASE_PATH . 'includes/header.php' ?>
         <!--end::Header-->
-          <?php  include BASE_PATH .'includes/sidebar.php'  ?>
+          <?php  include_once BASE_PATH .'includes/sidebar.php'  ?>
             <!--begin::App Main-->
       <main class="app-main">
         <!--begin::App Content Header-->
@@ -118,7 +118,7 @@ $items = $itemsModel->getAll();
               <div class="col-md-6"><h3 class="mb-0">Detail Invoice</h3></div>
               <div class="col-md-6">
                 <ol class="breadcrumb float-sm-end">
-                  <li class="breadcrumb-item"><a href="<?= BASE_URL?>pages/dataInvoice.php">Data Invoice</a></li>
+                  <li class="breadcrumb-item"><a href="<?= $BaseUrl->getUrlDataInvoice();?>">Data Invoice</a></li>
                   <li class="breadcrumb-item active" aria-current="page">Table Invoices</li>
                 </ol>
               </div>
@@ -166,7 +166,7 @@ $items = $itemsModel->getAll();
             <div class="d-flex justify-content-lg-start align-items-center mb-3">
             <!-- button create -->
             <div class="mb-2 me-2">
-                <a href="<?= BASE_URL ?>pages/editInvoice.php?id_inv=<?= $id_inv ?>" class="btn btn-warning btn-sm">
+                <a href="<?= $BaseUrl->getUrlFormInvoice($id_inv) ?>" class="btn btn-warning btn-sm">
                 <i class="bi bi-pencil-square me-1"></i> Edit Customer
                 </a>
             </div>
@@ -174,7 +174,7 @@ $items = $itemsModel->getAll();
 
             <!-- button print -->
             <div class="mb-2 mx-2">
-                <a href="<?= BASE_URL ?>pages/invoice_print.php?id=<?= $_GET['id_inv']?>" class="btn btn-success btn-sm">
+                <a href="<?= $BaseUrl->getPrint($id_inv) ?>" class="btn btn-success btn-sm">
                 <i class="bi bi-printer me-1"></i> Print
                 </a>
             </div>
@@ -192,7 +192,7 @@ $items = $itemsModel->getAll();
 
           <!-- Tombol -->
           <div class="mb-3 d-flex justify-content-between align-items-center">
-            <a href="<?= BASE_URL ?>pages/createInvoiceItems.php?id_inv=<?= $invoice['id_inv'] ?>" class="btn btn-primary btn-sm">
+            <a href="<?= $BaseUrl->getUrlFormInvoiceItems($id_inv) ?>" class="btn btn-primary btn-sm">
               <i class="bi bi-plus-circle me-1"></i> Tambah Item
             </a>
           </div>
@@ -222,11 +222,11 @@ $items = $itemsModel->getAll();
                       <td class="text-end">Rp. <?= number_format($item['price'], 0, ',', '.') ?></td>
                       <td class="text-end">Rp. <?= number_format($item['total'], 0, ',', '.') ?></td>
                       <td class="text-center">
-                      <a href="<?= BASE_URL ?>pages/editInvoiceItems.php?id=<?= $item['id'] ?>&id_inv=<?= $invoice['id_inv'] ?>" 
+                      <a href="<?= $BaseUrl->getUrlFormInvoiceItems( $id_inv, $item['id']) ?>" 
                         class="btn btn-warning btn-sm">
                         <i class="bi bi-pencil-square"></i> Edit
                       </a>
-                        <a href="<?= BASE_URL?>controllers/invoice_itemsController.php?action=delete&id=<?= $item['id'] ?>" 
+                        <a href="<?= $BaseUrl->getUrlControllerDeleteInvoiceItems($item['id']) ?>" 
                             class="btn btn-danger btn-sm"
                             onclick="return confirm('Yakin ingin menghapus item ini?');">
                             <i class="bi bi-trash"></i> Delete

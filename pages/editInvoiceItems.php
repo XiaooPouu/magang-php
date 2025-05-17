@@ -4,8 +4,8 @@ require_once __DIR__ . '/../config/env.php';
 require_once BASE_PATH . 'config/database.php';
 include BASE_PATH . 'models/invoice_items.php';
 include BASE_PATH . 'models/items.php';
+require_once BASE_PATH . 'function/baseurl.php';
 
-$db = (new Database())->getConnection();
 $itemModel = new Item($db);
 $items = $itemModel->getAll();
 
@@ -31,13 +31,14 @@ $itemData = $invoiceItemsModel->getById($id);
 if (!$itemData) {
     die("Data tidak ditemukan.");
 }
+
 ?>
 <!doctype html>
 <html lang="en">
   <!--begin::Head-->
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title>AdminLTE 4 | General Form Elements</title>
+    <title>Edit Invoice Items</title>
     <!--begin::Primary Meta Tags-->
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="title" content="AdminLTE 4 | General Form Elements" />
@@ -76,7 +77,7 @@ if (!$itemData) {
     />
     <!--end::Third Party Plugin(Bootstrap Icons)-->
     <!--begin::Required Plugin(AdminLTE)-->
-    <link rel="stylesheet" href="<?= BASE_URL?>src/css/adminlte.css" />
+    <link rel="stylesheet" href="<?= $BaseUrl->getUrlCSS();?>" />
     <!--end::Required Plugin(AdminLTE)-->
   </head>
   <!--end::Head-->
@@ -87,7 +88,7 @@ if (!$itemData) {
         <!--begin::Header-->
         <?php  include BASE_PATH . 'includes/header.php'  ?>
         <!--end::Header-->
-          <?php  include BASE_PATH . 'includes/sidebar.php'  ?>
+          <?php  include_once BASE_PATH . 'includes/sidebar.php'  ?>
             <!--begin::App Main-->
       <main class="app-main">
         <!--begin::App Content Header-->
@@ -99,7 +100,7 @@ if (!$itemData) {
               <div class="col-md-6"><h3 class="mb-0">Detail Invoice Form</h3></div>
               <div class="col-md-6">
                 <ol class="breadcrumb float-sm-end">
-                  <li class="breadcrumb-item"><a href="<?= BASE_URL?>pages/dataInvoiceItems.php?id_inv=<?= $invoice_id ?>">Detail Invoice</a></li>
+                  <li class="breadcrumb-item"><a href="<?= $BaseUrlIncoice->getUrlDetailInvoice($id_inv);?>">Detail Invoice</a></li>
                   <li class="breadcrumb-item active" aria-current="page">Edit Form</li>
                 </ol>
               </div>
@@ -127,7 +128,7 @@ if (!$itemData) {
                   <div class="card-header"><div class="card-title">Edit Invoice Items</div></div>
                   <!--end::Header-->
                   <!--begin::Form-->
-                  <form action="<?= BASE_URL ?>controllers/invoice_itemsController.php" method="POST">
+                  <form action="<?= $BaseUrlIncoice->getUrlControllerInvoiceItems(); ?>" method="POST">
                   <input type="hidden" name="action" value="update">
                   <input type="hidden" name="id" value="<?= $itemData['id'] ?>">
                   <input type="hidden" name="invoice_id" value="<?= $id_inv ?>">
@@ -179,7 +180,7 @@ if (!$itemData) {
                     <!--end::Body-->
                     <!--begin::Footer-->
                     <div class="card-footer d-flex align-items-center">
-                    <a href="<?= BASE_URL ?>pages/dataInvoiceItems.php?id_inv=<?= $id_inv ?>" class="btn btn-secondary" style="padding: 8px 16px;"><i class="bi bi-x-circle me-1"></i> Cancel</a>
+                    <a href="<?= $BaseUrlIncoice->getUrlDetailInvoice($id_inv); ?>" class="btn btn-secondary" style="padding: 8px 16px;"><i class="bi bi-x-circle me-1"></i> Cancel</a>
                     <button type="submit" class="btn btn-info ms-auto text-white" style="padding: 8px 16px;">
                       <i class="bi bi-check-circle-fill me-1"></i> Submit
                     </button>

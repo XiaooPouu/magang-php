@@ -1,31 +1,29 @@
 <?php
 session_start();
 require_once __DIR__ . '/../config/env.php';
-require_once BASE_PATH . 'config/database.php';
-include BASE_PATH . 'models/invoice_items.php';
-include BASE_PATH . 'models/invoice.php';
 include BASE_PATH . 'models/items.php';
+require_once BASE_PATH . 'function/baseurl.php';
 
-$invoice_id = $_GET['id_inv'] ?? null;
+$formData = isset($_SESSION['form_data']) ? $_SESSION['form_data'] : ['ref_no' => '', 'name' => '', 'price' => ''];
+$alert = isset ($_SESSION['alert']);
 
-$db = (new Database())->getConnection();
+$isEdit = false; // Variabel untuk menandakan mode edit
+$item = null;
 
-$model = new Invoice($db);
-$invoiceData = $model->getById($invoice_id);
-$itemsModel = new Item($db);
-$items = $itemsModel->getAll();
-
-// Validasi invoice
-if (!$invoice_id || !$invoiceData) {
-    die("Invoice tidak ditemukan.");
+// Mengecek apakah ada parameter 'id' pada URL
+if (isset($_GET['id'])) {
+    $id = $_GET['id'];
+    $itemModel = new Item($db);
+    $item = $itemModel->getById($id); // Mengambil data item berdasarkan id
+    if ($item) {
+        $formData = [
+            'ref_no' => $item['ref_no'],
+            'name' => $item['name'],
+            'price' => $item['price']
+        ];
+        $isEdit = true; // Menandakan form ini untuk edit
+    }
 }
-
-// Set session invoice_id
-if (!isset($_SESSION['invoice_id']) && $invoice_id) {
-    $_SESSION['invoice_id'] = $invoice_id;
-}
-
-$invoiceItemsModel = new InvoiceItems($db);
 ?>
 
 <!doctype html>
@@ -33,7 +31,7 @@ $invoiceItemsModel = new InvoiceItems($db);
   <!--begin::Head-->
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title>AdminLTE 4 | General Form Elements</title>
+    <title>Create Items</title>
     <!--begin::Primary Meta Tags-->
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="title" content="AdminLTE 4 | General Form Elements" />
@@ -72,7 +70,7 @@ $invoiceItemsModel = new InvoiceItems($db);
     />
     <!--end::Third Party Plugin(Bootstrap Icons)-->
     <!--begin::Required Plugin(AdminLTE)-->
-    <link rel="stylesheet" href="<?= BASE_URL?>src/css/adminlte.css" />
+    <link rel="stylesheet" href="<?= $BaseUrl->getUrlCSS();?>" />
     <!--end::Required Plugin(AdminLTE)-->
   </head>
   <!--end::Head-->
@@ -83,7 +81,7 @@ $invoiceItemsModel = new InvoiceItems($db);
         <!--begin::Header-->
         <?php  include BASE_PATH . 'includes/header.php'  ?>
         <!--end::Header-->
-          <?php  include BASE_PATH . 'includes/sidebar.php'  ?>
+          <?php  include_once BASE_PATH . 'includes/sidebar.php'  ?>
             <!--begin::App Main-->
       <main class="app-main">
         <!--begin::App Content Header-->
@@ -92,11 +90,11 @@ $invoiceItemsModel = new InvoiceItems($db);
           <div class="container-fluid mb-4">
             <!--begin::Row-->
             <div class="row">
-              <div class="col-md-6"><h3 class="mb-0">Detail Invoice Form</h3></div>
+              <div class="col-md-6"><h3 class="mb-0">Items Form</h3></div>
               <div class="col-md-6">
                 <ol class="breadcrumb float-sm-end">
-                  <li class="breadcrumb-item"><a href="<?= BASE_URL?>pages/dataInvoiceItems.php?id_inv=<?= $invoice_id ?>">Detail Invoice</a></li>
-                  <li class="breadcrumb-item active" aria-current="page">Input Form</li>
+                  <li class="breadcrumb-item"><a href="<?= $BaseUrl->getUrlDataItems();?>">Data Items</a></li>
+                  <li class="breadcrumb-item active" aria-current="page"><?= $isEdit ? 'Edit Form' : 'Input Form' ?></li>
                 </ol>
               </div>
             </div>
@@ -108,84 +106,90 @@ $invoiceItemsModel = new InvoiceItems($db);
           <div class="row g-4">
       <div class="col-md-12">
 
-                <!-- Notifikasi -->
-                <?php if (isset($_SESSION['alert'])): ?>
-                  <div class="alert alert-<?= $_SESSION['alert']['type'] ?> alert-dismissible fade show" role="alert">
-                    <?= $_SESSION['alert']['message'] ?>
-                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                  </div>
-                  <?php unset($_SESSION['alert']); ?>
-                <?php endif; ?> 
+      <?php if ($alert): ?>
+  <div class="alert alert-<?= $_SESSION['alert']['type'] ?> alert-dismissible fade show" role="alert">
+    <?= $_SESSION['alert']['message'] ?>
+    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+  </div>
+  <?php unset($_SESSION['alert']); ?>
+<?php endif; ?>
       
-                 <!--begin::Form Validation-->
-                <div class="card card-info card-outline mb-4">
+                <!--begin::Input Group-->
+                <div class="card card-success card-outline mb-4">
                   <!--begin::Header-->
-                  <div class="card-header"><div class="card-title">Input Invoice Items</div></div>
+                  <div class="card-header"><div class="card-title"><?= $isEdit ? 'Edit Item' : 'Input Items' ?></div>
+                </div>
                   <!--end::Header-->
-                  <!--begin::Form-->
-                  <form action="<?= BASE_URL ?>controllers/invoice_itemsController.php" method="POST">
-                  <input type="hidden" name="action" value="create">
-                  <input type="hidden" name="invoice_id" value="<?= $invoice_id ?>">
-                    <!--begin::Body-->
+                  <form action="<?= $BaseUrl->getUrlControllerItems();?>" method="POST">
+                   <?php if ($isEdit): ?>
+                  <input type="hidden" name="id" value="<?= htmlspecialchars($item['id']) ?>">
+                <?php endif; ?>
+                  <!--begin::Body-->
                     <div class="card-body">
-                      <!--begin::Row-->
-                      <div class="row g-3">
-                       <!--begin::Col-->
-                       <div class="col-md-4">
-                       <label for="item" class="form-label">Items</label>
-                    <select name="items_id" class="form-select" required>
-                        <option value="">-- Pilih Item --</option>
-                        <?php foreach ($items as $item): ?>
-                            <option value="<?= $item['id'] ?>">
-                                <?= htmlspecialchars($item['name']) ?>
-                            </option>
-                        <?php endforeach; ?>
-                    </select>
-                          <div class="invalid-feedback">Please select a valid state.</div>
-                        </div>
-                        <!--end::Col-->
-                        <!--begin::Col-->
+                      <div class="row">
                         <div class="col-md-4">
-                        <label for="qty" class="form-label">Qty</label>
-                    <input type="number" name="qty" class="form-control" min="1" value="1" required>
-                          <div class="invalid-feedback">Please select a valid state.</div>
+                          <label for="item_ref_no" class="form-label">Kode Items</label>
+                          <div class="input-group mb-3">
+                            <input
+                              type="text"
+                              class="form-control"
+                              placeholder="Contoh: ITM001"
+                              aria-label="Ref_No"
+                              name="ref_no"
+                              id="item_ref_no"
+                              aria-describedby="basic-addon1"
+                              required
+                              value="<?= htmlspecialchars($formData['ref_no'])?>"
+                            />
+                          </div>
                         </div>
-                        <!--end::Col-->
-                        <!--begin::Col-->
+
                         <div class="col-md-4">
-                          <label for="price" class="form-label">Harga (Opsional)</label>
-                          <div class="input-group has-validation">
-                            <span class="input-group-text" id="inputGroupPrepend">Rp.</span>
+                        <label for="item_name" class="form-label">Nama Items</label>
+                          <div class="mb-3">
+                            <input
+                              type="text"
+                              class="form-control"
+                              name="name"
+                              id="item_name"
+                              required
+                              aria-describedby="basic-addon3 basic-addon4"
+                              placeholder="Masukkan Nama Item Dengan Jelas"
+                              value="<?= htmlspecialchars($formData['name'])?>"
+                            />
+                          </div>
+                        </div>
+
+                        <div class="col-md-4">
+                        <label for="item_price" class="form-label">Harga Items</label>
+                          <div class="input-group mb-3">
+                            <span class="input-group-text">Rp.</span>
                             <input
                               type="number"
                               class="form-control"
-                              id="price"
-                              aria-describedby="inputGroupPrepend"
+                              aria-label="Amount (to the nearest dollar)"
                               name="price"
-                              placeholder="Kosongkan untuk default harga item"
+                              id="item_price"
+                              required
+                              placeholder="Masukkan Angka Tanpa Pemisah Ribuan" 
+                              value="<?= htmlspecialchars($formData['price'])?>"
                             />
-                            <div class="invalid-feedback">Please choose a username.</div>
                           </div>
                         </div>
-                        <!--end::Col-->
                       </div>
-                      <!--end::Row-->
                     </div>
                     <!--end::Body-->
-                    <!--begin::Footer-->
-                    <div class="card-footer d-flex align-items-center">
-                    <a href="<?= BASE_URL ?>pages/dataInvoiceItems.php?id_inv=<?= $invoice_id ?>" class="btn btn-secondary" style="padding: 8px 16px;">
-                      <i class="bi bi-x-circle me-1"></i> Cancel</a>
-                    <button type="submit" class="btn btn-info ms-auto text-white" style="padding: 8px 16px;">
-                      <i class="bi bi-check-circle-fill me-1"></i> Submit
-                    </button>
+
+                  <!--begin::Footer-->
+                  <div class="card-footer d-flex align-items-center">
+                          <a href="<?= $BaseUrl->getUrlDataItems();?>" class="btn btn-secondary" style="padding: 8px 16px;">
+                            <i class="bi bi-x-circle me-1"></i> Cancel</a>
+                          <button type="submit" class="btn btn-success ms-auto" style="padding: 8px 16px;" name="<?= $isEdit ? 'update_item' : 'add_item'?>">
+                            <i class="bi bi-check-circle-fill me-1"></i> Submit</button>
                     </div>
-                    <!--end::Footer-->
                   </form>
-                  <!--end::Form-->
-              </div>
-
-
+                  <!--end::Footer-->
+                  </div>
                   <!--end::Input Group-->
                   <!--end::JavaScript -->
                 </div>
@@ -255,3 +259,6 @@ $invoiceItemsModel = new InvoiceItems($db);
   </body>
   <!--end::Body-->
 </html>
+
+
+

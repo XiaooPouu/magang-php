@@ -2,15 +2,17 @@
 if (!defined('BASE_PATH')) {
   require_once __DIR__ . '/../env.php';
 }
+require_once BASE_PATH . 'function/baseurl.php';
+
 ?>
 
 <!--begin::Sidebar-->
 <aside class="app-sidebar bg-body-secondary shadow" data-bs-theme="dark">
   <!--begin::Sidebar Brand-->
   <div class="sidebar-brand">
-    <a href="<?= BASE_URL ?>index.php" class="brand-link">
+    <a href="<?= $BaseUrl->getIndex(); ?>" class="brand-link">
       <img
-        src="<?= BASE_URL ?>src/img/AdminLTELogo.png"
+        src="<?= $BaseUrl->getLogo(); ?>"
         alt="AdminLTE Logo"
         class="brand-image opacity-75 shadow"
       />
@@ -30,7 +32,7 @@ if (!defined('BASE_PATH')) {
         data-accordion="false"
       >
         <li class="nav-item">
-          <a href="<?= BASE_URL ?>index.php" class="nav-link">
+          <a href="<?= $BaseUrl->getIndex(); ?>" class="nav-link">
             <i class="nav-icon bi bi-speedometer"></i>
             <p>Dashboard</p>
           </a>
@@ -46,25 +48,25 @@ if (!defined('BASE_PATH')) {
           </a>
           <ul class="nav nav-treeview">
             <li class="nav-item">
-              <a href="<?= BASE_URL ?>pages/dataItems.php" class="nav-link">
+              <a href="<?= $BaseUrl->getUrlDataItems(); ?>" class="nav-link">
                 <i class="nav-icon bi bi-circle"></i>
                 <p>Data Items</p>
               </a>
             </li>
             <li class="nav-item">
-              <a href="<?= BASE_URL ?>pages/dataCostumer.php" class="nav-link">
+              <a href="<?= $BaseUrl->getUrlDataCostumer(); ?>" class="nav-link">
                 <i class="nav-icon bi bi-circle"></i>
                 <p>Data Costumers</p>
               </a>
             </li>
             <li class="nav-item">
-              <a href="<?= BASE_URL ?>pages/dataSuppliers.php" class="nav-link">
+              <a href="<?= $BaseUrl->getUrlDataSupplier();?>" class="nav-link">
                 <i class="nav-icon bi bi-circle"></i>
                 <p>Data Suppliers</p>
               </a>
             </li>
             <li class="nav-item">
-              <a href="<?= BASE_URL ?>pages/dataItems_Costumer.php" class="nav-link">
+              <a href="<?= $BaseUrl->getUrlDataItemsCostumer(); ?>" class="nav-link">
                 <i class="nav-icon bi bi-circle"></i>
                 <p>Data Items Costumers</p>
               </a>
@@ -73,9 +75,23 @@ if (!defined('BASE_PATH')) {
         </li>
 
         <li class="nav-item">
-          <a href="<?= BASE_URL ?>pages/dataInvoice.php" class="nav-link">
+          <a href="<?= $BaseUrl->getUrlDataInvoice(); ?>" class="nav-link">
             <i class="nav-icon bi bi-table"></i>
             <p>Tabel Invoice</p>
+          </a>
+        </li>
+
+        <li class="nav-item">
+          <a href="<?= BASE_URL ?>pages/dataomset.php?periode=harian" class="nav-link">
+            <i class="nav-icon bi bi-wallet"></i>
+            <p>Tabel Omset</p>
+          </a>
+        </li>
+
+        <li class="nav-item">
+          <a href="<?= $BaseUrl->getUrlDataBestSeller(); ?>" class="nav-link">
+            <i class="nav-icon bi bi-fire"></i>
+            <p>Best Seller</p>
           </a>
         </li>
       </ul>

@@ -91,17 +91,19 @@ class Invoice {
 
     // Mendapatkan invoice berdasarkan id_inv
     public function getById($id_inv) {
-        return $this->db->get('invoice', [
-            '[>]customers' => ['customers_id' => 'id']
-        ], [
-            'invoice.id_inv',
-            'invoice.kode_inv',
-            'invoice.tgl_inv',
-            'customers.name AS nama_customer'
-        ], [
-            'invoice.id_inv' => $id_inv
-        ]);
-    }
+    return $this->db->get("invoice", [
+        "[>]customers" => ["customers_id" => "id"]
+    ], [
+        "invoice.id_inv",
+        "invoice.kode_inv",
+        "invoice.tgl_inv",
+        "invoice.customers_id",
+        "customers.name(name)"
+    ], [
+        "invoice.id_inv" => $id_inv
+    ]);
+}
+
 
     // Mengupdate invoice
     public function update($id_inv, $kode_inv, $tgl_inv, $customers_id) {

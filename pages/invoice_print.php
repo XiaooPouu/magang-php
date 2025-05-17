@@ -10,7 +10,6 @@ if (!$id_inv) {
     exit;
 }
 
-$db = (new Database())->getConnection();
 $invoiceModel = new Invoice($db);
 $itemsModel = new InvoiceItems($db);
 

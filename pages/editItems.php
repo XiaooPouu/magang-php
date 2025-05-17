@@ -3,9 +3,8 @@ session_start();
 require_once __DIR__ . '/../config/env.php';
    require_once BASE_PATH . 'config/database.php';
    include BASE_PATH. 'models/items.php';
+   require_once BASE_PATH . 'function/baseurl.php';
 
-    $database = new Database();
-    $db = $database->getConnection();
     $itemModel = new Item($db);
 
     $id = $_GET['id'];
@@ -29,7 +28,7 @@ require_once __DIR__ . '/../config/env.php';
   <!--begin::Head-->
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title>AdminLTE 4 | General Form Elements</title>
+    <title>Edit Items</title>
     <!--begin::Primary Meta Tags-->
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="title" content="AdminLTE 4 | General Form Elements" />
@@ -68,7 +67,7 @@ require_once __DIR__ . '/../config/env.php';
     />
     <!--end::Third Party Plugin(Bootstrap Icons)-->
     <!--begin::Required Plugin(AdminLTE)-->
-    <link rel="stylesheet" href="<?= BASE_URL?>src/css/adminlte.css" />
+    <link rel="stylesheet" href="<?= $BaseUrl->getUrlCSS();?>" />
     <!--end::Required Plugin(AdminLTE)-->
   </head>
   <!--end::Head-->
@@ -91,7 +90,7 @@ require_once __DIR__ . '/../config/env.php';
               <div class="col-md-6"><h3 class="mb-0">Items Form</h3></div>
               <div class="col-md-6">
                 <ol class="breadcrumb float-sm-end">
-                  <li class="breadcrumb-item"><a href="<?= BASE_URL?>pages/dataItems.php">Data Items</a></li>
+                  <li class="breadcrumb-item"><a href="<?= $BaseUrl->getUrlDataItems();?>">Data Items</a></li>
                   <li class="breadcrumb-item active" aria-current="page">Edit Form</li>
                 </ol>
               </div>
@@ -118,7 +117,7 @@ require_once __DIR__ . '/../config/env.php';
                   <div class="card-header"><div class="card-title">Edit Items</div>
                 </div>
                   <!--end::Header-->
-                  <form action="<?= BASE_URL?>controllers/itemsController.php" method="POST">
+                  <form action="<?= $BaseUrl->getUrlControllerItems();?>" method="POST">
                   <input type="hidden" name="id" value="<?= $formUpdate['id'] ?>">
                   <!--begin::Body-->
                     <div class="card-body">
@@ -178,7 +177,7 @@ require_once __DIR__ . '/../config/env.php';
 
                   <!--begin::Footer-->
                   <div class="card-footer d-flex align-items-center">
-                          <a href="<?= BASE_URL?>pages/dataItems.php" class="btn btn-secondary" style="padding: 8px 16px;">
+                          <a href="<?= $BaseUrl->getUrlDataItems();?>" class="btn btn-secondary" style="padding: 8px 16px;">
                             <i class="bi bi-x-circle me-1"></i> Cancel</a>
                           <button type="submit" class="btn btn-success ms-auto" style="padding: 8px 16px;" name="update_item">
                             <i class="bi bi-check-circle-fill me-1"></i> Submit</button>
