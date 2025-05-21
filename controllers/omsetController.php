@@ -13,16 +13,19 @@ class OmsetController
         $this->omsetModel = new Omset($db);
     }
 
-    public function getOmsetByPeriode($periode = 'harian')
+    public function getOmsetByPeriode($periode = 'harian', $keyword = null)
     {
         switch ($periode) {
             case 'bulanan':
-                return $this->omsetModel->getOmsetBulanan();
+                return $this->omsetModel->getOmsetBulanan($keyword);
             case 'mingguan':
-                return $this->omsetModel->getOmsetMingguan();
+                return $this->omsetModel->getOmsetMingguan($keyword);
             case 'harian':
             default:
-                return $this->omsetModel->getOmsetHarian();
+                return $this->omsetModel->getOmsetHarian($keyword);
         }
     }
+    
 }
+
+$controller = new OmsetController();

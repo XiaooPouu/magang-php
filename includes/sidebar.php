@@ -83,7 +83,7 @@ require_once BASE_PATH . 'function/baseurl.php';
 
         <li class="nav-item">
           <a href="<?= BASE_URL ?>pages/dataomset.php?periode=harian" class="nav-link">
-            <i class="nav-icon bi bi-wallet"></i>
+            <i class="nav-icon bi bi-cash"></i>
             <p>Tabel Omset</p>
           </a>
         </li>
@@ -92,6 +92,13 @@ require_once BASE_PATH . 'function/baseurl.php';
           <a href="<?= $BaseUrl->getUrlDataBestSeller(); ?>" class="nav-link">
             <i class="nav-icon bi bi-fire"></i>
             <p>Best Seller</p>
+          </a>
+        </li>
+
+        <li class="nav-item">
+          <a href="<?= $BaseUrl->getUrlDataPayments(); ?>" class="nav-link">
+            <i class="nav-icon bi bi-wallet"></i>
+            <p>Payments</p>
           </a>
         </li>
       </ul>

@@ -2,7 +2,7 @@
 session_start();
 require_once __DIR__ . '/../config/env.php';
 include BASE_PATH . "models/invoice.php";
-include BASE_PATH . 'models/invoice_items.php';
+include_once BASE_PATH . 'models/invoice_items.php';
 include BASE_PATH . 'models/costumer.php';
 require_once BASE_PATH . 'config/database.php';
 require_once BASE_PATH . 'function/baseurl.php';
@@ -30,6 +30,7 @@ if (isset($_GET['reset'])) {
   unset($_SESSION['search_customer']);
   unset($_SESSION['search_tgl_dari']);
   unset($_SESSION['search_tgl_ke']);
+  unset($_SESSION['search_status_lunas']); 
 }
 
 if (isset($_SESSION['search_data'])) {
@@ -50,6 +51,8 @@ if(isset($_SESSION['alert_delete'])) {
   
   unset($_SESSION['alert_delete']); // agar hanya tampil sekali
 }
+
+
 ?>
 
 
@@ -140,6 +143,16 @@ if(isset($_SESSION['alert_delete'])) {
         }
         ?>
     </select>
+
+   <?php $status = $_SESSION['search_status_lunas'] ?? ''; ?>
+<select name="status_lunas" class="form-control me-2 mb-2">
+    <option value="">-- Status --</option>
+    <option value="lunas" <?= $status === 'lunas' ? 'selected' : '' ?>>Lunas</option>
+    <option value="belum_lunas" <?= $status === 'belum_lunas' ? 'selected' : '' ?>>Belum Lunas</option>
+</select>
+
+
+
     
     <input type="date" name="tgl_dari" class="form-control me-2 mb-2" value="<?= $_SESSION['search_tgl_dari'] ?? '' ?>" placeholder="Tanggal Dari">
     <input type="date" name="tgl_ke" class="form-control me-2 mb-2" value="<?= $_SESSION['search_tgl_ke'] ?? '' ?>" placeholder="Tanggal Ke">
@@ -193,17 +206,34 @@ if(isset($_SESSION['alert_delete'])) {
                         <tr>
                           <th>Kode Invoice</th>
                           <th>Tanggal Invoice</th>
+                          <th>Kode Costumer</th>
                           <th>Costumers</th>
+                          <th class="text-end">Grand Total</th>
+                          <th class="text-center">Status</th>
                           <th class="text-center">Action</th>
                         </tr>
                       </thead>
+                      <?php if (!empty($data)) :?>
                       <?php foreach ($data as $row): ?>
+                        <?php
+                          $dataSisa = $invoiceModel->getSisa($row['id_inv']);
+                          $sisa = $dataSisa['sisa'];
+                          $statusLunas = $sisa <= 0 ? 'Lunas' : 'Belum Lunas';
+                          $warna = $sisa <= 0 ? 'bg-success' : 'bg-danger';
+                        ?>
                       <tbody>
                         <tr class="align-middle">
                           <td><?= htmlspecialchars($row['kode_inv'])?></td>
                           <td><?= htmlspecialchars($row['tgl_inv'])?></td>
+                          <td><?= htmlspecialchars($row['ref_no'])?></td>
                           <td>
-                          <?= htmlspecialchars($row['name'])?>
+                          <?= htmlspecialchars($row['name'])?>    
+                          </td>
+                          <td class="text-end"><?= 'Rp. ' . number_format($row['grand_total'], 0, ',', '.') ?></td>
+                          <td class="text-center">
+                            <span class="badge <?= $warna ?>">
+                            <i class="bi bi-cash-coin me-1"></i> Status: <?= $statusLunas ?>
+                          </span>
                           </td>
                           <td class="text-center">
                           <a href="<?= $BaseUrl->getUrlFormInvoice($row['id_inv'])?>" class="btn btn-sm btn-warning me-1">
@@ -215,6 +245,11 @@ if(isset($_SESSION['alert_delete'])) {
                           </td>
                         </tr>
                         <?php endforeach;?>
+                        <?php else: ?>
+                        <tr>
+                          <td colspan="6" class="text-center">Tidak ada data</td>
+                        </tr>
+                        <?php endif; ?>
                       </tbody>
                     </table>
                   </div>

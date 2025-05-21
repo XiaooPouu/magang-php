@@ -140,6 +140,38 @@ class Baseurl
     public function getUrlDataBestSeller(){
         return BASE_URL . 'pages/dataBestSeller.php';
     }
+    
+    public function getUrlControllerBestSeller(){
+        return BASE_URL . 'controllers/bestsellerController.php';
+    }
+
+    public function getUrlDataBestSellerReset(){
+        return BASE_URL . 'pages/dataBestSeller.php?reset=true';
+    }
+
+    public function getUrlDataPayments(){
+        return BASE_URL . 'pages/dataPayments.php';
+    }
+
+    public function getUrlFormPayments($id = null){
+        if(!empty($id)){
+            return BASE_URL . 'pages/formPayments.php?id_payments=' . $id;
+        } else {
+            return BASE_URL . 'pages/formPayments.php';
+        }
+    }
+
+    public function getUrlControllerPayments(){
+        return BASE_URL . 'controllers/paymentsController.php';
+    }
+
+    public function getUrlControllerDeletePayments($id){
+        return BASE_URL . 'controllers/paymentsController.php?delete_payment=' . $id;
+    }
+
+    public function getUrlDataPaymentsReset() {
+        return BASE_URL . 'pages/dataPayments.php?reset=true';
+    }
 
     public function getUrlCSS () {
         return BASE_URL . 'src/css/adminlte.css';

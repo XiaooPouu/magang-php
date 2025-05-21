@@ -1,23 +1,30 @@
 <?php
-session_start();
 require_once __DIR__ . '/../config/env.php';
 require_once BASE_PATH . 'config/database.php';
+include_once BASE_PATH . 'models/payments.php';
+include_once BASE_PATH . 'models/invoice.php';
 require_once BASE_PATH . 'function/baseurl.php';
-include_once BASE_PATH . 'models/bestseller.php';
+$formData = isset($_SESSION['form_data']) ? $_SESSION['form_data'] : ['invoice_id' => '', 'tanggal' => '', 'nominal' => ''];
+$isEdit = null;
+$payment = null;
 
-if(isset($_GET['reset'])){
-  unset($_SESSION['search_data']);
-  unset($_SESSION['search_keyword']);
+$getInvoices = $invoiceModel->getAllInvoicesWithCustomer();
+
+if(isset($_GET['id_payments'])){
+    $id = $_GET['id_payments'];
+    $paymentModel = new Payments($db);
+    $payment = $paymentModel->getById($id); // Mengambil data item berdasarkan id
+    if ($payment) {
+        $formData = [
+            'invoice_id' => $payment['invoice_id'],
+            'tanggal' => $payment['tanggal'],
+            'nominal' => $payment['nominal']
+        ];
+        $isEdit = true; // Menandakan form ini untuk edit
+    }
+
 }
-
-if(isset($_SESSION['search_data'])){
-  $DataBestSeller = $_SESSION['search_data'];
-} else {
-  $DataBestSeller = $modelBestSeller->getBestSeller();
-}
-
 ?>
-
 
 
 <!doctype html>
@@ -25,7 +32,7 @@ if(isset($_SESSION['search_data'])){
   <!--begin::Head-->
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title>Data Best Seller</title>
+    <title>Create Items</title>
     <!--begin::Primary Meta Tags-->
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="title" content="AdminLTE 4 | General Form Elements" />
@@ -73,113 +80,111 @@ if(isset($_SESSION['search_data'])){
     <!--begin::App Wrapper-->
       <div class="app-wrapper">
         <!--begin::Header-->
-        <?php include BASE_PATH . 'includes/header.php' ?>
+        <?php  include BASE_PATH . 'includes/header.php'  ?>
         <!--end::Header-->
           <?php  include_once BASE_PATH . 'includes/sidebar.php'  ?>
             <!--begin::App Main-->
       <main class="app-main">
         <!--begin::App Content Header-->
         <div class="app-content-header">
-             <!--begin::Container-->
-          <div class="container-fluid">
+          <!--begin::Container-->
+          <div class="container-fluid mb-4">
             <!--begin::Row-->
             <div class="row">
-              <div class="col-md-6"><h3 class="mb-5">Data Best Seller</h3></div>
+              <div class="col-md-6"><h3 class="mb-0">Payments Form</h3></div>
               <div class="col-md-6">
                 <ol class="breadcrumb float-sm-end">
-                  <li class="breadcrumb-item"><a href="<?= $BaseUrl->getUrlDataBestSeller();?>">Data Best Seller</a></li>
-                  <li class="breadcrumb-item active" aria-current="page">Tabel Best Sellers</li>
+                  <li class="breadcrumb-item"><a href="<?= $BaseUrl->getUrlDataPayments();?>">Data Payments</a></li>
+                  <li class="breadcrumb-item active" aria-current="page"><?= $isEdit ? 'Edit Form' : 'Input Form' ?></li>
                 </ol>
               </div>
             </div>
             <!--end::Row-->
-             <div class="card mb-4">
-          <div class="card-header">
-            <h3 class="card-title">Cari Data Best Seller</h3>
-          </div>
-          <div class="card-body">
-            <div class="tab-content">
-              <div class="tab-pane fade show active" id="harian">
-                <div class="row mb-3">
-                  <div class="col-md-12">
-                    <div>
-            <form action="<?= $BaseUrl->getUrlControllerBestSeller();?>" method="GET" class="d-flex my-2">
-              <input type="text" name="search" class="form-control me-2 mb-2" placeholder="Search" value="<?= $_SESSION['search_keyword'] ?? '';?>">
-              <button class="btn btn-primary me-2 mb-2" type="submit">Search</button>
-              <a href="<?= $BaseUrl->getUrlDataBestSellerReset();?>" class="btn btn-secondary me-2 mb-2">Reset</a>
-            </form>
-                    </div>
-                  </div>
-
-                  <div class="card-header"><h3 class="card-title">Best Seller Table</h3></div>
-                  <!-- /.card-header -->
-                  <div class="card-body">
-                  <table class="table table-bordered">
-                    <thead>
-                        <tr>
-                        <th style="width: 10px;">No.</th>
-                        <th>Kode Items</th>
-                        <th>Nama Items</th>
-                        <th class="text-end">Qty</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                      <?php if(!empty($DataBestSeller)):?>
-                        <?php $i = 0; foreach ($DataBestSeller as $row):?>
-                        <tr>
-                            <td><?= ++$i ?>.</td>
-                            <td><?= htmlspecialchars($row['kode'])?></td>
-                            <td><?= htmlspecialchars($row['nama'])?></td>
-                            <td class="text-end"><?= htmlspecialchars($row['total_qty'])?></td>
-                        </tr>
-                        <?php endforeach; ?>
-                      <?php else: ?>
-                        <tr>
-                          <td colspan="4" class="text-center">Data Tidak Ditemukan</td>
-                        </tr>
-                      <?php endif; ?>
-                    </tbody>
-                    </table>
-                  </div>
-                  <!-- /.card-body -->
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
           </div>
           <!--end::Container-->
-  </div>
+          <!--begin::Container Input-->
+          <div class="container-fluid">
+          <div class="row g-4">
+      <div class="col-md-12">
 
+      
+      
+                <!--begin::Input Group-->
+                <div class="card card-success card-outline mb-4">
+                  <!--begin::Header-->
+                  <div class="card-header"><div class="card-title"><?= $isEdit ? 'Edit Payments' : 'Input Payments' ?></div>
+                </div>
+                  <!--end::Header-->
+                  <form action="<?= $BaseUrl->getUrlControllerPayments();?>" method="POST">
+                   <?php if ($isEdit): ?>
+                  <input type="hidden" name="id_payments" value="<?= htmlspecialchars($payment['id_payments']) ?>">
+                <?php endif; ?>
+                  <!--begin::Body-->
+                    <div class="card-body">
+                      <div class="row">
+                        <div class="col-md-4">
+                        <label for="invoice_id" class="form-label">Kode Invoice</label>
+                        <select name="invoice_id" class="form-select" id="invoice_id" required>
+                          <option value="" disabled <?= empty($formData['invoice_id']) ? 'selected' : ''?>>-- Pilih Invoice --</option>
+                          <?php foreach ($getInvoices as $row): ?>
+                            <option value="<?= $row['id_inv']?>" <?= $formData['invoice_id'] == $row['id_inv'] ? 'selected' : ''?>>
+                              <?= $row['kode_inv'] ?> - <?= htmlspecialchars($row['name']) ?>
+                            </option>
+                          <?php endforeach; ?>
+                        </select>
+                      </div>
 
-                  <!-- begin::JavaScript-->
-                  <!-- <script>
-                    // Example starter JavaScript for disabling form submissions if there are invalid fields
-                    (() => {
-                      'use strict';
+                        <div class="col-md-4">
+                        <label for="tanggal" class="form-label">Tanggal</label>
+                          <div class="input-group mb-3">
+                            <input
+                              type="date"
+                              class="form-control"
+                              aria-label="Amount (to the nearest dollar)"
+                              name="tanggal"
+                              id="tanggal"
+                              required
+                              placeholder="Masukkan Angka Tanpa Pemisah Ribuan" 
+                              value="<?= $formData['tanggal']?>"
+                            />
+                          </div>
+                        </div>
 
-                      // Fetch all the forms we want to apply custom Bootstrap validation styles to
-                      const forms = document.querySelectorAll('.needs-validation');
+                        <div class="col-md-4">
+                        <label for="nominal" class="form-label">Nominal</label>
+                          <div class="input-group mb-3">
+                            <span class="input-group-text">Rp.</span>
+                            <input
+                              type="number"
+                              class="form-control"
+                              aria-label="Amount (to the nearest dollar)"
+                              name="nominal"
+                              id="nominal"
+                              required
+                              placeholder="Masukkan Angka Tanpa Pemisah Ribuan" 
+                              value="<?= $formData['nominal']?>"
+                            />
+                          </div>
+                        </div>
+                      </div>
+                   </div>  
+                    <!--end::Body-->
 
-                      // Loop over them and prevent submission
-                      Array.from(forms).forEach((form) => {
-                        form.addEventListener(
-                          'submit',
-                          (event) => {
-                            if (!form.checkValidity()) {
-                              event.preventDefault();
-                              event.stopPropagation();
-                            }
-
-                            form.classList.add('was-validated');
-                          },
-                          false,
-                        );
-                      });
-                    })();
-                  </script> -->
+                  <!--begin::Footer-->
+                  <div class="card-footer d-flex align-items-center">
+                          <a href="<?= $BaseUrl->getUrlDataPayments();?>" class="btn btn-secondary" style="padding: 8px 16px;">
+                            <i class="bi bi-x-circle me-1"></i> Cancel</a>
+                          <button type="submit" class="btn btn-success ms-auto" style="padding: 8px 16px;" name="<?= $isEdit ? 'update_payment' : 'submit_payment'?>">
+                            <i class="bi bi-check-circle-fill me-1"></i> Submit</button>
+                    </div>
+                    
+                  </form>
+                  <!--end::Footer-->
+                  </div>
+                   </div>
+                  <!--end::Input Group-->
                   <!--end::JavaScript -->
-                
+                </div>
                 <!--end::Form Validation-->
               </div>
               <!--end::Col-->

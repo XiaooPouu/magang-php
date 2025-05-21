@@ -72,14 +72,15 @@ else if (isset($_POST['update_invoice'])){
 }
 
 // Pencarian invoice
-else if (isset($_GET['search']) || isset($_GET['customer']) || isset($_GET['tgl_dari']) || isset($_GET['tgl_ke'])) {
+else if (isset($_GET['search']) || isset($_GET['customer']) || isset($_GET['tgl_dari']) || isset($_GET['tgl_ke']) || isset($_GET['status_lunas'])) {
     $keyword = $_GET['search'] ?? '';
     $customer_id = $_GET['customer'] ?? null;
     $tgl_dari = $_GET['tgl_dari'] ?? null;
     $tgl_ke = $_GET['tgl_ke'] ?? null;
+    $statusLunas = $_GET['status_lunas'] ?? null;
 
     // Mengambil data berdasarkan parameter pencarian
-    $data = $model->search($keyword, $customer_id, $tgl_dari, $tgl_ke);
+    $data = $model->search($keyword, $customer_id, $tgl_dari, $tgl_ke, $statusLunas);
 
     // Simpan hasil pencarian ke session
     $_SESSION['search_data'] = $data;
@@ -87,6 +88,7 @@ else if (isset($_GET['search']) || isset($_GET['customer']) || isset($_GET['tgl_
     $_SESSION['search_customer'] = $customer_id;
     $_SESSION['search_tgl_dari'] = $tgl_dari;
     $_SESSION['search_tgl_ke'] = $tgl_ke;
+    $_SESSION['search_status_lunas'] = $statusLunas;
 
     header('Location: ' . $BaseUrl->getUrlDataInvoice());
     exit();

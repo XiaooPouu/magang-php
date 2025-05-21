@@ -14,6 +14,7 @@ $invoiceItemsModel = new InvoiceItems($db);
 
 $invoiceModel = new Invoice($db);
 $invoice = $invoiceModel->getById($id_inv);
+
 if (!$invoice) {
     die("Data invoice tidak ditemukan.");
 }
@@ -22,7 +23,7 @@ $keyword = $_GET['search'] ?? '';
 $search_data = $_SESSION['search_data'] ?? [];
 
 $page = isset($_GET['page']) ? (int)$_GET['page'] : 1;
-$perPage = 5;
+$perPage = 30;
 $offset = ($page - 1) * $perPage;
 
 // Jika ada pencarian, jalankan pencarian
@@ -35,9 +36,13 @@ if (!empty($keyword)) {
   $invoiceItems = $invoiceItemsModel->getWithLimit($perPage, $offset, $id_inv);
 }
 
-$invoiceItems = $invoiceItemsModel->getByInvoiceId($id_inv, $perPage, $offset);
 $totalInvoiceItems = $invoiceItemsModel->getCountByInvoiceId($id_inv);
 $totalPages = ceil($totalInvoiceItems / $perPage);
+
+$dataSisa = $invoiceModel->getSisa($id_inv);
+$sisa = $dataSisa['sisa'];
+$statusLunas = $sisa <= 0 ? 'Lunas' : 'Belum Lunas';
+$warna = $sisa <= 0 ? 'bg-success' : 'bg-danger';
 
 // Hitung total dan jumlah barang
 $totalHarga = 0;
@@ -49,6 +54,8 @@ foreach ($invoiceItems as $item) {
 
 $itemsModel = new Item($db);
 $items = $itemsModel->getAll();
+
+ 
 ?>
 
 <!doctype html>
@@ -155,6 +162,12 @@ $items = $itemsModel->getAll();
           <h3 class="text-center mb-4"><span class="badge bg-primary"><i class="bi bi-info-circle-fill me-1"></i> Kode Invoice: <?= htmlspecialchars($invoice['kode_inv']) ?></span></h3>
 
           <!-- Info Invoice -->
+           <?php ?>
+           <div class="mb-3">
+            <span class="badge <?= $warna ?>">
+            <i class="bi bi-cash-coin me-1"></i> Status: <?= $statusLunas ?>
+          </span>
+          </div>
           <div class="mb-3">
             <span class="badge bg-info"><i class="bi bi-calendar2-week-fill me-1"></i> Tanggal: <?= htmlspecialchars($invoice['tgl_inv']) ?></span>
           </div>

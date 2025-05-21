@@ -99,11 +99,12 @@ class InvoiceItems {
 
     public function getWithLimit($limit, $offset, $invoice_id) {
         return $this->db->select('inv_items', [
-            '[>]items' => ['items_id' => 'id']  // Join tabel items berdasarkan items_id
+            '[>]items' => ['items_id' => 'id']// Join tabel items berdasarkan items_id
         ], [
             'inv_items.id',
             'inv_items.invoice_id',
             'items.name AS item_name',
+            'items.ref_no',
             'inv_items.qty',
             'inv_items.price',
             'inv_items.total'
@@ -158,4 +159,6 @@ class InvoiceItems {
         ]);
     }
 }
+
+$invoiceItems = new InvoiceItems($db);
 ?>

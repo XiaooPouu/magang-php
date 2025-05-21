@@ -10,35 +10,44 @@ class Bestseller {
         $this->db = $db;
     }
 
-     public function getBestSeller($limit = 10): array {
-     $query = "
-        SELECT 
-            items.ref_no AS kode, 
-            items.name AS nama, 
-            SUM(inv_items.qty) AS total_qty
-
-        FROM inv_items
-
-        JOIN items ON inv_items.items_id = items.id
-
-        GROUP BY inv_items.items_id
-        
-        ORDER BY total_qty DESC
-        LIMIT $limit
-    ";
-
-     $stmt = $this->db->pdo->query($query);
-
-    $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
-
-    $data = [];
-    foreach ($result as $row){
-        $data[] = [
-            'kode' => $row['kode'],
-            'nama' => $row['nama'],
-            'total_qty' => $row['total_qty']
-        ];
-    }
-    return $data;
+     public function getBestSeller($limit = 10) {
+    return $this->db->select("inv_items", [
+        "[>]items" => ["items_id" => "id"]
+    ], [
+        "items.ref_no(kode)",
+        "items.name(nama)",
+        "total_qty" => \Medoo\Medoo::raw("SUM(qty)")
+    ], [
+        "GROUP" => "inv_items.items_id",
+        "ORDER" => ["total_qty" => "DESC"],
+        "LIMIT" => $limit
+    ]);
 }
+
+public function getCount() {
+    return $this->db->count("inv_items");
 }
+
+    public function search($keyword) {
+    return $this->db->select("inv_items", [
+        "[>]items" => ["items_id" => "id"]
+    ], [
+        "items.ref_no(kode)",
+        "items.name(nama)",
+        "total_qty" => \Medoo\Medoo::raw("SUM(inv_items.qty)")
+    ], [
+        "AND" => [
+            "OR" => [
+                "items.name[~]" => $keyword,
+                "items.ref_no[~]" => $keyword
+            ]
+        ],
+        "GROUP" => "inv_items.items_id",
+        "ORDER" => ["total_qty" => "DESC"]
+    ]);
+}
+
+
+}
+
+$modelBestSeller = new Bestseller($db);

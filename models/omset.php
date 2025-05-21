@@ -9,90 +9,102 @@ class Omset {
         $this->db = $db;
     }
 
-    public function getOmsetHarian(): array
-    {
-        $sql = "
-            SELECT 
-                i.tgl_inv AS tanggal,
-                SUM(ii.qty * ii.price) AS total_omzet
-            FROM 
-                invoice i
-            JOIN 
-                inv_items ii ON ii.invoice_id = i.id_inv
-            GROUP BY 
-                i.tgl_inv
-            ORDER BY 
-                i.tgl_inv ASC
-        ";
+   public function getOmsetHarian($search = null): array
+{
+    $result = $this->db->select("invoice", [
+        "[><]inv_items" => ["id_inv" => "invoice_id"]
+    ], [
+        "invoice.tgl_inv(tanggal_raw)", // masih raw date untuk proses format nanti
+        "total_omzet" => \Medoo\Medoo::raw("SUM(inv_items.qty * inv_items.price)")
+    ], [
+        "GROUP" => "invoice.tgl_inv",
+        "ORDER" => ["invoice.tgl_inv" => "ASC"]
+    ]);
 
-        $stmt = $this->db->pdo->query($sql);
-        $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
+    $data = [];
 
-        $data = [];
+    foreach ($result as $row) {
+        $tanggalFormatted = date('d-m-Y', strtotime($row['tanggal_raw']));
 
-        foreach ($result as $row) {
-            $data[] = [
-                'tanggal' => date('d-m-Y', strtotime($row['tanggal'])),
-                'total_omzet' => $row['total_omzet']
-            ];
+        // jika ada search, cek apakah $search ada di $tanggalFormatted
+        if ($search !== null && stripos($tanggalFormatted, $search) === false) {
+            continue; // skip data yang tidak cocok search
         }
-        return $data;
+
+        $data[] = [
+            'tanggal' => $tanggalFormatted,
+            'total_omzet' => $row['total_omzet']
+        ];
     }
 
-    public function getOmsetMingguan(): array{
-        $query = "
-         SELECT 
-            WEEK(i.tgl_inv, 1) AS minggu_ke,
-            SUM(ii.qty * ii.price) AS total_omzet
-        FROM inv_items ii
-        JOIN invoice i ON ii.invoice_id = i.id_inv
-        GROUP BY minggu_ke
-        ORDER BY minggu_ke
-        ";
+    return $data;
+}
 
-        $stmt = $this->db->pdo->query($query);
-        $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
-        $data = [];
-        foreach ($result as $row){
-            $data[] = [
-                'minggu_ke' => $row['minggu_ke'],
-                'total_omzet' => $row['total_omzet']
-            ];
+    public function getOmsetMingguan($search = null): array
+{
+    $result = $this->db->select("invoice", [
+        "[><]inv_items" => ["id_inv" => "invoice_id"]
+    ], [
+        "minggu_ke" => \Medoo\Medoo::raw("WEEK(invoice.tgl_inv, 1)"),
+        "total_omzet" => \Medoo\Medoo::raw("SUM(inv_items.qty * inv_items.price)")
+    ], [
+        "GROUP" => [ "minggu_ke"],
+        "ORDER" => [ "minggu_ke" => "ASC"]
+    ]);
+
+    $data = [];
+
+    foreach ($result as $row) {
+        $mingguFormatted = $row['minggu_ke'];
+
+        if ($search !== null && stripos($mingguFormatted, $search) === false) {
+            continue;
         }
-        return $data;
+
+        $data[] = [
+            'minggu_ke' => $mingguFormatted,
+            'total_omzet' => $row['total_omzet']
+        ];
     }
 
-    public function getOmsetBulanan(): array{
-        $sql = "
-            SELECT 
-            DATE_FORMAT(i.tgl_inv, '%Y-%m') AS bulan,
-            SUM(ii.qty * ii.price) AS total_omzet
-        FROM 
-            invoice i
-        JOIN 
-            inv_items ii ON ii.invoice_id = i.id_inv
-        GROUP BY 
-            DATE_FORMAT(i.tgl_inv, '%Y-%m')
-        ORDER BY 
-            DATE_FORMAT(i.tgl_inv, '%Y-%m') ASC
-        ";
+    return $data;
+}
 
-        $stmt = $this->db->pdo->query($sql);
-        $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
-        $data = [];
 
-        foreach ($result as $row) {
-            $bulanTahun = DateTime::createFromFormat('Y-m', $row['bulan'])->format('F-Y');
+    public function getOmsetBulanan($search = null): array
+{
+    $result = $this->db->select("invoice", [
+        "[><]inv_items" => ["id_inv" => "invoice_id"]
+    ], [
+        "bulan_raw" => \Medoo\Medoo::raw("DATE_FORMAT(invoice.tgl_inv, '%Y-%m')"),
+        "total_omzet" => \Medoo\Medoo::raw("SUM(inv_items.qty * inv_items.price)")
+    ], [
+        "GROUP" => \Medoo\Medoo::raw("DATE_FORMAT(invoice.tgl_inv, '%Y-%m')"),
+        "ORDER" => ["bulan_raw" => "ASC"]
+    ]);
 
-            $data[] = [
-                'bulan' => $bulanTahun,
-                'total_omzet' => $row['total_omzet']
-            ];
+    $data = [];
+
+    foreach ($result as $row) {
+        $bulanFormatted = DateTime::createFromFormat('Y-m', $row['bulan_raw'])->format('F-Y');
+
+        if ($search !== null && stripos($bulanFormatted, $search) === false) {
+            continue;
         }
-        return $data;
+
+        $data[] = [
+            'bulan' => $bulanFormatted,
+            'total_omzet' => $row['total_omzet']
+        ];
     }
+
+    return $data;
+}
+
+
+
 }
 
 $omsetModel = new Omset($db);

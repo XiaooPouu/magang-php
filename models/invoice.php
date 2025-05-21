@@ -75,19 +75,50 @@ class Invoice {
         return $this->db->count("invoice");
     }
 
-    public function getWithLimit($offset, $limit){
-        return $this->db->select("invoice", [
-            '[>]customers' => ['customers_id' => 'id']
-        ], [
-            'invoice.id_inv',
-            'invoice.kode_inv',
-            'invoice.tgl_inv',
-            'customers.name AS nama_customer'
-        ],[
-            "LIMIT" => [$offset, $limit],
-            "ORDER" => ["id_inv" => "DESC"]
-        ]);
-    }
+   public function getWithLimit($offset, $limit) {
+    return $this->db->select("invoice", [
+        '[>]customers' => ['customers_id' => 'id'],
+        '[<]inv_items' => ['id_inv' => 'invoice_id']
+    ], [
+        'invoice.id_inv',
+        'invoice.kode_inv',
+        'invoice.tgl_inv',
+        'customers.name(name)',
+        'customers.ref_no(ref_no)',
+        'grand_total' => \Medoo\Medoo::raw("COALESCE(SUM(inv_items.total), 0)")
+    ], [
+        "GROUP" => "invoice.id_inv",
+        "LIMIT" => [$offset, $limit],
+        "ORDER" => ["invoice.id_inv" => "DESC"]
+    ]);
+}
+
+    public function getSisa($id_inv) {
+    // Ambil total dari inv_items dengan alias 'total_item'
+    $item = $this->db->get('inv_items', [
+        'total_semua' => \Medoo\Medoo::raw('SUM(total)')
+    ], [
+        'invoice_id' => $id_inv
+    ]);
+
+    // Ambil total dari payments dengan alias 'total_bayar'
+    $bayar = $this->db->get('payments', [
+        'total_bayar' => \Medoo\Medoo::raw('SUM(nominal)')
+    ], [
+        'invoice_id' => $id_inv
+    ]);
+
+    // Ambil nilainya dan ubah null jadi 0
+    $totalItem = (float)($item['total_semua'] ?? 0);
+    $totalBayar = (float)($bayar['total_bayar'] ?? 0);
+
+    $sisa = round($totalItem - $totalBayar, 2);
+
+    return ['sisa' => $sisa];
+}
+
+
+
 
     // Mendapatkan invoice berdasarkan id_inv
     public function getById($id_inv) {
@@ -124,43 +155,83 @@ class Invoice {
     }
 
     // Mencari invoice berdasarkan kata kunci
-    public function search($keyword = '', $customerId = '', $tglDari = '', $tglKe = '') {
-        // Inisialisasi array WHERE untuk filter pencarian
-        $where = [];
-    
-        // Pencarian berdasarkan keyword
-        if (!empty($keyword)) {
-            $where['OR'] = [
-                'invoice.kode_inv[~]' => $keyword, // Mencari di kode_inv
-                'customers.name[~]' => $keyword,   // Mencari di nama customer
-                'invoice.tgl_inv[~]' => $keyword  // Mencari di tanggal invoice
-            ];
-        }
-    
-        // Filter berdasarkan customer (jika ada)
-        if (!empty($customerId)) {
-            $where['invoice.customers_id'] = $customerId;
-        }
-    
-        // Filter berdasarkan tanggal (jika ada)
-        if (!empty($tglDari) && !empty($tglKe)) {
-            $where['invoice.tgl_inv[<>]'] = [$tglDari, $tglKe]; // Rentang tanggal
-        } elseif (!empty($tglDari)) {
-            $where['invoice.tgl_inv[>=]'] = $tglDari; // Tanggal dari
-        } elseif (!empty($tglKe)) {
-            $where['invoice.tgl_inv[<=]'] = $tglKe; // Tanggal ke
-        }
-    
-        // Query menggunakan Medoo untuk mencari data
-        return $this->db->select('invoice', [
-            '[>]customers' => ['customers_id' => 'id']
-        ], [
-            'invoice.id_inv',
-            'invoice.kode_inv',
-            'invoice.tgl_inv',
-            'customers.name AS nama_customer'
-        ], $where);
+    public function search($keyword = '', $customerId = '', $tglDari = '', $tglKe = '', $statusLunas = '') {
+    // Inisialisasi array WHERE untuk filter pencarian
+    $where = [];
+
+    // Pencarian berdasarkan keyword
+    if (!empty($keyword)) {
+        $where['OR'] = [
+            'invoice.kode_inv[~]' => $keyword,
+            'customers.name[~]' => $keyword,
+            'invoice.tgl_inv[~]' => $keyword
+        ];
     }
+
+    // Filter berdasarkan customer
+    if (!empty($customerId)) {
+        $where['invoice.customers_id'] = $customerId;
+    }
+
+    // Filter berdasarkan tanggal
+    if (!empty($tglDari) && !empty($tglKe)) {
+        $where['invoice.tgl_inv[<>]'] = [$tglDari, $tglKe];
+    } elseif (!empty($tglDari)) {
+        $where['invoice.tgl_inv[>=]'] = $tglDari;
+    } elseif (!empty($tglKe)) {
+        $where['invoice.tgl_inv[<=]'] = $tglKe;
+    }
+
+    // Tambahkan GROUP BY supaya SUM(inv_items.total) per invoice, bukan total semua
+     $where['GROUP'] = 'invoice.id_inv';
+
+    // Ambil data dasar dari invoice + customer + total item
+    $data = $this->db->select('invoice', [
+        '[>]customers' => ['customers_id' => 'id'],
+        '[<]inv_items' => ['id_inv' => 'invoice_id']
+    ], [
+        'invoice.id_inv',
+        'invoice.kode_inv',
+        'invoice.tgl_inv',
+        'customers.name(name)',
+        'customers.ref_no(ref_no)',
+        'grand_total' => \Medoo\Medoo::raw("COALESCE(SUM(inv_items.total), 0)")
+    ], $where);
+
+    // Jika tidak butuh filter status lunas, langsung return
+    if (empty($statusLunas)) {
+        return $data;
+    }
+
+    // Filter status lunas secara manual
+    $filtered = [];
+    foreach ($data as $inv) {
+        $sisa = $this->getSisa($inv['id_inv'])['sisa'] ?? 0;
+        $isLunas = $sisa <= 0;
+
+        if (
+            ($statusLunas === 'lunas' && $isLunas) ||
+            ($statusLunas === 'belum_lunas' && !$isLunas)
+        ) {
+            $filtered[] = $inv;
+        }
+    }
+
+    return $filtered;
+}
+
+
+    public function getAllInvoicesWithCustomer() {
+    return $this->db->select("invoice", [
+        "[>]customers" => ["customers_id" => "id"]
+    ], [
+        "invoice.id_inv",
+        "invoice.kode_inv",
+        "customers.name"
+    ]);
+}
+
     
 }
-?>
+
+$invoiceModel = new Invoice($db);

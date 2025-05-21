@@ -2,23 +2,37 @@
 session_start();
 require_once __DIR__ . '/../config/env.php';
 require_once BASE_PATH . 'config/database.php';
-require_once BASE_PATH . 'controllers/OmsetController.php'; // Panggil controller-nya
+include_once BASE_PATH . 'models/payments.php';
 require_once BASE_PATH . 'function/baseurl.php';
 
-$keyword = $_GET['search'] ?? null;
-
-$periode = $_GET['periode'] ?? 'harian';
-$dataOmset = $controller->getOmsetByPeriode($periode, $keyword);
-
-$page = isset($_GET['page']) ? (int)$_GET['page'] : 1;
-$perPage = 30;
+$page = isset($_GET['page']) ? $_GET['page'] : 1;
+$perPage = 5;
 $offset = ($page - 1) * $perPage;
 
-$totalOmset = count($dataOmset);
-$totalPages = ceil($totalOmset / $perPage);
+$totalPayments = $payments->getCount();
+$totalPages = ceil($totalPayments / $perPage);
 
-// Potong array sesuai halaman
-$dataPerPage = array_slice($dataOmset, $offset, $perPage);
+if(isset($_GET['reset'])){
+  unset($_SESSION['search_data']);
+  unset($_SESSION['search_keyword']);
+  unset($_SESSION['search_tgl_dari']);
+  unset($_SESSION['search_tgl_ke']);
+
+}
+
+// Jika ada hasil pencarian di session
+if (isset($_SESSION['search_data'])) {
+    $dataPayments = $_SESSION['search_data'];
+
+    // Juga bisa ambil kembali keyword dan tanggal pencarian jika mau ditampilkan di form
+    $keyword = $_SESSION['search_keyword'] ?? '';
+    $tgl_dari = $_SESSION['search_tgl_dari'] ?? '';
+    $tgl_ke = $_SESSION['search_tgl_ke'] ?? '';
+} else {
+    // Jika tidak ada pencarian, ambil 30 data terakhir
+    $dataPayments = $payments->getPayments($offset, $perPage);
+}
+
 ?>
 
 
@@ -28,7 +42,7 @@ $dataPerPage = array_slice($dataOmset, $offset, $perPage);
   <!--begin::Head-->
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title>Data Omset</title>
+    <title>Data Payments</title>
     <!--begin::Primary Meta Tags-->
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="title" content="AdminLTE 4 | General Form Elements" />
@@ -78,123 +92,124 @@ $dataPerPage = array_slice($dataOmset, $offset, $perPage);
         <!--begin::Header-->
         <?php include BASE_PATH . 'includes/header.php' ?>
         <!--end::Header-->
-          <?php  include_once BASE_PATH . 'includes/sidebar.php'  ?>
+          <?php  include_once BASE_PATH .'includes/sidebar.php'  ?>
             <!--begin::App Main-->
       <main class="app-main">
         <!--begin::App Content Header-->
         <div class="app-content-header">
-             <!--begin::Container-->
-          <div class="container-fluid">
+            <!--begin::Container-->
+          <div class="container-fluid mb-4">
             <!--begin::Row-->
-            <div class="row">
-              <div class="col-md-6"><h3 class="mb-5">Data Omset</h3></div>
-              <div class="col-md-6">
+            <div class="row mb-4">
+              <div class="col-sm-6"><h3 class="mb-4">Data Payments</h3></div>
+              <div class="col-sm-6">
                 <ol class="breadcrumb float-sm-end">
-                  <li class="breadcrumb-item"><a href="<?= BASE_URL?>pages/dataomset.php">Data Omset</a></li>
-                  <li class="breadcrumb-item active" aria-current="page">Tabel Omset</li>
+                  <li class="breadcrumb-item"><a href="<?= $BaseUrl->getUrlDataPayments();?>">Data Payments</a></li>
+                  <li class="breadcrumb-item active" aria-current="page">Table Payments</li>
                 </ol>
               </div>
-            </div>
-           
+
+              <!-- search form -->
+      <form action="<?= $BaseUrl->getUrlControllerPayments(); ?>" method="GET" class="d-flex mt-md-3">
+        <input type="hidden" name="page" value="<?= $page ?>">
+    <input type="text" name="search" class="form-control me-2 mb-2" value="<?= $_SESSION['search_keyword'] ?? '' ?>" placeholder="Search">
     
-        <div class="card mb-4">
-          <div class="card-header">
-            <h3 class="card-title">Pilih Periode</h3>
-            <div class="card-tools">
-              <ul class="nav nav-pills ml-auto">
-                <li class="nav-item">
-                  <a class="nav-link me-2 <?= ($_GET['periode'] ?? 'harian') == 'harian' ? 'active' : '' ?>" 
-                    href="?periode=harian">Harian</a>
-                </li>
-                <li class="nav-item">
-                  <a class="nav-link me-2 <?= ($_GET['periode'] ?? '') == 'mingguan' ? 'active' : '' ?>" 
-                    href="?periode=mingguan">Mingguan</a>
-                </li>
-                <li class="nav-item">
-                  <a class="nav-link me-2 <?= ($_GET['periode'] ?? '') == 'bulanan' ? 'active' : '' ?>" 
-                    href="?periode=bulanan">Bulanan</a>
-                </li>
-              </ul>
-
+    <input type="date" name="tgl_dari" class="form-control me-2 mb-2" value="<?= $_SESSION['search_tgl_dari'] ?? '' ?>" placeholder="Tanggal Dari">
+    <input type="date" name="tgl_ke" class="form-control me-2 mb-2" value="<?= $_SESSION['search_tgl_ke'] ?? '' ?>" placeholder="Tanggal Ke">
+    
+    <button class="btn btn-primary me-2 mb-2" type="submit">Search</button>
+    <a href="<?= $BaseUrl->getUrlDataPaymentsReset(); ?>" class="btn btn-secondary me-2 mb-2">Reset</a>
+</form>
+<!-- end search form -->
             </div>
-          </div>
-          
-          <div class="card-body">
-            <div class="tab-content">
-              <div class="tab-pane fade show active" id="harian">
-                <div class="row mb-3">
-                  <div class="col-md-12">
-                    <div>
-            <form action="" method="GET" class="d-flex my-2">
-              <input type="hidden" name="periode" value="<?= htmlspecialchars($periode) ?>">
-              <input type="text" name="search" class="form-control me-2 mb-2" placeholder="Search" value="<?= $_GET['search'] ?? '' ?>">
-              <button class="btn btn-primary me-2 mb-2" type="submit">Search</button>
-              <a href="<?= BASE_URL ?>pages/dataomset.php?periode=<?= htmlspecialchars($periode) ?>" class="btn btn-secondary me-2 mb-2">Reset</a>
-            </form>
+            <div class="col-md-12">
+       
 
-                    </div>
-                  </div>
+    <!-- notifikasi tambah berhasil -->
+  <?php if (isset($_SESSION['alert'])): ?>
+    <div class="alert alert-<?= $_SESSION['alert']['type'] ?> alert-dismissible fade show" role="alert">
+        <?= $_SESSION['alert']['message'] ?>
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+    <?php unset($_SESSION['alert']); ?>
+<?php endif; ?>
+<!-- end notifikasi tambah -->
+      </div>
 
-                  <div class="card-header"><h3 class="card-title">Omset Table</h3></div>
+  <!-- Table Items -->
+  <div class="card mb-4">
+                  <div class="card-header"><h3 class="card-title">Table Payments</h3>
+                </div>
+
+                <!-- button create -->
+            <div class="mx-3 mt-3">
+              <a href="<?= $BaseUrl->getUrlFormPayments();?>" class="btn btn-primary btn-sm">
+              <i class="bi bi-plus-circle me-1"></i> Create New</a>
+            </div>
+            <!-- end button create -->
                   <!-- /.card-header -->
                   <div class="card-body">
-                  <table class="table table-bordered">
-                    <thead>
+                    <table class="table table-bordered">
+                      <thead>
                         <tr>
-                        <th style="width: 10px;">No.</th>
-                        <th><?= $periode === 'bulanan' ? 'Periode (Bulan-Tahun)' : ($periode === 'mingguan' ? 'Periode (Minggu-ke)' : 'Tanggal') ?></th>
-                        <th class="text-end">Total Omset</th>
+                          <th>No.</th>
+                          <th>Tanggal</th>
+                          <th>Kode Invoice</th>
+                          <th class="text-end">Nominal</th>
+                          <th class="text-center">Action</th>
                         </tr>
-                    </thead>
-                    <tbody>
-                        <?php $i = 1; foreach ($dataPerPage as $row): ?>
-                        <tr>
-                            <td><?= $i++ ?>.</td>
-                            <td><?= htmlspecialchars($row['tanggal'] ?? $row['bulan'] ?? $row['minggu_ke']) ?></td>
-                            <td class="text-end"><?= 'Rp. ' . number_format($row['total_omzet'], 0, ',', '.') ?></td>
+                      </thead>
+                      <?php if (!empty($dataPayments)) :?>
+                      <?php $i = 0; foreach ($dataPayments as $row):?>
+                      <tbody>
+                        <tr class="align-middle">
+                          <td><?= ++$i?>.</td>
+                          <td><?= htmlspecialchars($row['tanggal_payments'])?></td>
+                          <td><?= htmlspecialchars($row['kode_inv'])?></td>
+                          <td class="text-end"><?= htmlspecialchars('Rp. ' . number_format($row['nominal'], 0, ',', '.'))?></td>
+                          <td class="text-center">
+                          <a href="<?= $BaseUrl->getUrlFormPayments($row['id']);?>" class="btn btn-sm btn-warning me-1">
+              <i class="bi bi-pencil-square me-1"></i>Edit</a>
+              <a href="<?= $BaseUrl->getUrlControllerDeletePayments($row['id']) ?>" class="btn btn-sm btn-danger" onclick="return confirm('Are you sure?')">
+              <i class="bi bi-trash me-1"></i>Delete</a>
+                          </td>
                         </tr>
-                        <?php endforeach; ?>
-                    </tbody>
+                       <?php endforeach;?>
+                       <?php else: ?>
+                        <tr class="align-middle">
+                          <td colspan="5" class="text-center">Data Kosong</td>
+                        </tr>
+                       <?php endif; ?>
+                      </tbody>
                     </table>
                   </div>
                   <!-- /.card-body -->
-              </div>
-            </div>
-          </div>
-        </div>
-        <!-- footer card -->
-<div class="card-footer clearfix">
-    <ul class="pagination pagination-sm m-0 float-end">
-        <!-- Tombol Sebelumnya -->
-        <li class="page-item <?= ($page <= 1) ? 'disabled' : '' ?>">
-            <a class="page-link" href="?page=<?= $page - 1 ?>&periode=<?= $periode ?>&search=<?= $keyword ?>">&laquo;</a>
-        </li>
+                   <!-- /.card-body -->
+                  <!-- footer card -->
+                    <div class="card-footer clearfix">
+                    <ul class="pagination pagination-sm m-0 float-end">
+                      <?php if ($page > 1): ?>
+                        <li class="page-item"><a class="page-link" href="?page=<?= $page - 1 ?>">&laquo;</a></li>
+                      <?php endif; ?>
 
-        <!-- Nomor Halaman -->
-        <?php for ($i = 1; $i <= $totalPages; $i++): ?>
-            <li class="page-item <?= ($i == $page) ? 'active' : '' ?>">
-                <a class="page-link" href="?page=<?= $i ?>&periode=<?= $periode ?>&search=<?= $keyword ?>">
-                    <?= $i ?>
-                </a>
-            </li>
-        <?php endfor; ?>
+                      <?php for ($i = 1; $i <= $totalPages; $i++): ?>
+                        <li class="page-item <?= $i == $page ? 'active' : '' ?>">
+                          <a class="page-link" href="?page=<?= $i ?>"><?= $i ?></a>
+                        </li>
+                      <?php endfor; ?>
 
-        <!-- Tombol Selanjutnya -->
-        <li class="page-item <?= ($page >= $totalPages) ? 'disabled' : '' ?>">
-            <a class="page-link" href="?page=<?= $page + 1 ?>&periode=<?= $periode ?>&search=<?= $keyword ?>">&raquo;</a>
-        </li>
-    </ul>
-</div>
-<!-- end footer card -->
-
-      </div>
-  
-
+                      <?php if ($page < $totalPages): ?>
+                        <li class="page-item"><a class="page-link" href="?page=<?= $page + 1 ?>">&raquo;</a></li>
+                      <?php endif; ?>
+                    </ul>
+                  </div>
+                <!-- end footer card -->
+                </div>
+                <!-- /.card -->
             <!--end::Row-->
           </div>
           <!--end::Container-->
-
-
+      
 
                   <!-- begin::JavaScript-->
                   <!-- <script>
@@ -223,7 +238,7 @@ $dataPerPage = array_slice($dataOmset, $offset, $perPage);
                     })();
                   </script> -->
                   <!--end::JavaScript -->
-               
+                </div>
                 <!--end::Form Validation-->
               </div>
               <!--end::Col-->
