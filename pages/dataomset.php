@@ -147,6 +147,7 @@ $dataPerPage = array_slice($dataOmset, $offset, $perPage);
                         </tr>
                     </thead>
                     <tbody>
+                      <?php if (!empty($dataPerPage)) :?>
                         <?php $i = 1; foreach ($dataPerPage as $row): ?>
                         <tr>
                             <td><?= $i++ ?>.</td>
@@ -154,6 +155,11 @@ $dataPerPage = array_slice($dataOmset, $offset, $perPage);
                             <td class="text-end"><?= 'Rp. ' . number_format($row['total_omzet'], 0, ',', '.') ?></td>
                         </tr>
                         <?php endforeach; ?>
+                        <?php else:?>
+                        <tr>
+                            <td colspan="3" class="text-center">Data Tidak Ditemukan</td>
+                        </tr>
+                        <?php endif; ?>
                     </tbody>
                     </table>
                   </div>

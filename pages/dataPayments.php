@@ -12,25 +12,21 @@ $offset = ($page - 1) * $perPage;
 $totalPayments = $payments->getCount();
 $totalPages = ceil($totalPayments / $perPage);
 
-if(isset($_GET['reset'])){
-  unset($_SESSION['search_data']);
-  unset($_SESSION['search_keyword']);
-  unset($_SESSION['search_tgl_dari']);
-  unset($_SESSION['search_tgl_ke']);
+$keyword = $_GET['search'] ?? '';
+$tgl_dari = $_GET['tgl_dari'] ?? null;
+$tgl_ke = $_GET['tgl_ke'] ?? null;
 
+if(isset($_GET['reset'])){
+  $keyword = null;
+  $tgl_dari = null;
+  $tgl_ke = null;
 }
 
-// Jika ada hasil pencarian di session
-if (isset($_SESSION['search_data'])) {
-    $dataPayments = $_SESSION['search_data'];
-
-    // Juga bisa ambil kembali keyword dan tanggal pencarian jika mau ditampilkan di form
-    $keyword = $_SESSION['search_keyword'] ?? '';
-    $tgl_dari = $_SESSION['search_tgl_dari'] ?? '';
-    $tgl_ke = $_SESSION['search_tgl_ke'] ?? '';
+if(isset($keyword) || isset($tgl_dari) || isset($tgl_ke)){
+  // Mengambil data berdasarkan parameter pencarian
+  $dataPayments = $payments->search($keyword, $tgl_dari, $tgl_ke, $offset, $perPage);
 } else {
-    // Jika tidak ada pencarian, ambil 30 data terakhir
-    $dataPayments = $payments->getPayments($offset, $perPage);
+  $dataPayments = $payments->getPayments($offset, $perPage);
 }
 
 ?>
@@ -108,19 +104,34 @@ if (isset($_SESSION['search_data'])) {
                   <li class="breadcrumb-item active" aria-current="page">Table Payments</li>
                 </ol>
               </div>
-
-              <!-- search form -->
-      <form action="<?= $BaseUrl->getUrlControllerPayments(); ?>" method="GET" class="d-flex mt-md-3">
-        <input type="hidden" name="page" value="<?= $page ?>">
-    <input type="text" name="search" class="form-control me-2 mb-2" value="<?= $_SESSION['search_keyword'] ?? '' ?>" placeholder="Search">
-    
-    <input type="date" name="tgl_dari" class="form-control me-2 mb-2" value="<?= $_SESSION['search_tgl_dari'] ?? '' ?>" placeholder="Tanggal Dari">
-    <input type="date" name="tgl_ke" class="form-control me-2 mb-2" value="<?= $_SESSION['search_tgl_ke'] ?? '' ?>" placeholder="Tanggal Ke">
-    
-    <button class="btn btn-primary me-2 mb-2" type="submit">Search</button>
-    <a href="<?= $BaseUrl->getUrlDataPaymentsReset(); ?>" class="btn btn-secondary me-2 mb-2">Reset</a>
-</form>
-<!-- end search form -->
+              <!-- start form search -->
+            <form action="<?= $BaseUrl->getUrlDataPayments(); ?>" method="GET" class="mt-md-3">
+                <input type="hidden" name="page" value="<?= $page ?>">
+                <div class="row g-2 align-items-end"> 
+                  <div class="col-md-5">
+                    <label for="search" class="form-label">Kata Kunci:</label>
+                    <div class="input-group">
+                      <input type="text" name="search" id="search" class="form-control" value="<?= $keyword?>"
+                       placeholder="Seperti Kode Invoice">
+                    </div>
+                  </div>
+                  <div class="col-md-3">
+                    <label for="tgl_dari" class="form-label">Tanggal Dari:</label>
+                    <div class="input-group">
+                      <input type="date" name="tgl_dari" id="tgl_dari" class="form-control" value="<?= $tgl_dari?>" placeholder="Tanggal Dari">
+                    </div>
+                  </div>
+                  <div class="col-md-4"> 
+                    <label for="tgl_ke" class="form-label">Tanggal Ke:</label>
+                    <div class="d-flex align-items-end"> 
+                      <input type="date" name="tgl_ke" id="tgl_ke" class="form-control me-2" value="<?= $tgl_ke?>" placeholder="Tanggal Ke">
+                      <button class="btn btn-primary me-2" type="submit">Search</button>
+                      <a href="<?= $BaseUrl->getUrlDataPaymentsReset(); ?>" class="btn btn-secondary">Reset</a>
+                    </div>
+                  </div>
+                  </div>
+            </form>
+              <!-- end form search -->
             </div>
             <div class="col-md-12">
        
@@ -305,3 +316,5 @@ if (isset($_SESSION['search_data'])) {
   </body>
   <!--end::Body-->
 </html>
+
+<?php unset($_SESSION['form_data']);?>

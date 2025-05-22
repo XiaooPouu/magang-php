@@ -93,6 +93,14 @@ class Invoice {
     ]);
 }
 
+public function getGrandTotal($id_inv) {
+    return $this->db->get('inv_items', [
+        'grand_total' => \Medoo\Medoo::raw('SUM(total)')
+    ], [
+        'invoice_id' => $id_inv
+    ]);
+}
+
     public function getSisa($id_inv) {
     // Ambil total dari inv_items dengan alias 'total_item'
     $item = $this->db->get('inv_items', [

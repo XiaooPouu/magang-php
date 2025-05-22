@@ -23,8 +23,8 @@ class Payments {
         "payments.id_payments(id)",
         "invoice.kode_inv",
         "invoice.tgl_inv",
-        "customers.name(customer_name)",
-        "payments.tanggal(tanggal_payments)",
+        "customers.name",
+        "payments.tanggal",
         "payments.nominal"
     ], [
         "GROUP" => "payments.id_payments",
@@ -58,21 +58,21 @@ public function getCount() {
     return $this->db->count("payments");
 }
 
-
-
-    public function insert($invoice_id, $tanggal, $nominal) {
+    public function insert($invoice_id, $tanggal, $nominal, $catatan = null) {
        return $this->db->insert("payments", [
           "invoice_id" => $invoice_id,         
           "tanggal" => $tanggal,
-          "nominal" => $nominal
+          "nominal" => $nominal,
+          "catatan" => $catatan
        ]);
     }
 
-    public function update($id, $invoice_id, $tanggal, $nominal) {
+    public function update($id, $invoice_id, $tanggal, $nominal, $catatan = null) {
         return $this->db->update("payments", [
             "invoice_id" => $invoice_id,
             "tanggal" => $tanggal,
-            "nominal" => $nominal
+            "nominal" => $nominal,
+            "catatan" => $catatan
         ], [
             "id_payments" => $id
         ]);
@@ -84,11 +84,11 @@ public function getCount() {
         ]);
     }
 
-    public function search($keyword = '', $tglDari = '', $tglKe = '')
+    public function search($keyword = '', $tglDari = '', $tglKe = '', $offset = null, $limit = null)
 {
     $where = [];
 
-    // Pencarian berdasarkan keyword (misalnya invoice_id)
+    // Pencarian berdasarkan keyword
     if (!empty($keyword)) {
         $where['OR'] = [
             'invoice.kode_inv[~]' => $keyword,
@@ -96,16 +96,19 @@ public function getCount() {
         ];
     }
 
-    // Filter tanggal
+    // Filter berdasarkan tanggal
     if (!empty($tglDari) && !empty($tglKe)) {
-        $where['tanggal[<>]'] = [$tglDari, $tglKe]; // Antara dua tanggal
+        $where['payments.tanggal[<>]'] = [$tglDari, $tglKe];
     } elseif (!empty($tglDari)) {
-        $where['tanggal[>=]'] = $tglDari;
+        $where['payments.tanggal[>=]'] = $tglDari;
     } elseif (!empty($tglKe)) {
-        $where['tanggal[<=]'] = $tglKe;
+        $where['payments.tanggal[<=]'] = $tglKe;
     }
-    
-    // Eksekusi query dan kembalikan hasil
+
+    // Tambahkan limit dan offset
+    $where['LIMIT'] = [$offset, $limit];
+
+    // Eksekusi query
     return $this->db->select("payments", [
         "[>]invoice" => ["invoice_id" => "id_inv"],
         "[>]customers" => ["invoice.customers_id" => "id"]
@@ -118,6 +121,7 @@ public function getCount() {
         "payments.nominal"
     ], $where);
 }
+
 
 }
 

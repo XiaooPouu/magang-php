@@ -1,15 +1,23 @@
 <?php
+session_start();
 require_once __DIR__ . '/../config/env.php';
 require_once BASE_PATH . 'config/database.php';
 include_once BASE_PATH . 'models/payments.php';
 include_once BASE_PATH . 'models/invoice.php';
 require_once BASE_PATH . 'function/baseurl.php';
-$formData = isset($_SESSION['form_data']) ? $_SESSION['form_data'] : ['invoice_id' => '', 'tanggal' => '', 'nominal' => ''];
+
+$formData = isset($_SESSION['form_data']) ? $_SESSION['form_data'] : [
+    'invoice_id' => '',
+    'tanggal' => '',
+    'nominal' => '',
+    'catatan' => ''
+];
+
 $isEdit = null;
 $payment = null;
 
 $getInvoices = $invoiceModel->getAllInvoicesWithCustomer();
-
+$invoice = $_POST['invoice_id'] ?? $_GET['invoice_id'] ?? null;
 if(isset($_GET['id_payments'])){
     $id = $_GET['id_payments'];
     $paymentModel = new Payments($db);
@@ -18,12 +26,15 @@ if(isset($_GET['id_payments'])){
         $formData = [
             'invoice_id' => $payment['invoice_id'],
             'tanggal' => $payment['tanggal'],
-            'nominal' => $payment['nominal']
+            'nominal' => $payment['nominal'],
+            'catatan' => $payment['catatan']
         ];
-        $isEdit = true; // Menandakan form ini untuk edit
+            $isEdit = true; // Menandakan form ini untuk edit
     }
-
 }
+$totalInvoice = $invoiceModel->getGrandTotal($invoice);
+$dataSisa = $invoiceModel->getSisa($invoice);
+$sisa = $dataSisa['sisa'];
 ?>
 
 
@@ -32,7 +43,7 @@ if(isset($_GET['id_payments'])){
   <!--begin::Head-->
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title>Create Items</title>
+    <title>Payments Form</title>
     <!--begin::Primary Meta Tags-->
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="title" content="AdminLTE 4 | General Form Elements" />
@@ -107,8 +118,15 @@ if(isset($_GET['id_payments'])){
           <div class="row g-4">
       <div class="col-md-12">
 
-      
-      
+      <?php if (isset($_SESSION['alert'])): ?>
+    <div class="alert alert-<?= $_SESSION['alert']['type'] ?> alert-dismissible fade show" role="alert">
+        <?= $_SESSION['alert']['message'] ?>
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+    <?php unset($_SESSION['alert']); ?>
+<?php endif; ?>
+        
+          <?php if ($invoice):?>
                 <!--begin::Input Group-->
                 <div class="card card-success card-outline mb-4">
                   <!--begin::Header-->
@@ -118,24 +136,13 @@ if(isset($_GET['id_payments'])){
                   <form action="<?= $BaseUrl->getUrlControllerPayments();?>" method="POST">
                    <?php if ($isEdit): ?>
                   <input type="hidden" name="id_payments" value="<?= htmlspecialchars($payment['id_payments']) ?>">
-                <?php endif; ?>
+                  <?php endif; ?>
+                  <input type="hidden" name="invoice_id" value="<?= $invoice ?>">
                   <!--begin::Body-->
                     <div class="card-body">
                       <div class="row">
-                        <div class="col-md-4">
-                        <label for="invoice_id" class="form-label">Kode Invoice</label>
-                        <select name="invoice_id" class="form-select" id="invoice_id" required>
-                          <option value="" disabled <?= empty($formData['invoice_id']) ? 'selected' : ''?>>-- Pilih Invoice --</option>
-                          <?php foreach ($getInvoices as $row): ?>
-                            <option value="<?= $row['id_inv']?>" <?= $formData['invoice_id'] == $row['id_inv'] ? 'selected' : ''?>>
-                              <?= $row['kode_inv'] ?> - <?= htmlspecialchars($row['name']) ?>
-                            </option>
-                          <?php endforeach; ?>
-                        </select>
-                      </div>
-
-                        <div class="col-md-4">
-                        <label for="tanggal" class="form-label">Tanggal</label>
+                        <div class="col-md-6">
+                        <label for="tanggal" class="form-label">Tanggal:</label>
                           <div class="input-group mb-3">
                             <input
                               type="date"
@@ -145,14 +152,14 @@ if(isset($_GET['id_payments'])){
                               id="tanggal"
                               required
                               placeholder="Masukkan Angka Tanpa Pemisah Ribuan" 
-                              value="<?= $formData['tanggal']?>"
+                              value="<?= htmlspecialchars($formData['tanggal'] ?? null)?>"
                             />
                           </div>
                         </div>
 
-                        <div class="col-md-4">
-                        <label for="nominal" class="form-label">Nominal</label>
-                          <div class="input-group mb-3">
+                        <div class="col-md-6">
+                        <label for="nominal" class="form-label">Nominal:</label>
+                          <div class="input-group mb-1">
                             <span class="input-group-text">Rp.</span>
                             <input
                               type="number"
@@ -160,9 +167,28 @@ if(isset($_GET['id_payments'])){
                               aria-label="Amount (to the nearest dollar)"
                               name="nominal"
                               id="nominal"
+                              min="500"
                               required
                               placeholder="Masukkan Angka Tanpa Pemisah Ribuan" 
-                              value="<?= $formData['nominal']?>"
+                              value="<?= htmlspecialchars($formData['nominal'] ?? null)?>"
+                            />
+                          </div>
+                         
+                          <small>Total Invoice: Rp.<?= number_format($totalInvoice['grand_total'], 0, ',', '.')?>, Sisa Yang Harus Anda Bayarkan: Rp.<?= number_format($sisa, 0, ',', '.')?></small>
+                          
+                        </div>
+
+                        <div class="col-md-12">
+                        <label for="catatan" class="form-label">Catatan:</label>
+                          <div class="input-group mb-3">
+                            <input
+                              type="text"
+                              class="form-control"
+                              aria-label="Amount (to the nearest dollar)"
+                              name="catatan"
+                              id="catatan"
+                              placeholder="Contoh: Pembayaran Lunas" 
+                              value="<?= htmlspecialchars($formData['catatan'] ?? null)?>"
                             />
                           </div>
                         </div>
@@ -177,11 +203,52 @@ if(isset($_GET['id_payments'])){
                           <button type="submit" class="btn btn-success ms-auto" style="padding: 8px 16px;" name="<?= $isEdit ? 'update_payment' : 'submit_payment'?>">
                             <i class="bi bi-check-circle-fill me-1"></i> Submit</button>
                     </div>
-                    
+                     <!--end::Footer-->
                   </form>
-                  <!--end::Footer-->
                   </div>
-                   </div>
+
+        <?php else: ?>
+
+                    <!--begin::Input Group-->
+                <div class="card card-success card-outline mb-4">
+                  <!--begin::Header-->
+                  <div class="card-header"><div class="card-title"><?= $isEdit ? 'Edit Payments' : 'Input Payments' ?></div>
+                </div>
+                  <!--end::Header-->
+                  <form action="?" method="GET">
+                   <?php if ($isEdit): ?>
+                  <input type="hidden" name="id_payments" value="<?= htmlspecialchars($payment['id_payments']) ?>">
+                      <?php endif; ?>
+                  <!--begin::Body-->
+                    <div class="card-body">
+                      <div class="row">
+                        <div class="col-md-12">
+                        <label for="invoice_id" class="form-label">Kode Invoice</label>
+                        <select name="invoice_id" class="form-select" id="invoice_id" required>
+                          <option value="" disabled <?= empty($formData['invoice_id'] ?? '') ? 'selected' : '' ?>>-- Pilih Invoice --</option>
+                          <?php foreach ($getInvoices as $row): ?>
+                            <option value="<?= $row['id_inv']?>" <?= ($formData['invoice_id'] ?? '') == $row['id_inv'] ? 'selected' : '' ?>>
+                              <?= $row['kode_inv'] ?> - <?= htmlspecialchars($row['name']) ?>
+                            </option>
+                          <?php endforeach; ?>
+                        </select>
+                      </div>
+                      </div>
+                   </div>  
+                    <!--end::Body-->
+
+                  <!--begin::Footer-->
+                  <div class="card-footer d-flex align-items-center">
+                          <a href="<?= $BaseUrl->getUrlDataPayments();?>" class="btn btn-secondary" style="padding: 8px 16px;">
+                            <i class="bi bi-x-circle me-1"></i> Cancel</a>
+                          <button type="submit" class="btn btn-success ms-auto" style="padding: 8px 16px;">
+                            <i class="bi bi-check-circle-fill me-1"></i> Submit</button>
+                    </div>
+                     <!--end::Footer-->
+                  </form>
+                  </div>
+          <?php endif; ?>
+                </div>
                   <!--end::Input Group-->
                   <!--end::JavaScript -->
                 </div>

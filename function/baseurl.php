@@ -161,6 +161,10 @@ class Baseurl
         }
     }
 
+    public function getUrlFormPaymentsInvoice($id){
+        return BASE_URL . 'pages/formPayments.php?invoice_id=' . $id;
+    }
+
     public function getUrlControllerPayments(){
         return BASE_URL . 'controllers/paymentsController.php';
     }
