@@ -41,8 +41,7 @@ $totalPages = ceil($totalInvoiceItems / $perPage);
 
 $dataSisa = $invoiceModel->getSisa($id_inv);
 $sisa = $dataSisa['sisa'];
-$statusLunas = $sisa <= 0 ? 'Lunas' : 'Belum Lunas';
-$warna = $sisa <= 0 ? 'bg-success' : 'bg-danger';
+
 
 // Hitung total dan jumlah barang
 $totalHarga = 0;
@@ -55,7 +54,7 @@ foreach ($invoiceItems as $item) {
 $itemsModel = new Item($db);
 $items = $itemsModel->getAll();
 
- 
+
 ?>
 
 <!doctype html>
@@ -162,12 +161,6 @@ $items = $itemsModel->getAll();
           <h3 class="text-center mb-4"><span class="badge bg-primary"><i class="bi bi-info-circle-fill me-1"></i> Kode Invoice: <?= htmlspecialchars($invoice['kode_inv']) ?></span></h3>
 
           <!-- Info Invoice -->
-           <?php ?>
-           <div class="mb-3">
-            <span class="badge <?= $warna ?>">
-            <i class="bi bi-cash-coin me-1"></i> Status: <?= $statusLunas ?>
-          </span>
-          </div>
           <div class="mb-3">
             <span class="badge bg-info"><i class="bi bi-calendar2-week-fill me-1"></i> Tanggal: <?= htmlspecialchars($invoice['tgl_inv']) ?></span>
           </div>
@@ -202,6 +195,22 @@ $items = $itemsModel->getAll();
               <strong>Total Harga:</strong> Rp. <?= number_format($totalHarga, 0, ',', '.') ?>
             </div>
           </div>
+          
+          <?php if(!empty($invoice['note'])): ?>
+          <div class="mb-3">
+            <strong>Catatan:</strong>
+              <div class="border p-2 bg-light rounded">
+                <?= nl2br(htmlspecialchars($invoice['note'])) ?>
+              </div>
+          </div>
+          <?php else: ?>
+            <div class="mb-3">
+            <strong>Catatan:</strong>
+              <div class="border p-2 bg-light rounded">
+                Tidak ada catatan
+              </div>
+          </div>
+          <?php endif; ?>
 
           <!-- Tombol -->
           <div class="mb-3 d-flex justify-content-between align-items-center">

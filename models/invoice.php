@@ -9,11 +9,13 @@ class Invoice {
     }
 
     // Membuat invoice baru
-    public function createInvoice($kode_inv, $tgl_inv, $customers_id) {
+    public function createInvoice($kode_inv, $tgl_inv, $customers_id, $tgl_tempo, $note = null) {
         return $this->db->insert('invoice', [
             'kode_inv' => $kode_inv,
             'tgl_inv' => $tgl_inv,
-            'customers_id' => $customers_id
+            'customers_id' => $customers_id,
+            'tgl_tempo' => $tgl_tempo,
+            'note'=> $note
         ]);
     }
 
@@ -78,14 +80,15 @@ class Invoice {
    public function getWithLimit($offset, $limit) {
     return $this->db->select("invoice", [
         '[>]customers' => ['customers_id' => 'id'],
-        '[<]inv_items' => ['id_inv' => 'invoice_id']
+        "[>]inv_items" => ["id_inv" => "invoice_id"]  // pastikan ini LEFT JOIN
     ], [
         'invoice.id_inv',
         'invoice.kode_inv',
         'invoice.tgl_inv',
+        'invoice.tgl_tempo',
         'customers.name(name)',
         'customers.ref_no(ref_no)',
-        'grand_total' => \Medoo\Medoo::raw("COALESCE(SUM(inv_items.total), 0)")
+         "grand_total" => \Medoo\Medoo::raw("COALESCE(SUM(inv_items.total), 0)")
     ], [
         "GROUP" => "invoice.id_inv",
         "LIMIT" => [$offset, $limit],
@@ -136,20 +139,23 @@ public function getGrandTotal($id_inv) {
         "invoice.id_inv",
         "invoice.kode_inv",
         "invoice.tgl_inv",
+        "invoice.note",
         "invoice.customers_id",
+        "invoice.tgl_tempo",
         "customers.name(name)"
     ], [
         "invoice.id_inv" => $id_inv
     ]);
 }
 
-
     // Mengupdate invoice
-    public function update($id_inv, $kode_inv, $tgl_inv, $customers_id) {
+    public function update($id_inv, $kode_inv, $tgl_inv, $customers_id, $tgl_tempo, $note = null) {
         return $this->db->update('invoice', [
             'kode_inv' => $kode_inv,
             'tgl_inv' => $tgl_inv,
-            'customers_id' => $customers_id
+            'customers_id' => $customers_id,
+            'tgl_tempo' => $tgl_tempo,
+            'note' => $note
         ], [
             'id_inv' => $id_inv
         ]);

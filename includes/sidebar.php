@@ -101,6 +101,13 @@ require_once BASE_PATH . 'function/baseurl.php';
             <p>Payments</p>
           </a>
         </li>
+
+        <li class="nav-item">
+          <a href="<?= $BaseUrl->getUrlDataTunggakan(); ?>" class="nav-link">
+            <i class="nav-icon bi bi-clock"></i>
+            <p>Tunggakan</p>
+          </a>
+        </li>
       </ul>
       <!--end::Sidebar Menu-->
     </nav>

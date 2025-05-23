@@ -1,57 +1,10 @@
 <?php
-session_start();
 require_once __DIR__ . '/../config/env.php';
-include BASE_PATH . "models/invoice.php";
-include_once BASE_PATH . 'models/invoice_items.php';
-include BASE_PATH . 'models/costumer.php';
 require_once BASE_PATH . 'config/database.php';
 require_once BASE_PATH . 'function/baseurl.php';
+include_once BASE_PATH . 'models/tunggakan.php';
 
-$invoiceModel = new Invoice($db);
-$costumerModel = new Costumer($db);
-$customers = $costumerModel->getAll();
-
-$page = isset($_GET['page']) ? $_GET['page'] : 1;
-$perPage = 5;
-$offset = ($page - 1) * $perPage;
-
-// hitung total data
-$total_invoice = $invoiceModel->getCount();
-
-// hitung total halaman
-$totalPages = ceil($total_invoice / $perPage);
-
-$keyword = $_GET['search'] ?? '';
-
-// Jika tombol reset ditekan, bersihkan semua session pencarian
-if (isset($_GET['reset'])) {
-  unset($_SESSION['search_data']);
-  unset($_SESSION['search_keyword']);
-  unset($_SESSION['search_customer']);
-  unset($_SESSION['search_tgl_dari']);
-  unset($_SESSION['search_tgl_ke']);
-  unset($_SESSION['search_status_lunas']); 
-}
-
-if (isset($_SESSION['search_data'])) {
-  $data = $_SESSION['search_data'];
-} else {
-  $data = $invoiceModel->getWithLimit($offset, $perPage); // ambil data();
-}
-
-
-// hapus notifikasi
-if(isset($_SESSION['alert_delete'])) {
-  $type = $_SESSION['alert_delete']['type'];
-  $message = $_SESSION['alert_delete']['message'];
-  $hapus = "<div class='alert alert-{$type} alert-dismissible fade show' role='alert'>
-      {$message}
-      <button type='button' class='btn-close' data-bs-dismiss='alert' aria-label='Close'></button>
-      </div>";
-  
-  unset($_SESSION['alert_delete']); // agar hanya tampil sekali
-}
-
+$getTunggakan = $tunggakan->getTunggakanCustomer();
 
 ?>
 
@@ -61,7 +14,7 @@ if(isset($_SESSION['alert_delete'])) {
   <!--begin::Head-->
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title>Data Invoices</title>
+    <title>Data Tunggakan</title>
     <!--begin::Primary Meta Tags-->
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="title" content="AdminLTE 4 | General Form Elements" />
@@ -120,52 +73,24 @@ if(isset($_SESSION['alert_delete'])) {
           <div class="container-fluid mb-4">
             <!--begin::Row-->
             <div class="row mb-4">
-              <div class="col-sm-6"><h3 class="mb-4">Data Invoice</h3></div>
+              <div class="col-sm-6"><h3 class="mb-4">Data Tunggakan</h3></div>
               <div class="col-sm-6">
                 <ol class="breadcrumb float-sm-end">
-                  <li class="breadcrumb-item"><a href="<?= $BaseUrl->getUrlDataInvoice();?>">Data Invoice</a></li>
-                  <li class="breadcrumb-item active" aria-current="page">Table Invoices</li>
+                  <li class="breadcrumb-item"><a href="<?= $BaseUrl->getUrlDataTunggakan();?>">Data Tunggakan</a></li>
+                  <li class="breadcrumb-item active" aria-current="page">Table Tunggakan</li>
                 </ol>
               </div>
-
-              <!-- search form -->
-      <form action="<?= $BaseUrl->getUrlControllerInvoice(); ?>" method="GET" class="d-flex mt-md-3">
-      <input type="hidden" name="page" value="<?= $page ?>">
-    <input type="text" name="search" class="form-control me-2 mb-2" value="<?= $_SESSION['search_keyword'] ?? '' ?>" placeholder="Search">
-    
-    <select name="customer" class="form-control me-2 mb-2">
-        <option value="">-- Pilih Customer --</option>
-        <?php
-        // Menampilkan list customer berdasarkan data yang ada di model atau tabel
-        foreach ($customers as $customer) {
-            $selected = ($_SESSION['search_customer'] ?? '') == $customer['id'] ? 'selected' : '';
-            echo '<option value="' . $customer['id'] . '" ' . $selected . '>' . htmlspecialchars($customer['name']) . '</option>';
-        }
-        ?>
-    </select>
-
-   <?php $status = $_SESSION['search_status_lunas'] ?? ''; ?>
-<select name="status_lunas" class="form-control me-2 mb-2">
-    <option value="">-- Status --</option>
-    <option value="lunas" <?= $status === 'lunas' ? 'selected' : '' ?>>Lunas</option>
-    <option value="belum_lunas" <?= $status === 'belum_lunas' ? 'selected' : '' ?>>Belum Lunas</option>
-</select>
-
-
-
-    
-    <input type="date" name="tgl_dari" class="form-control me-2 mb-2" value="<?= $_SESSION['search_tgl_dari'] ?? '' ?>" placeholder="Tanggal Dari">
-    <input type="date" name="tgl_ke" class="form-control me-2 mb-2" value="<?= $_SESSION['search_tgl_ke'] ?? '' ?>" placeholder="Tanggal Ke">
-    
-    <button class="btn btn-primary me-2 mb-2" type="submit">Search</button>
-    <a href="<?= $BaseUrl->getUrlDataInvoiceReset(); ?>" class="btn btn-secondary me-2 mb-2">Reset</a>
-</form>
-<!-- end search form -->
+               <!-- start form search -->
+        <form action="<?= $BaseUrl->getUrlDataPayments(); ?>" method="GET" class="d-flex mt-md-3">
+            <input type="hidden" name="page" value="<?= $page ?>">
+            <input type="text" name="search" class="form-control me-2 mb-2" placeholder="Search">
+            <button class="btn btn-primary me-2 mb-2" type="submit">Search</button>
+            <a href="<?= $BaseUrl->getUrlDataItems(); ?>" class="btn btn-secondary me-2 mb-2">Reset</a>
+        </form>
+              <!-- end form search -->
             </div>
             <div class="col-md-12">
-        <!-- allert hapus -->
-  <?= isset($hapus) ? $hapus : '' ?>
-  <!-- end allert -->
+       
 
     <!-- notifikasi tambah berhasil -->
   <?php if (isset($_SESSION['alert'])): ?>
@@ -176,91 +101,52 @@ if(isset($_SESSION['alert_delete'])) {
     <?php unset($_SESSION['alert']); ?>
 <?php endif; ?>
 <!-- end notifikasi tambah -->
-
- <!-- notifikasi update berhasil -->
- <?php if (isset($_SESSION['alert_update'])): ?>
-    <div class="alert alert-<?= $_SESSION['alert_update']['type'] ?> alert-dismissible fade show" role="alert">
-        <?= $_SESSION['alert_update']['message'] ?>
-        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-    </div>
-    <?php unset($_SESSION['alert_update']); ?>
-<?php endif; ?>
-<!-- end notifikasi update -->
       </div>
 
   <!-- Table Items -->
   <div class="card mb-4">
-                  <div class="card-header"><h3 class="card-title">Table Invoice</h3>
+                  <div class="card-header"><h3 class="card-title">Tabel Tunggakan</h3>
                 </div>
-
-                <!-- button create -->
-            <div class="mx-3 mt-3">
-              <a href="<?= $BaseUrl->getUrlFormInvoice();?>" class="btn btn-primary btn-sm">
-              <i class="bi bi-plus-circle me-1"></i> Create New</a>
-            </div>
+ 
             <!-- end button create -->
                   <!-- /.card-header -->
                   <div class="card-body">
                     <table class="table table-bordered">
                       <thead>
                         <tr>
-                          <th>Kode Invoice</th>
-                          <th>Tanggal Invoice</th>
-                          <th>Kode Costumer</th>
-                          <th>Costumers</th>
+                          <th>No.</th>
+                          <th>Nama Customer</th>
                           <th>Tanggal Jatuh Tempo</th>
-                          <th class="text-end">Grand Total</th>
-                          <th class="text-center">Status</th>
+                          <th class="text-end">Total Invoice</th>
+                          <th class="text-end">Total Terbayar</th>
+                          <th class="text-end">Sisa Tagihan</th>
                           <th class="text-center">Action</th>
                         </tr>
                       </thead>
                       
-                        <tbody>
-                      <?php foreach ($data as $row): ?>
-                        <?php
-                          $dataSisa = $invoiceModel->getSisa($row['id_inv']);
-                          $sisa = $dataSisa['sisa'];
-
-                          if ($row['grand_total'] == 0) {
-                              $statusLunas = 'Belum Ada Item';
-                              $warna = 'bg-secondary';
-                          } else {
-                              $statusLunas = $sisa <= 0 ? 'Lunas' : 'Belum Lunas';
-                              $warna = $sisa <= 0 ? 'bg-success' : 'bg-danger';
-                          }
-                        ?>
+                    
+                      <tbody>
+                      <?php $i = 0; foreach ($getTunggakan as $row):?>  
                         <tr class="align-middle">
-                          <td><?= htmlspecialchars($row['kode_inv'])?></td>
-                          <td><?= htmlspecialchars($row['tgl_inv'])?></td>
-                          <td><?= htmlspecialchars($row['ref_no'])?></td>
-                          <td>
-                          <?= htmlspecialchars($row['name'])?>    
-                          </td>
-                          
+                          <td><?= ++$i?></td>
+                          <td><?= htmlspecialchars($row['name'])?></td>
                           <td><?= htmlspecialchars($row['tgl_tempo'])?></td>
                           <td class="text-end"><?= htmlspecialchars('Rp ' . number_format($row['grand_total'], 0, ',', '.'))?></td>
+                          <td class="text-end"><?= htmlspecialchars('Rp ' . number_format($row['total_bayar'], 0, ',', '.'))?></td>
+                          <td class="text-end"><?= htmlspecialchars('Rp ' . number_format($row['sisa'], 0, ',', '.'))?></td>
                           <td class="text-center">
-                            <span class="badge <?= $warna ?>">
-                            <i class="bi bi-cash-coin me-1"></i><?= $statusLunas ?>
-                          </span>
-                          </td>
-                          <td class="text-center">
-                          <a href="<?= $BaseUrl->getUrlFormInvoice($row['id_inv'])?>" class="btn btn-sm btn-warning me-1">
-              <i class="bi bi-pencil-square me-1"></i>Edit</a>
-              <a href="<?= $BaseUrl->getUrlDetailInvoice($row['id_inv'])?>" class="btn btn-sm btn-primary me-1">
-              <i class="bi bi-file-earmark-text me-1"></i>Detail</a>
-              <a href="<?= $BaseUrl->getUrlControllerDeleteInvoice($row['id_inv']) ?>" class="btn btn-sm btn-danger" onclick="return confirm('Are you sure?')">
-              <i class="bi bi-trash me-1"></i>Delete</a>
+                            <a href="<?= $BaseUrl->getUrlDataDetailTunggakan($row['customer_id'])?>" class="btn btn-sm btn-primary me-1">
+                            <i class="bi bi-file-earmark-text me-1"></i>Detail</a>
                           </td>
                         </tr>
                         <?php endforeach;?>
-
                       </tbody>
                     </table>
                   </div>
                   <!-- /.card-body -->
                    <!-- /.card-body -->
-                  <div class="card-footer clearfix">
+                  <!-- footer card -->
+                    <!-- <div class="card-footer clearfix">
                     <ul class="pagination pagination-sm m-0 float-end">
                       <?php if ($page > 1): ?>
                         <li class="page-item"><a class="page-link" href="?page=<?= $page - 1 ?>">&laquo;</a></li>
@@ -276,7 +162,8 @@ if(isset($_SESSION['alert_delete'])) {
                         <li class="page-item"><a class="page-link" href="?page=<?= $page + 1 ?>">&raquo;</a></li>
                       <?php endif; ?>
                     </ul>
-                  </div>
+                  </div> -->
+                <!-- end footer card -->
                 </div>
                 <!-- /.card -->
             <!--end::Row-->
@@ -378,5 +265,3 @@ if(isset($_SESSION['alert_delete'])) {
   </body>
   <!--end::Body-->
 </html>
-
-<?php unset($_SESSION['form_data'])?>

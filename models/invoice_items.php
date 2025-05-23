@@ -107,7 +107,7 @@ class InvoiceItems {
             'items.ref_no',
             'inv_items.qty',
             'inv_items.price',
-            'inv_items.total'
+            'inv_items.total',
         ], [
             'inv_items.invoice_id' => $invoice_id,  // Menyaring berdasarkan invoice_id
             'LIMIT' => [$offset, $limit],  // Menentukan limit dan offset

@@ -1,42 +1,21 @@
 <?php
-session_start();
 require_once __DIR__ . '/../config/env.php';
 require_once BASE_PATH . 'config/database.php';
-include BASE_PATH . 'models/invoice.php';
-include BASE_PATH . 'models/costumer.php';
 require_once BASE_PATH . 'function/baseurl.php';
+include_once BASE_PATH . 'models/tunggakan.php';
 
-$formData = isset($_SESSION['form_data']) ? $_SESSION['form_data'] : ['kode_inv' => '', 'tgl_inv' => '', 'customers_id' => '', 'tgl_tempo' => '', 'note' => ''];
-$alert = isset($_SESSION['alert']);
+$id_customer = $_GET['customer_id'];
 
-$customersModel = new Costumer($db); // Ambil data customer
-$customers = $customersModel->getAll();
-
-$isEdit = false; // Variabel untuk menandakan mode edit
-$invoice = null;
-
-if(isset($_GET['id_inv'])){
-  $id_inv = $_GET['id_inv'];
-  $invoiceModel = new Invoice($db);
-  $invoice = $invoiceModel->getById($id_inv);
-  if($invoice){
-    $formData = [
-      'kode_inv' => $invoice['kode_inv'],
-      'tgl_inv' => $invoice['tgl_inv'],
-      'customers_id' => $invoice['customers_id'],
-      'tgl_tempo' => $invoice['tgl_tempo'],
-      'note' => $invoice['note']
-    ];
-  }
-  $isEdit = true;
-}
+$detailTunggakan = $tunggakan->getDetailTunggakanCustomer($id_customer);
+$dataCustomer = $tunggakan->getById($id_customer);
 ?>
+
 <!doctype html>
 <html lang="en">
   <!--begin::Head-->
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title>Form Invoice</title>
+    <title>Data Invoice Items</title>
     <!--begin::Primary Meta Tags-->
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="title" content="AdminLTE 4 | General Form Elements" />
@@ -84,93 +63,136 @@ if(isset($_GET['id_inv'])){
     <!--begin::App Wrapper-->
       <div class="app-wrapper">
         <!--begin::Header-->
-        <?php  include BASE_PATH . 'includes/header.php'  ?>
+        <?php include BASE_PATH . 'includes/header.php' ?>
         <!--end::Header-->
-          <?php  include_once BASE_PATH . 'includes/sidebar.php'  ?>
+          <?php  include_once BASE_PATH .'includes/sidebar.php'  ?>
             <!--begin::App Main-->
       <main class="app-main">
         <!--begin::App Content Header-->
         <div class="app-content-header">
-          <!--begin::Container-->
+            <!--begin::Container-->
           <div class="container-fluid mb-4">
             <!--begin::Row-->
             <div class="row">
-              <div class="col-md-6"><h3 class="mb-0">Invoice Form</h3></div>
+              <div class="col-md-6"><h3 class="mb-0">Detail Tunggakan</h3></div>
               <div class="col-md-6">
                 <ol class="breadcrumb float-sm-end">
-                  <li class="breadcrumb-item"><a href="<?= $BaseUrl->getUrlDataInvoice();?>">Data Invoice</a></li>
-                  <li class="breadcrumb-item active" aria-current="page"><?= $isEdit ? 'Edit Form' : 'Create Form' ?></li>
+                  <li class="breadcrumb-item"><a href="<?= $BaseUrl->getUrlDataTunggakan();?>">Data Tunggakan</a></li>
+                  <li class="breadcrumb-item active" aria-current="page">Table Tunggakan</li>
                 </ol>
               </div>
             </div>
             <!--end::Row-->
           </div>
           <!--end::Container-->
-          <!--begin::Container Input-->
+          <!--begin::Container-->
           <div class="container-fluid">
           <div class="row g-4">
       <div class="col-md-12">
-
-      <!-- notifikasi -->
-  <?php if ($alert): ?>
-  <div class="alert alert-<?= $_SESSION['alert']['type'] ?> alert-dismissible fade show" role="alert">
-    <?= $_SESSION['alert']['message'] ?>
-    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-  </div>
-  <?php unset($_SESSION['alert']); ?>
+       <!-- notifikasi tambah -->
+    <?php if (isset($_SESSION['alert'])): ?>
+    <div class="alert alert-<?= $_SESSION['alert']['type'] ?> alert-dismissible fade show" role="alert">
+        <?= $_SESSION['alert']['message'] ?>
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+    <?php unset($_SESSION['alert']); ?>
 <?php endif; ?>
-<!-- end notifikasi -->
+<!-- end notifikasi tambah -->
 
-      
-                <!-- Form Invoice -->
-              <div class="card card-primary card-outline mb-4">
-                  <div class="card-header">
-                    <div class="card-title"><?= $isEdit ? 'Edit Invoice' : 'Input Invoice'?></div>
-                  </div>
-                  <form action="<?= $BaseUrl->getUrlControllerInvoice(); ?>" method="POST">
-                    <?php if ($isEdit): ?>
-                      <input type="hidden" name="id_inv" value="<?= htmlspecialchars($invoice['id_inv']) ?>">
-                      <?php endif;?>
-                    <div class="card-body row g-3">
-                      <div class="col-md-3">
-                        <label for="invoice_code" class="form-label">Kode Invoice:</label>
-                        <input type="text" name="kode_inv" class="form-control" id="invoice_code" required value="<?= htmlspecialchars($formData['kode_inv'])?>" placeholder="Contoh: INV001">
-                      </div>
-                      <div class="col-md-3">
-                        <label for="invoice_date" class="form-label">Tanggal Invoice:</label>
-                        <input type="date" name="tgl_inv" class="form-control" id="invoice_date" required value="<?= htmlspecialchars($formData['tgl_inv'])?>">
-                      </div>
-                      <div class="col-md-3">
-                        <label for="customer_id" class="form-label">Customer:</label>
-                        <select name="customers_id" class="form-select" id="customer_id" required>
-                          <option value="" disabled <?= empty($formData['customers_id']) ? 'selected' : ''?>>-- Pilih Customer --</option>
-                          <?php foreach ($customers as $customer): ?>
-                            <option value="<?= $customer['id']?>" <?= $formData['customers_id'] == $customer['id'] ? 'selected' : ''?>>
-                              <?= htmlspecialchars($customer['name']) ?>
-                            </option>
-                          <?php endforeach; ?>
-                        </select>
-                      </div>
-                      <div class="col-md-3">
-                        <label for="invoice_tempo" class="form-label">Tanggal Jatuh Tempo:</label>
-                        <input type="date" name="tgl_tempo" class="form-control" id="invoice_tempo" required value="<?= htmlspecialchars($formData['tgl_tempo'])?>">
-                      </div>
+<!-- notifikasi hapus -->
+<?php if (isset($_SESSION['alert_delete'])): ?>
+    <div class="alert alert-<?= $_SESSION['alert_delete']['type'] ?> alert-dismissible fade show" role="alert">
+        <?= $_SESSION['alert_delete']['message'] ?>
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+    <?php unset($_SESSION['alert_delete']); ?>
+<?php endif; ?>
 
-                      <div class="col-md-12">
-                        <label for="note">Catatan/Note:</label>
-                        <textarea name="note" class="form-control" id="note" value ="<?= htmlspecialchars($formData['note'])?>">
-                        </textarea>
-                      </div>
-                    </div>
-                    <div class="card-footer d-flex align-items-center">
-                      <a href="<?= $BaseUrl->getUrlDataInvoice(); ?>" class="btn btn-secondary" style="padding: 8px 16px;">
-                        <i class="bi bi-x-circle me-1"></i> Cancel</a>
-                      <button type="submit" name="<?= $isEdit ? 'update_invoice' : 'save_invoice'?>" class="btn btn-primary ms-auto" style="padding: 8px 16px;"><i class="bi bi-check-circle-fill me-1"></i> Submit</button>
-                    </div>
-                  </form>
-                </div>
-                <!-- End Form Invoice -->
-                  <!--end::Input Group-->
+
+<div class="container mt-2">
+        <div class="card p-4">
+          <h3 class="text-center mb-4"><span class="badge bg-primary"><i class="bi bi-person-circle me-1"></i> Customer: <?= htmlspecialchars($dataCustomer['name']) ?></span></h3>
+
+          <!-- Info Invoice -->
+          <div class="mb-3">
+            <span class="badge bg-info"><i class="bi bi-calendar2-week-fill me-1"></i> Tanggal Tempo: <?= htmlspecialchars($dataCustomer['tgl_tempo']) ?></span>
+          </div>
+          <div class="mb-4">
+            <span class="badge bg-primary"><i class="bi bi-info-circle-fill me-1"></i> Kode Customer: <?= htmlspecialchars($dataCustomer['ref_no']) ?></span>
+          </div>
+
+          <!-- Tombol -->
+          <div class="mb-3 d-flex justify-content-between align-items-center">
+            <a href="<?= $BaseUrl->getUrlFormInvoice();?>" class="btn btn-primary btn-sm">
+              <i class="bi bi-plus-circle me-1"></i> Create New Invoice
+            </a>
+          </div>
+
+          <!-- Tabel Item -->
+          <div class="table-responsive">
+            <table class="table table-bordered align-middle table-striped">
+              <thead class="table-light">
+                <tr>
+                  <th>No.</th>
+                  <th>Tanggal Bayar</th>
+                  <th>Kode Invoice</th>
+                  <th class="text-end">Grand Total</th>
+                  <th class="text-end">Jumlah Bayar</th>
+                  <th class="text-end">Sisa</th>
+                 
+                </tr>
+              </thead>
+              <tbody>
+                <?php if (!empty($detailTunggakan)) : ?>
+                  <?php $i=0; foreach ($detailTunggakan as $row) : ?>
+                    <tr>
+                      <td><?= ++$i ?>.</td>
+                      <td><?= htmlspecialchars($row['tanggal_bayar']) ?></td>
+                      <td><?= htmlspecialchars($row['kode_inv']) ?></td>
+                      <td class="text-end">Rp. <?= number_format($row['grand_total'], 0, ',', '.') ?></td>
+                      <td class="text-end">Rp. <?= number_format($row['jumlah_bayar'], 0, ',', '.') ?></td>
+                      <td class="text-end">Rp. <?= number_format($row['sisa'], 0, ',', '.') ?></td>
+                    </tr>
+                  <?php endforeach; ?>
+                <?php else : ?>
+                  <tr>
+                    <td colspan="6" class="text-center">Belum ada item pada invoice ini.</td>
+                  </tr>
+                <?php endif; ?>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+            </div>
+</div>
+                  <!-- begin::JavaScript-->
+                  <!-- <script>
+                    // Example starter JavaScript for disabling form submissions if there are invalid fields
+                    (() => {
+                      'use strict';
+
+                      // Fetch all the forms we want to apply custom Bootstrap validation styles to
+                      const forms = document.querySelectorAll('.needs-validation');
+
+                      // Loop over them and prevent submission
+                      Array.from(forms).forEach((form) => {
+                        form.addEventListener(
+                          'submit',
+                          (event) => {
+                            if (!form.checkValidity()) {
+                              event.preventDefault();
+                              event.stopPropagation();
+                            }
+
+                            form.classList.add('was-validated');
+                          },
+                          false,
+                        );
+                      });
+                    })();
+                  </script> -->
                   <!--end::JavaScript -->
                 </div>
                 <!--end::Form Validation-->
@@ -239,5 +261,3 @@ if(isset($_GET['id_inv'])){
   </body>
   <!--end::Body-->
 </html>
-
-<?php unset($_SESSION['form_data']);?>

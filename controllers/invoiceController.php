@@ -10,14 +10,31 @@ $model = new Invoice($db);
 $id_inv = $_POST['id_inv'] ?? null;
 $kode_inv = $_POST['kode_inv'] ?? null;
 $tgl_inv = $_POST['tgl_inv'] ?? null;
+$tgl_tempo = $_POST['tgl_tempo'] ?? null;
 $customer_id = $_POST['customers_id'] ?? null;
+$note = $_POST['note'] ?? null;
 
 // menyimpan session form data
     $_SESSION['form_data'] = [
         'kode_inv' => $kode_inv,
         'tgl_inv' => $tgl_inv,
-        'customers_id' => $customer_id
+        'customers_id' => $customer_id,
+        'tgl_tempo' => $tgl_tempo,
+        'note' => $note
     ];
+
+
+if(isset($_POST['save_invoice']) || isset($_POST['update_invoice'])){
+    if(strtotime($tgl_tempo) < strtotime($tgl_inv)){
+            $_SESSION['alert'] = [
+                'type' => 'danger',
+                'message' => 'Tanggal Tempo harus lebih besar dari Tanggal Invoice!'
+            ];
+            header('Location:' . $BaseUrl->getUrlFormInvoice());
+            exit();
+        }
+}
+
 
 if(isset($_POST['save_invoice'])){
 
@@ -31,7 +48,7 @@ if(isset($_POST['save_invoice'])){
         header('Location:' . $BaseUrl->getUrlFormInvoice());
         exit();
     } else {
-        $model->createInvoice($kode_inv, $tgl_inv, $customer_id);
+        $model->createInvoice($kode_inv, $tgl_inv, $customer_id, $tgl_tempo, $note);
         $_SESSION['alert'] = [
             'type' => 'success',
             'message' => 'Invoice berhasil disimpan!'
@@ -40,6 +57,7 @@ if(isset($_POST['save_invoice'])){
         unset($_SESSION['form_data']);
         header('Location:' . $BaseUrl->getUrlDataInvoice());
         exit();
+        
     }
 }
 // hapus invoice
@@ -59,8 +77,8 @@ else if (isset($_GET['delete_invoice'])) {
 // update invoice 
 else if (isset($_POST['update_invoice'])){
 
-    if($id_inv && $kode_inv && $tgl_inv && $customer_id){
-        $model->update($id_inv, $kode_inv, $tgl_inv, $customer_id);
+    if($id_inv && $kode_inv && $tgl_inv && $customer_id && $tgl_tempo) {
+        $model->update($id_inv, $kode_inv, $tgl_inv, $customer_id, $tgl_tempo, $note);
         $_SESSION['alert'] = [
             'type' => 'success',
             'message' => 'Invoice berhasil diupdate!'

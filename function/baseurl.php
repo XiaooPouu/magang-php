@@ -177,6 +177,14 @@ class Baseurl
         return BASE_URL . 'pages/dataPayments.php?reset=true';
     }
 
+    public function getUrlDataTunggakan(){
+        return BASE_URL . 'pages/dataTunggakan.php';
+    }
+
+    public function getUrlDataDetailTunggakan($customer_id){
+        return BASE_URL . 'pages/detailTunggakan.php?customer_id=' . $customer_id;
+    }
+
     public function getUrlCSS () {
         return BASE_URL . 'src/css/adminlte.css';
     }
