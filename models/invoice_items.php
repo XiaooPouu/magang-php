@@ -11,26 +11,20 @@ class InvoiceItems {
     }
 
     // Ambil semua item dari 1 invoice berdasarkan invoice_id
-    public function getByInvoiceId($invoice_id, $limit = null, $offset = null) {
-        $where = [
-            "invoice_id" => $invoice_id
-        ];
-    
-        if ($limit !== null && $offset !== null) {
-            $where["LIMIT"] = [$offset, $limit];
-        }
-    
-        return $this->db->select("inv_items", [
-            "[>]items" => ["items_id" => "id"]
+    public function getByInvoiceId($invoiceId) {
+        return $this->db->select('inv_items', [
+            '[>]items' => ['items_id' => 'id'],
         ], [
-            "inv_items.id",
-            "inv_items.invoice_id",
-            "inv_items.qty",
-            "inv_items.price",
-            "inv_items.total",
-            "items.name",
-            "items.ref_no"
-        ], $where);
+            'inv_items.id',
+            'inv_items.invoice_id',
+            'items.ref_no',
+            'items.name',
+            'inv_items.qty',
+            'inv_items.price',
+            'inv_items.total'
+        ], [
+            'inv_items.invoice_id' => $invoiceId
+        ]);
     }
     
 
@@ -149,6 +143,17 @@ class InvoiceItems {
             'items.name AS item_name'
         ], [
             'inv_items.id' => $id
+        ]);
+    }
+
+    public function getCustomer($invoice_id) {
+        return $this->db->get('inv_items', [
+            '[>]invoice' => ['invoice_id' => 'id_inv'],
+            '[>]customers' => ['invoice.customers_id' => 'id']
+        ],[
+            'customers.name'
+        ], [
+            'id_inv' => $invoice_id
         ]);
     }
 

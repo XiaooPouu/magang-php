@@ -104,34 +104,6 @@ if(isset($keyword) || isset($tgl_dari) || isset($tgl_ke)){
                   <li class="breadcrumb-item active" aria-current="page">Table Payments</li>
                 </ol>
               </div>
-              <!-- start form search -->
-            <form action="<?= $BaseUrl->getUrlDataPayments(); ?>" method="GET" class="mt-md-3">
-                <input type="hidden" name="page" value="<?= $page ?>">
-                <div class="row g-2 align-items-end"> 
-                  <div class="col-md-5">
-                    <label for="search" class="form-label">Kata Kunci:</label>
-                    <div class="input-group">
-                      <input type="text" name="search" id="search" class="form-control" value="<?= $keyword?>"
-                       placeholder="Seperti Kode Invoice">
-                    </div>
-                  </div>
-                  <div class="col-md-3">
-                    <label for="tgl_dari" class="form-label">Tanggal Dari:</label>
-                    <div class="input-group">
-                      <input type="date" name="tgl_dari" id="tgl_dari" class="form-control" value="<?= $tgl_dari?>" placeholder="Tanggal Dari">
-                    </div>
-                  </div>
-                  <div class="col-md-4"> 
-                    <label for="tgl_ke" class="form-label">Tanggal Ke:</label>
-                    <div class="d-flex align-items-end"> 
-                      <input type="date" name="tgl_ke" id="tgl_ke" class="form-control me-2" value="<?= $tgl_ke?>" placeholder="Tanggal Ke">
-                      <button class="btn btn-primary me-2" type="submit">Search</button>
-                      <a href="<?= $BaseUrl->getUrlDataPaymentsReset(); ?>" class="btn btn-secondary">Reset</a>
-                    </div>
-                  </div>
-                  </div>
-            </form>
-              <!-- end form search -->
             </div>
             <div class="col-md-12">
        
@@ -146,6 +118,64 @@ if(isset($keyword) || isset($tgl_dari) || isset($tgl_ke)){
 <?php endif; ?>
 <!-- end notifikasi tambah -->
       </div>
+
+      <!--begin::Input Group-->
+                <div class="card card-primary card-outline mb-4">
+                  <!--begin::Header-->
+                  <div class="card-header"><div class="card-title">Search Payments</div>
+                </div>
+                  <!--end::Header-->
+                  <form action="<?= $BaseUrl->getUrlDataPayments();?>" method="GET">
+                    <input type="hidden" name="page" value="<?= $page ?>">
+                  <!--begin::Body-->
+                    <div class="card-body">
+                      <div class="row">
+                        <div class="col-md-4">
+                          <label for="costumer_search" class="form-label">Kata Kunci:</label>
+                          <div class="input-group">
+                            <input
+                              type="text"
+                              class="form-control"
+                              placeholder="Search Kata kunci"
+                              aria-label="Ref_No"
+                              name="search"
+                              id="costumer_ref_no"
+                              aria-describedby="basic-addon1"
+                              value="<?= $keyword?>"
+                            />
+                          </div>
+                        </div>
+
+                        <div class="col-md-4">
+                          <label for="tgl_dari" class="form-label">Tanggal Dari:</label>
+                          <div class="input-group">
+                             <input type="date" name="tgl_dari" id="tgl_dari" class="form-control" value="<?= $tgl_dari ?>" placeholder="Tanggal Dari">
+                          </div>
+                        </div>
+
+                        <div class="col-md-4">
+                          <label for="tgl_ke" class="form-label">Tanggal Ke:</label>
+                          <div class="input-group">
+                            <input type="date" name="tgl_ke" id="tgl_ke" class="form-control" value="<?= $tgl_ke ?>" placeholder="Tanggal Ke">
+
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <!--end::Body-->
+
+                  <!--begin::Footer-->
+                  <div class="card-footer d-flex justify-content-end">
+                          <a href="<?= $BaseUrl->getUrlDataPaymentsReset();?>" class="btn btn-secondary">
+                            <i class="bi bi-arrow-counterclockwise me-1"></i> Reset</a>
+                          <button type="submit" class="btn btn-primary ms-2">
+                            <i class="bi bi-search me-1"></i> Search</button>
+                    </div>
+                  </form>
+                  <!--end::Footer-->
+                  </div>
+
+
 
   <!-- Table Items -->
   <div class="card mb-4">
@@ -181,6 +211,9 @@ if(isset($keyword) || isset($tgl_dari) || isset($tgl_ke)){
                           <td class="text-center">
                           <a href="<?= $BaseUrl->getUrlFormPayments($row['id']);?>" class="btn btn-sm btn-warning me-1">
               <i class="bi bi-pencil-square me-1"></i>Edit</a>
+              <a href="<?= $BaseUrl->getPrintKwitansi($row['id']) ?>" class="btn btn-success btn-sm">
+                <i class="bi bi-printer me-1"></i> Print
+                </a>
               <a href="<?= $BaseUrl->getUrlControllerDeletePayments($row['id']) ?>" class="btn btn-sm btn-danger" onclick="return confirm('Are you sure?')">
               <i class="bi bi-trash me-1"></i>Delete</a>
                           </td>

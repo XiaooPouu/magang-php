@@ -9,10 +9,13 @@ class Costumer {
         $this->db = $db; // Medoo instance
     }
 
-    public function insert($ref_no, $name) {
+    public function insert($ref_no, $name, $alamat, $nomer, $email) {
         return $this->db->insert("customers", [
             "ref_no" => $ref_no,
-            "name"   => $name
+            "name"   => $name,
+            "alamat" => $alamat,
+            "nomer" => $nomer,
+            "email" => $email
         ]);
     }
 
@@ -26,6 +29,10 @@ class Costumer {
 
     public function getCount() {
         return $this->db->count("customers");
+    }
+
+    public function getEmailById($id){
+        return $this->db->get("customers", "email", ["id" => $id]);
     }
 
     public function getWhitLimit($limit, $offset) {
@@ -46,10 +53,13 @@ class Costumer {
         return $this->db->get("customers", "*", ["id" => $id]);
     }
 
-    public function update($id, $ref_no, $name) {
+    public function update($id, $ref_no, $name, $alamat, $nomer, $email) {
         return $this->db->update("customers", [
             "ref_no" => $ref_no,
-            "name"   => $name
+            "name"   => $name,
+            "alamat" => $alamat,
+            "nomer" => $nomer,
+            "email" => $email
         ], [
             "id" => $id
         ]);
@@ -64,7 +74,8 @@ class Costumer {
             "OR" => [
                 "ref_no[~]" => $keyword,
                 "name[~]"   => $keyword
-            ]
+            ],
+            "ORDER" => ["id" => "DESC"]
         ]);
     }
 }

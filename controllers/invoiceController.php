@@ -70,7 +70,7 @@ else if (isset($_GET['delete_invoice'])) {
         'type' => 'success',
         'message' => 'Invoice berhasil dihapus!'  
       ];
-
+      unset($_SESSION['search_data']);
     header('Location: ' . $BaseUrl->getUrlDataInvoice());
     exit();
 }

@@ -21,11 +21,14 @@ $totalItems_Costumers = $itemsCostumerModel->getCount();
 // hitung total halaman
 $totalPages = ceil($totalItems_Costumers / $perPage);
 
+if(isset($_GET['reset'])){
+  unset($_SESSION['search_data']);
+  unset($_SESSION['search_keyword']);
+}
+
 
 if (isset($_SESSION['search_data'])) {
   $data = $_SESSION['search_data'];
-  unset($_SESSION['search_data']); // biar gak nyangkut terus
-  unset($_SESSION['search_keyword']);
 } else {
   $data = $itemsCostumerModel->getWithLimit($perPage, $offset);
 }
@@ -77,15 +80,6 @@ $alert = isset($_SESSION['alert_delete']);
                   <li class="breadcrumb-item active" aria-current="page">Tabel Items Costumers</li>
                 </ol>
               </div>
-
-              <!-- Search Form -->
-              <form action="<?= $BaseUrl->getUrlControllerItemsCostumer(); ?>" method="GET" class="d-flex mt-md-3">
-                <input type="text" name="search" class="form-control me-2 mb-2" placeholder="Search" value="<?= $_SESSION['search_keyword'] ?? '' ?>">
-                <input type="hidden" name="page" value="<?= $page ?>">
-                <button class="btn btn-primary me-2 mb-2" type="submit">
-                  Search</button>
-                <a href="<?= $BaseUrl->getUrlDataItemsCostumer(); ?>" class="btn btn-secondary me-2 mb-2">Reset</a>
-              </form>
             </div>
             <!-- untuk notif -->
               <div class="col-md-12">
@@ -120,6 +114,48 @@ $alert = isset($_SESSION['alert_delete']);
               <!-- end notif delete -->
               </div>
                 <!-- end untuk notif -->
+
+                  <!--begin::Input Group-->
+                <div class="card card-primary card-outline mb-4">
+                  <!--begin::Header-->
+                  <div class="card-header"><div class="card-title">Search Items Costumers</div>
+                </div>
+                  <!--end::Header-->
+                  <form action="<?= $BaseUrl->getUrlControllerItemsCostumer();?>" method="GET">
+                    <input type="hidden" name="page" value="<?= $page ?>">
+                  <!--begin::Body-->
+                    <div class="card-body">
+                      <div class="row">
+                        <div class="col-md-12">
+                          <label for="items_costumer_search" class="form-label">Kata Kunci:</label>
+                          <div class="input-group">
+                            <input
+                              type="text"
+                              class="form-control"
+                              placeholder="Search Kata kunci"
+                              aria-label="Ref_No"
+                              name="search"
+                              id="items_costumer_search"
+                              aria-describedby="basic-addon1"
+                              value="<?= $_SESSION['search_keyword'] ?? '' ?>"
+                            />
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <!--end::Body-->
+
+                  <!--begin::Footer-->
+                  <div class="card-footer d-flex justify-content-end">
+                          <a href="<?= $BaseUrl->getUrlDataItemsCostumerReset();?>" class="btn btn-secondary">
+                            <i class="bi bi-arrow-counterclockwise me-1"></i> Reset</a>
+                          <button type="submit" class="btn btn-primary ms-2">
+                            <i class="bi bi-search me-1"></i> Search</button>
+                    </div>
+                  </form>
+                  <!--end::Footer-->
+                  </div>
+
 
               <!-- Table Items -->
                 <div class="card mb-4">

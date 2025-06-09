@@ -1,13 +1,34 @@
 <?php
+session_start();
 require_once __DIR__ . '/../config/env.php';
 require_once BASE_PATH . 'config/database.php';
 require_once BASE_PATH . 'function/baseurl.php';
-include_once BASE_PATH . 'models/tunggakan.php';
+include_once BASE_PATH . 'models/pic.php';
 
-$id_customer = $_GET['customer_id'];
+$formData = isset($_SESSION['form_data']) ? $_SESSION['form_data'] : [
+    'name' => '',
+    'jabatan' => '',
+    'email' => '',
+    'nomer' => ''
+];
 
-$detailTunggakan = $tunggakan->getDetailTunggakanCustomer($id_customer);
-$dataCustomer = $tunggakan->getById($id_customer);
+$isEdit = false;
+$PIC = null;
+
+if(isset($_GET['id'])){
+    $id = $_GET['id'];
+    $PIC = $picModel->getById($id); // Mengambil data item berdasarkan id
+    if ($PIC) {
+        $formData = [
+            'name' => $PIC['name'],
+            'jabatan' => $PIC['jabatan'],
+            'email' => $PIC['email'],
+            'nomer' => $PIC['nomer']
+        ];
+        $isEdit = true;
+    }
+
+}
 ?>
 
 <!doctype html>
@@ -15,7 +36,7 @@ $dataCustomer = $tunggakan->getById($id_customer);
   <!--begin::Head-->
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title>Data Invoice Items</title>
+    <title>Form PIC</title>
     <!--begin::Primary Meta Tags-->
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="title" content="AdminLTE 4 | General Form Elements" />
@@ -63,34 +84,35 @@ $dataCustomer = $tunggakan->getById($id_customer);
     <!--begin::App Wrapper-->
       <div class="app-wrapper">
         <!--begin::Header-->
-        <?php include BASE_PATH . 'includes/header.php' ?>
+        <?php  include BASE_PATH . 'includes/header.php'  ?>
         <!--end::Header-->
-          <?php  include_once BASE_PATH .'includes/sidebar.php'  ?>
+          <?php  include_once BASE_PATH . 'includes/sidebar.php'  ?>
             <!--begin::App Main-->
       <main class="app-main">
         <!--begin::App Content Header-->
         <div class="app-content-header">
-            <!--begin::Container-->
+          <!--begin::Container-->
           <div class="container-fluid mb-4">
             <!--begin::Row-->
             <div class="row">
-              <div class="col-md-6"><h3 class="mb-0">Detail Tunggakan</h3></div>
+              <div class="col-md-6"><h3 class="mb-0">PIC Form</h3></div>
               <div class="col-md-6">
                 <ol class="breadcrumb float-sm-end">
-                  <li class="breadcrumb-item"><a href="<?= $BaseUrl->getUrlDataTunggakan();?>">Data Tunggakan</a></li>
-                  <li class="breadcrumb-item active" aria-current="page">Table Tunggakan</li>
+                  <li class="breadcrumb-item"><a href="<?= $BaseUrl->getUrlDataPIC();?>">Data PIC</a></li>
+                  <li class="breadcrumb-item active" aria-current="page"><?= $isEdit ? 'Edit Form' : 'Input Form' ?></li>
                 </ol>
               </div>
             </div>
             <!--end::Row-->
           </div>
           <!--end::Container-->
-          <!--begin::Container-->
+          <!--begin::Container Input-->
           <div class="container-fluid">
           <div class="row g-4">
       <div class="col-md-12">
-       <!-- notifikasi tambah -->
-    <?php if (isset($_SESSION['alert'])): ?>
+
+       <!-- notifikasi tambah berhasil -->
+  <?php if (isset($_SESSION['alert'])): ?>
     <div class="alert alert-<?= $_SESSION['alert']['type'] ?> alert-dismissible fade show" role="alert">
         <?= $_SESSION['alert']['message'] ?>
         <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
@@ -98,109 +120,101 @@ $dataCustomer = $tunggakan->getById($id_customer);
     <?php unset($_SESSION['alert']); ?>
 <?php endif; ?>
 <!-- end notifikasi tambah -->
-
-<!-- notifikasi hapus -->
-<?php if (isset($_SESSION['alert_delete'])): ?>
-    <div class="alert alert-<?= $_SESSION['alert_delete']['type'] ?> alert-dismissible fade show" role="alert">
-        <?= $_SESSION['alert_delete']['message'] ?>
-        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-    </div>
-    <?php unset($_SESSION['alert_delete']); ?>
-<?php endif; ?>
-
-
-<div class="container mt-2">
-        <div class="card p-4">
-          <h3 class="text-center mb-4"><span class="badge bg-info"><i class="bi bi-person-circle me-1"></i> Customer : <?= htmlspecialchars($dataCustomer['name']) ?></span></h3>
-
-          <div class="mb-4">
-            <span class="badge bg-secondary"><i class="bi bi-info-circle-fill me-1"></i> Kode Customer : <?= htmlspecialchars($dataCustomer['ref_no']) ?></span>
-          </div>
-
-           <div class="mb-4">
-            <span class="badge bg-primary"><i class="bi bi-envelope me-1"></i> Email : <?= htmlspecialchars($dataCustomer['email']) ?></span>
-          </div>
-
-           <div class="mb-4">
-            <span class="badge bg-danger"><i class="bi bi-geo-alt me-1"></i> Alamat : <?= htmlspecialchars($dataCustomer['alamat']) ?></span>
-          </div>
-
-           <div class="mb-4">
-            <span class="badge bg-success"><i class="bi bi-telephone me-1"></i> No Telepone : <?= htmlspecialchars($dataCustomer['nomer']) ?></span>
-          </div>
-
-          <!-- Tombol -->
-          <div class="mb-3 d-flex justify-content-between align-items-center">
-            <a href="<?= $BaseUrl->getUrlFormInvoice();?>" class="btn btn-primary btn-sm">
-              <i class="bi bi-plus-circle me-1"></i> Create New Invoice
-            </a>
-          </div>
-
-          <!-- Tabel Item -->
-          <div class="table-responsive">
-            <table class="table table-bordered align-middle table-striped">
-              <thead class="table-light">
-                <tr>
-                  <th>No.</th>
-                  <th>Tanggal Bayar</th>
-                  <th>Kode Invoice</th>
-                  <th class="text-end">Grand Total</th>
-                  <th class="text-end">Jumlah Bayar</th>
-                  <th class="text-end">Sisa</th>
-                 
-                </tr>
-              </thead>
-              <tbody>
-                <?php if (!empty($detailTunggakan)) : ?>
-                  <?php $i=0; foreach ($detailTunggakan as $row) : ?>
-                    <tr>
-                      <td><?= ++$i ?>.</td>
-                      <td><?= htmlspecialchars($row['tanggal_bayar']) ?></td>
-                      <td><?= htmlspecialchars($row['kode_inv']) ?></td>
-                      <td class="text-end">Rp. <?= number_format($row['grand_total'], 0, ',', '.') ?></td>
-                      <td class="text-end">Rp. <?= number_format($row['jumlah_bayar'], 0, ',', '.') ?></td>
-                      <td class="text-end">Rp. <?= number_format($row['sisa'], 0, ',', '.') ?></td>
-                    </tr>
-                  <?php endforeach; ?>
-                <?php else : ?>
-                  <tr>
-                    <td colspan="6" class="text-center">Belum ada item pada invoice ini.</td>
-                  </tr>
+      
+                <!--begin::Input Group-->
+                <div class="card card-success card-outline mb-4">
+                  <!--begin::Header-->
+                  <div class="card-header"><div class="card-title"><?= $isEdit ? 'Edit PIC' : 'Input PIC' ?></div>
+                </div>
+                  <!--end::Header-->
+                  <form action="<?= $BaseUrl->getUrlControllerPIC();?>" method="POST">
+                   <?php if ($isEdit): ?>
+                  <input type="hidden" name="id" value="<?= htmlspecialchars($PIC['id']) ?>">
                 <?php endif; ?>
-              </tbody>
-            </table>
-          </div>
-        </div>
-      </div>
+                  <!--begin::Body-->
+                    <div class="card-body">
+                      <div class="row">
+                        <div class="col-md-6">
+                          <label for="name_pic" class="form-label">Nama PIC</label>
+                          <div class="input-group mb-3">
+                            <input
+                              type="text"
+                              class="form-control"
+                              placeholder="Contoh: Bujang"
+                              aria-label="Ref_No"
+                              name="name"
+                              id="name_pic"
+                              aria-describedby="basic-addon1"
+                              required
+                              value="<?= htmlspecialchars($formData['name'] ?? '')?>"
+                            />
+                          </div>
+                        </div>
 
-            </div>
-</div>
-                  <!-- begin::JavaScript-->
-                  <!-- <script>
-                    // Example starter JavaScript for disabling form submissions if there are invalid fields
-                    (() => {
-                      'use strict';
+                        <div class="col-md-6">
+                        <label for="jabatan" class="form-label">Jabatan</label>
+                          <div class="mb-3">
+                            <input
+                              type="text"
+                              class="form-control"
+                              name="jabatan"
+                              id="jabatan"
+                              required
+                              aria-describedby="basic-addon3 basic-addon4"
+                              placeholder="Contoh: Manager"
+                              value="<?= htmlspecialchars($formData['jabatan'] ?? '')?>"
+                            />
+                          </div>
+                        </div>
 
-                      // Fetch all the forms we want to apply custom Bootstrap validation styles to
-                      const forms = document.querySelectorAll('.needs-validation');
+                        <div class="col-md-6">
+                        <label for="email" class="form-label">Email</label>
+                          <div class="mb-3">
+                            <input
+                              type="email"
+                              class="form-control"
+                              name="email"
+                              id="email"
+                              required
+                              aria-describedby="basic-addon3 basic-addon4"
+                              placeholder="Contoh: 2bN0w@example.com"
+                              value="<?= htmlspecialchars($formData['email'] ?? '')?>"
+                            />
+                          </div>
+                        </div>
 
-                      // Loop over them and prevent submission
-                      Array.from(forms).forEach((form) => {
-                        form.addEventListener(
-                          'submit',
-                          (event) => {
-                            if (!form.checkValidity()) {
-                              event.preventDefault();
-                              event.stopPropagation();
-                            }
+                        <div class="col-md-6">
+                        <label for="nomer" class="form-label">Nomer</label>
+                          <div class="mb-3">
+                            <input
+                              type="text"
+                              class="form-control"
+                              name="nomer"
+                              id="nomer"
+                              required
+                              pattern="[0-9]+"
+                              aria-describedby="basic-addon3 basic-addon4"
+                              placeholder="Contoh: 08123456789"
+                              value="<?= htmlspecialchars($formData['nomer'] ?? '')?>"
+                            />
+                          </div>
+                        </div>
+                        
+                      </div>
+                    </div>
+                    <!--end::Body-->
 
-                            form.classList.add('was-validated');
-                          },
-                          false,
-                        );
-                      });
-                    })();
-                  </script> -->
+                  <!--begin::Footer-->
+                  <div class="card-footer d-flex align-items-center">
+                          <a href="<?= $BaseUrl->getUrlDataPIC();?>" class="btn btn-secondary" style="padding: 8px 16px;">
+                            <i class="bi bi-x-circle me-1"></i> Cancel</a>
+                          <button type="submit" class="btn btn-success ms-auto" style="padding: 8px 16px;" name="<?= $isEdit ? 'update_pic' : 'add_pic'?>">
+                            <i class="bi bi-check-circle-fill me-1"></i> Submit</button>
+                    </div>
+                  </form>
+                  <!--end::Footer-->
+                  </div>
+                  <!--end::Input Group-->
                   <!--end::JavaScript -->
                 </div>
                 <!--end::Form Validation-->

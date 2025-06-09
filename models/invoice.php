@@ -142,7 +142,10 @@ public function getGrandTotal($id_inv) {
         "invoice.note",
         "invoice.customers_id",
         "invoice.tgl_tempo",
-        "customers.name(name)"
+        "customers.name(name)",
+        "customers.alamat",
+        "customers.nomer",
+        "customers.email"
     ], [
         "invoice.id_inv" => $id_inv
     ]);
@@ -207,7 +210,8 @@ public function getGrandTotal($id_inv) {
         'invoice.id_inv',
         'invoice.kode_inv',
         'invoice.tgl_inv',
-        'customers.name(name)',
+        'invoice.tgl_tempo',
+        'customers.name',
         'customers.ref_no(ref_no)',
         'grand_total' => \Medoo\Medoo::raw("COALESCE(SUM(inv_items.total), 0)")
     ], $where);

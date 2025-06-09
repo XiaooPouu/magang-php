@@ -71,6 +71,90 @@ class Tunggakan {
     return $data;
 }
 
+public function search($keyword = '', $tglDari = '', $tglKe = '') {
+    // Inisialisasi array WHERE untuk filter pencarian
+    $where = [
+        'GROUP' => 'customers.id',
+        'ORDER' => 'invoice.tgl_tempo' // Urutkan langsung dalam query
+    ];
+
+    // Pencarian berdasarkan keyword
+    if (!empty($keyword)) {
+        $where['OR'] = [
+            'customers.name[~]' => $keyword,
+        ];
+    }
+
+    // Filter berdasarkan tanggal
+    if (!empty($tglDari) && !empty($tglKe)) {
+        $where['invoice.tgl_tempo[<>]'] = [$tglDari, $tglKe];
+    } elseif (!empty($tglDari)) {
+        $where['invoice.tgl_tempo[>=]'] = $tglDari;
+    } elseif (!empty($tglKe)) {
+        $where['invoice.tgl_tempo[<=]'] = $tglKe;
+    }
+
+    // Ambil semua customer yang memenuhi kriteria pencarian
+    $customers = $this->db->select("invoice", [
+        "[>]customers" => ["customers_id" => "id"]
+    ], [
+        'invoice.customers_id',
+        'customers.name',
+        'invoice.tgl_tempo' // Tambahkan tgl_tempo untuk sorting
+    ], $where);
+
+    $data = [];
+
+    foreach ($customers as $row) {
+        $customerId = $row['customers_id'];
+
+        // Ambil semua ID invoice milik customer ini dengan filter yang sama
+        $invoiceWhere = [
+            "customers_id" => $customerId
+        ];
+
+        $invoices = $this->db->select("invoice", "id_inv", $invoiceWhere);
+
+        if (empty($invoices)) {
+            continue;
+        }
+
+        // Hitung total dari inv_items
+        $totalItem = (float)($this->db->get("inv_items", [
+            "total_semua" => \Medoo\Medoo::raw("SUM(total)")
+        ], [
+            "invoice_id" => $invoices
+        ])['total_semua'] ?? 0);
+
+        // Hitung total dari payments
+        $totalBayar = (float)($this->db->get("payments", [
+            "total_bayar" => \Medoo\Medoo::raw("SUM(nominal)")
+        ], [
+            "invoice_id" => $invoices
+        ])['total_bayar'] ?? 0);
+
+        $sisa = round($totalItem - $totalBayar, 2);
+
+        // Ambil tanggal jatuh tempo terakhir dengan filter yang sama
+        $tglTempo = $this->db->get("invoice", [
+            "tgl_tempo" => \Medoo\Medoo::raw("MAX(tgl_tempo)")
+        ], $invoiceWhere)['tgl_tempo'] ?? null;
+
+        // Hanya tambahkan ke data jika ada sisa tagihan
+        if ($sisa > 0) {
+            $data[] = [
+                'customer_id' => $customerId,
+                'name' => $row['name'],
+                'grand_total' => $totalItem,
+                'total_bayar' => $totalBayar,
+                'sisa' => $sisa,
+                'tgl_tempo' => $tglTempo
+            ];
+        }
+    }
+
+    return $data;
+}
 
 public function getDetailTunggakanCustomer($customerId) {
     $result = $this->db->select("invoice", [
@@ -146,7 +230,10 @@ public function getById($customerId) {
         "invoice.customers_id",
         "invoice.tgl_tempo",
         "customers.name",
-        "customers.ref_no"
+        "customers.ref_no",
+        "customers.alamat",
+        "customers.nomer",
+        "customers.email"
     ], [
         "invoice.customers_id" => $customerId
     ]);

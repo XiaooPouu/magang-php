@@ -127,40 +127,6 @@ if(isset($_SESSION['alert_delete'])) {
                   <li class="breadcrumb-item active" aria-current="page">Table Invoices</li>
                 </ol>
               </div>
-
-              <!-- search form -->
-      <form action="<?= $BaseUrl->getUrlControllerInvoice(); ?>" method="GET" class="d-flex mt-md-3">
-      <input type="hidden" name="page" value="<?= $page ?>">
-    <input type="text" name="search" class="form-control me-2 mb-2" value="<?= $_SESSION['search_keyword'] ?? '' ?>" placeholder="Search">
-    
-    <select name="customer" class="form-control me-2 mb-2">
-        <option value="">-- Pilih Customer --</option>
-        <?php
-        // Menampilkan list customer berdasarkan data yang ada di model atau tabel
-        foreach ($customers as $customer) {
-            $selected = ($_SESSION['search_customer'] ?? '') == $customer['id'] ? 'selected' : '';
-            echo '<option value="' . $customer['id'] . '" ' . $selected . '>' . htmlspecialchars($customer['name']) . '</option>';
-        }
-        ?>
-    </select>
-
-   <?php $status = $_SESSION['search_status_lunas'] ?? ''; ?>
-<select name="status_lunas" class="form-control me-2 mb-2">
-    <option value="">-- Status --</option>
-    <option value="lunas" <?= $status === 'lunas' ? 'selected' : '' ?>>Lunas</option>
-    <option value="belum_lunas" <?= $status === 'belum_lunas' ? 'selected' : '' ?>>Belum Lunas</option>
-</select>
-
-
-
-    
-    <input type="date" name="tgl_dari" class="form-control me-2 mb-2" value="<?= $_SESSION['search_tgl_dari'] ?? '' ?>" placeholder="Tanggal Dari">
-    <input type="date" name="tgl_ke" class="form-control me-2 mb-2" value="<?= $_SESSION['search_tgl_ke'] ?? '' ?>" placeholder="Tanggal Ke">
-    
-    <button class="btn btn-primary me-2 mb-2" type="submit">Search</button>
-    <a href="<?= $BaseUrl->getUrlDataInvoiceReset(); ?>" class="btn btn-secondary me-2 mb-2">Reset</a>
-</form>
-<!-- end search form -->
             </div>
             <div class="col-md-12">
         <!-- allert hapus -->
@@ -187,6 +153,92 @@ if(isset($_SESSION['alert_delete'])) {
 <?php endif; ?>
 <!-- end notifikasi update -->
       </div>
+
+       <!--begin::Input Group-->
+                <div class="card card-primary card-outline mb-4">
+                  <!--begin::Header-->
+                  <div class="card-header"><div class="card-title">Search Invoice</div>
+                </div>
+                  <!--end::Header-->
+                  <form action="<?= $BaseUrl->getUrlControllerInvoice();?>" method="GET">
+                    <input type="hidden" name="page" value="<?= $page ?>">
+                  <!--begin::Body-->
+                    <div class="card-body">
+                      <div class="row">
+                        <div class="col-md-4">
+                          <label for="invoice_search" class="form-label">Kata Kunci:</label>
+                          <div class="input-group">
+                            <input
+                              type="text"
+                              class="form-control"
+                              placeholder="Search Kata kunci"
+                              aria-label="Ref_No"
+                              name="search"
+                              id="invoice_search"
+                              aria-describedby="basic-addon1"
+                              value="<?= $_SESSION['search_keyword'] ?? '' ?>"
+                            />
+                          </div>
+                        </div>
+
+                        <div class="col-md-2">
+                          <label for="costumer" class="form-label">Pilih Customer:</label>
+                          <div class="input-group">
+                            <select name="customer" id="costumer" class="form-control">
+                        <option value="">-- Pilih Customer --</option>
+                        <?php
+                        // Menampilkan list customer berdasarkan data yang ada di model atau tabel
+                        foreach ($customers as $customer) {
+                            $selected = ($_SESSION['search_customer'] ?? '') == $customer['id'] ? 'selected' : '';
+                            echo '<option value="' . $customer['id'] . '" ' . $selected . '>' . htmlspecialchars($customer['name']) . '</option>';
+                        }
+                        ?>
+                    </select>
+                          </div>
+                        </div>
+
+                        <div class="col-md-2">
+                          <label for="status" class="form-label">Pilih Status:</label>
+                          <div class="input-group">
+                             <?php $status = $_SESSION['search_status_lunas'] ?? ''; ?>
+<select name="status_lunas" class="form-control" id="status">
+    <option value="">-- Status --</option>
+    <option value="lunas" <?= $status === 'lunas' ? 'selected' : '' ?>>Lunas</option>
+    <option value="belum_lunas" <?= $status === 'belum_lunas' ? 'selected' : '' ?>>Belum Lunas</option>
+</select>
+
+                          </div>
+                        </div>
+
+                        <div class="col-md-2">
+                          <label for="tgl_dari" class="form-label">Tanggal Dari:</label>
+                          <div class="input-group">
+                             <input type="date" name="tgl_dari" id="tgl_dari" class="form-control" value="<?= $_SESSION['search_tgl_dari'] ?? '' ?>" placeholder="Tanggal Dari">
+                          </div>
+                        </div>
+
+                        <div class="col-md-2">
+                          <label for="tgl_ke" class="form-label">Tanggal Ke:</label>
+                          <div class="input-group">
+                            <input type="date" name="tgl_ke" id="tgl_ke" class="form-control" value="<?= $_SESSION['search_tgl_ke'] ?? '' ?>" placeholder="Tanggal Ke">
+
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <!--end::Body-->
+
+                  <!--begin::Footer-->
+                  <div class="card-footer d-flex justify-content-end">
+                          <a href="<?= $BaseUrl->getUrlDataInvoiceReset();?>" class="btn btn-secondary">
+                            <i class="bi bi-arrow-counterclockwise me-1"></i> Reset</a>
+                          <button type="submit" class="btn btn-primary ms-2">
+                            <i class="bi bi-search me-1"></i> Search</button>
+                    </div>
+                  </form>
+                  <!--end::Footer-->
+                  </div>
+
 
   <!-- Table Items -->
   <div class="card mb-4">

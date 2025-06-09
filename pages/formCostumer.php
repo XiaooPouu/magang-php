@@ -5,7 +5,7 @@ require_once BASE_PATH . 'config/database.php';
 include_once BASE_PATH . 'models/costumer.php';
 require_once BASE_PATH . 'function/baseurl.php';
 
-$formData = isset($_SESSION['form_data']) ? $_SESSION['form_data'] : ['ref_no' => '', 'name' => ''];
+$formData = isset($_SESSION['form_data']) ? $_SESSION['form_data'] : ['ref_no' => '', 'name' => '', 'alamat' => '', 'nomer' => '', 'email' => ''];
 $alert = isset($_SESSION['alert']);
 
 $isEdit = false; // Variabel untuk menandakan mode edit
@@ -19,7 +19,10 @@ if (isset($_GET['id'])) {
   if ($costumer) {
     $formData = [
       'ref_no' => $costumer['ref_no'],
-      'name' => $costumer['name']
+      'name' => $costumer['name'],
+      'alamat' => $costumer['alamat'],
+      'nomer' => $costumer['nomer'],  
+      'email' => $costumer['email']
     ];
     $isEdit = true; // Menandakan form ini untuk edit
   }
@@ -159,6 +162,62 @@ if (isset($_GET['id'])) {
                       </div>
                     </div>
                     </div>
+
+                    <div class="col-md-6">
+                    <label for="costumer_email" class="form-label">Email</label>
+                    <div class="mb-3">
+                      <div class="input-group">
+                        <input
+                          type="text"
+                          class="form-control"
+                          name="email"
+                          id="costumer_email"
+                          required
+                          aria-describedby="basic-addon3 basic-addon4"
+                          value="<?= htmlspecialchars($formData['email'])?>"
+                          placeholder="Contoh: bK2d3@example.com"
+                        />
+                      </div>
+                    </div>
+                    </div>
+
+                    <div class="col-md-6">
+                    <label for="costumer_nomer" class="form-label">Telepon</label>
+                    <div class="mb-3">
+                      <div class="input-group">
+                        <input
+                          type="text"
+                          class="form-control"
+                          name="nomer"
+                          id="costumer_nomer"
+                          required
+                          pattern="[0-9]+"
+                          aria-describedby="basic-addon3 basic-addon4"
+                          value="<?= htmlspecialchars($formData['nomer'])?>"
+                          placeholder="Contoh: 08123456789"
+                        />
+                      </div>
+                    </div>
+                    </div>
+
+                    <div class="col-md-12">
+                    <label for="costumer_alamat" class="form-label">Alamat</label>
+                    <div class="mb-3">
+                      <div class="input-group">
+                        <input
+                          type="text"
+                          class="form-control"
+                          name="alamat"
+                          id="costumer_alamat"
+                          required
+                          aria-describedby="basic-addon3 basic-addon4"
+                          value="<?= htmlspecialchars($formData['alamat'])?>"
+                          placeholder="Contoh: Jl. ABC"
+                        />
+                      </div>
+                    </div>
+                    </div>
+
                     </div>
                   </div>
                   <!--end::Body-->

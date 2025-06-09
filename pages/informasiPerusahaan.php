@@ -3,24 +3,18 @@ session_start();
 require_once __DIR__ . '/../config/env.php';
 require_once BASE_PATH . 'config/database.php';
 require_once BASE_PATH . 'function/baseurl.php';
-include_once BASE_PATH . 'models/tunggakan.php';
+include_once BASE_PATH . 'models/company.php';
 
-
-if(isset($_SESSION['search_data'])){
-  $getTunggakan = $_SESSION['search_data'];
-} else {
-  $getTunggakan = $tunggakan->getTunggakanCustomer();
-}
-
+$company = $companyModel->getCompany();
+$getStatusPIC = $companyModel->getStatusPIC();
 ?>
-
 
 <!doctype html>
 <html lang="en">
   <!--begin::Head-->
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title>Data Tunggakan</title>
+    <title>Informasi Perusahaan</title>
     <!--begin::Primary Meta Tags-->
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="title" content="AdminLTE 4 | General Form Elements" />
@@ -77,13 +71,13 @@ if(isset($_SESSION['search_data'])){
         <div class="app-content-header">
             <!--begin::Container-->
           <div class="container-fluid mb-4">
-            <!--begin::Row-->
+             <!--begin::Row-->
             <div class="row mb-4">
-              <div class="col-sm-6"><h3 class="mb-4">Data Tunggakan</h3></div>
+              <div class="col-sm-6"><h3 class="mb-2">Informasi Perusahaan</h3></div>
               <div class="col-sm-6">
                 <ol class="breadcrumb float-sm-end">
-                  <li class="breadcrumb-item"><a href="<?= $BaseUrl->getUrlDataTunggakan();?>">Data Tunggakan</a></li>
-                  <li class="breadcrumb-item active" aria-current="page">Table Tunggakan</li>
+                  <li class="breadcrumb-item"><a href="<?= $BaseUrl->getInformasiPerusahaan();?>">Informasi Perusahaan</a></li>
+                  <li class="breadcrumb-item active" aria-current="page">Table Informasi Perusahaan</li>
                 </ol>
               </div>
             </div>
@@ -101,125 +95,66 @@ if(isset($_SESSION['search_data'])){
 <!-- end notifikasi tambah -->
       </div>
 
-      <!--begin::Input Group-->
-                <div class="card card-primary card-outline mb-4">
-                  <!--begin::Header-->
-                  <div class="card-header"><div class="card-title">Search Tunggakan</div>
-                </div>
-                  <!--end::Header-->
-                  <form action="<?= $BaseUrl->getUrlControllerTunggakan();?>" method="GET">
-                    <input type="hidden" name="page" value="<?= $page ?>">
-                  <!--begin::Body-->
-                    <div class="card-body">
-                      <div class="row">
-                        <div class="col-md-4">
-                          <label for="item_search" class="form-label">Kata Kunci:</label>
-                          <div class="input-group">
-                            <input
-                              type="text"
-                              class="form-control"
-                              placeholder="Search Kata kunci"
-                              aria-label="Ref_No"
-                              name="search"
-                              id="item_ref_no"
-                              aria-describedby="basic-addon1"
-                              value="<?= $_SESSION['search_keyword'] ?? null?>"
-                            />
-                          </div>
-                        </div>
+        <div class="content-wrapper">
 
-                        <div class="col-md-4">
-                          <label for="tgl_dari" class="form-label">Tanggal Dari:</label>
-                          <div class="input-group">
-                             <input type="date" name="tgl_dari" id="tgl_dari" class="form-control" value="<?= $_SESSION['search_tgl_dari'] ?? null?>" placeholder="Tanggal Dari">
-                          </div>
-                        </div>
+  <!-- Main content -->
+  <section class="content">
+    
+      <!-- Card Box -->
+      <div class="card">
+        <div class="card-header bg-info d-flex justify-content-between align-items-center">
+          <h3 class="card-title mb-0">Detail Pengaturan</h3>
+          <div class="ms-auto">
+          <a href="<?= $BaseUrl->getUrlFormPerusahaan($company['id']);?>" class="btn btn-primary btn-sm">
+            <i class="bi bi-pencil-square"></i> Edit Perusahaan
+          </a>
+          </div>
+        </div>
+        <div class="card-body">
+          <table class="table table-borderless">
+            <tr>
+              <th style="width: 200px;">Nama Perusahaan</th>
+              <td><?= $company['nama_perusahaan'] ?? '-' ?></td>
+            </tr>
+            <tr>
+              <th>PIC</th>
+              <td><?= $getStatusPIC['name'] ?? '-' ?></td>
+            </tr>
+            <tr>
+              <th>Alamat</th>
+              <td><?= $company['alamat'] ?? '-' ?></td>
+            </tr>
+            <tr>
+              <th>Kota</th>
+              <td><?= $company['kota'] ?? '-' ?></td>
+            </tr>
+            <tr>
+              <th>Provinsi</th>
+              <td><?= $company['provinsi'] ?? '-' ?></td>
+            </tr>
+            <tr>
+              <th>Kode Pos</th>
+              <td><?= $company['kode_pos'] ?? '-' ?></td>
+            </tr>
+            <tr>
+              <th>Negara</th>
+              <td><?= $company['negara'] ?? '-' ?></td>
+            </tr>
+            <tr>
+              <th>Telepon</th>
+              <td><?= $company['telepon'] ?? '-' ?></td>
+            </tr>
+            <tr>
+              <th>Email</th>
+              <td><?= $company['email'] ?? '-' ?></td>
+            </tr>
+          </table>
+        </div>
+      </div>
+    
+  </section>
+</div>
 
-                        <div class="col-md-4">
-                          <label for="tgl_ke" class="form-label">Tanggal Ke:</label>
-                          <div class="input-group">
-                            <input type="date" name="tgl_ke" id="tgl_ke" class="form-control" value="<?= $_SESSION['search_tgl_ke'] ?? null?>" placeholder="Tanggal Ke">
-
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                    <!--end::Body-->
-
-                  <!--begin::Footer-->
-                  <div class="card-footer d-flex justify-content-end">
-                          <a href="<?= $BaseUrl->getUrlControllerTunggakan() . '?reset';?>" class="btn btn-secondary">
-                            <i class="bi bi-arrow-counterclockwise me-1"></i> Reset</a>
-                          <button type="submit" class="btn btn-primary ms-2">
-                            <i class="bi bi-search me-1"></i> Search</button>
-                    </div>
-                  </form>
-                  <!--end::Footer-->
-                  </div>
-
-  <!-- Table Items -->
-  <div class="card mb-4">
-                  <div class="card-header"><h3 class="card-title">Tabel Tunggakan</h3>
-                </div>
- 
-            <!-- end button create -->
-                  <!-- /.card-header -->
-                  <div class="card-body">
-                    <table class="table table-bordered">
-                      <thead>
-                        <tr>
-                          <th>No.</th>
-                          <th>Nama Customer</th>
-                          <th>Tanggal Jatuh Tempo</th>
-                          <th class="text-end">Total Invoice</th>
-                          <th class="text-end">Total Terbayar</th>
-                          <th class="text-end">Sisa Tagihan</th>
-                          <th class="text-center">Action</th>
-                        </tr>
-                      </thead>
-                      
-                    
-                      <tbody>
-                      <?php $i = 0; foreach ($getTunggakan as $row):?>  
-                        <tr class="align-middle">
-                          <td><?= ++$i?></td>
-                          <td><?= htmlspecialchars($row['name'])?></td>
-                          <td><?= htmlspecialchars($row['tgl_tempo'])?></td>
-                          <td class="text-end"><?= htmlspecialchars('Rp ' . number_format($row['grand_total'], 0, ',', '.'))?></td>
-                          <td class="text-end"><?= htmlspecialchars('Rp ' . number_format($row['total_bayar'], 0, ',', '.'))?></td>
-                          <td class="text-end"><?= htmlspecialchars('Rp ' . number_format($row['sisa'], 0, ',', '.'))?></td>
-                          <td class="text-center">
-                            <a href="<?= $BaseUrl->getUrlDataDetailTunggakan($row['customer_id'])?>" class="btn btn-sm btn-primary me-1">
-                            <i class="bi bi-file-earmark-text me-1"></i>Detail</a>
-                          </td>
-                        </tr>
-                        <?php endforeach;?>
-                      </tbody>
-                    </table>
-                  </div>
-                  <!-- /.card-body -->
-                   <!-- /.card-body -->
-                  <!-- footer card -->
-                    <!-- <div class="card-footer clearfix">
-                    <ul class="pagination pagination-sm m-0 float-end">
-                      <?php if ($page > 1): ?>
-                        <li class="page-item"><a class="page-link" href="?page=<?= $page - 1 ?>">&laquo;</a></li>
-                      <?php endif; ?>
-
-                      <?php for ($i = 1; $i <= $totalPages; $i++): ?>
-                        <li class="page-item <?= $i == $page ? 'active' : '' ?>">
-                          <a class="page-link" href="?page=<?= $i ?>"><?= $i ?></a>
-                        </li>
-                      <?php endfor; ?>
-
-                      <?php if ($page < $totalPages): ?>
-                        <li class="page-item"><a class="page-link" href="?page=<?= $page + 1 ?>">&raquo;</a></li>
-                      <?php endif; ?>
-                    </ul>
-                  </div> -->
-                <!-- end footer card -->
-                </div>
-                <!-- /.card -->
             <!--end::Row-->
           </div>
           <!--end::Container-->

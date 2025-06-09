@@ -84,6 +84,10 @@ class Baseurl
         return BASE_URL . 'controllers/items_costumersController.php?delete_ic=' . $id;
     }
 
+    public function getUrlDataItemsCostumerReset() {
+        return BASE_URL . 'pages/dataItems_Costumer.php?reset=true';
+    }
+
     public function getUrlDataInvoice() {
         return BASE_URL . 'pages/dataInvoice.php';
     }
@@ -181,8 +185,52 @@ class Baseurl
         return BASE_URL . 'pages/dataTunggakan.php';
     }
 
+    public function getUrlControllerTunggakan(){
+        return BASE_URL . 'controllers/tunggakanController.php';
+    }
+
     public function getUrlDataDetailTunggakan($customer_id){
         return BASE_URL . 'pages/detailTunggakan.php?customer_id=' . $customer_id;
+    }
+
+    public function getUrlDataPIC(){
+        return BASE_URL . 'pages/dataPIC.php';
+    }
+
+    public function getUrlDataPICReset(){
+        return BASE_URL . 'pages/dataPIC.php?reset=true';
+    }
+
+    public function getURLFormPIC($id = null){
+        if(!empty($id)){
+            return BASE_URL . 'pages/formPIC.php?id=' . $id;
+        } else {
+            return BASE_URL . 'pages/formPIC.php';
+        }
+    }
+
+    public function getUrlControllerPIC(){
+        return BASE_URL . 'controllers/picController.php';
+    }
+
+    public function getUrlControllerDeletePIC($id){
+        return BASE_URL . 'controllers/picController.php?delete_pic=' . $id;
+    }
+
+    public function getUrlControllerToggleStatusPIC($id) {
+    return BASE_URL . "controllers/picController.php?toggle_status=" . $id;
+    }
+
+    public function getInformasiPerusahaan(){
+        return BASE_URL . 'pages/informasiPerusahaan.php';
+    }
+
+    public function getUrlFormPerusahaan($id){
+        return BASE_URL . 'pages/formPerusahaan.php?id=' . $id;
+    }
+
+    public function getUrlControllerPerusahaan(){
+        return BASE_URL . 'controllers/perusahaanController.php';
     }
 
     public function getUrlCSS () {
@@ -199,6 +247,10 @@ class Baseurl
 
     public function getPrint($id){
         return BASE_URL . 'pages/invoice_print.php?id=' . $id;
+    }
+
+    public function getPrintKwitansi($id){
+        return BASE_URL . 'pages/printKwitansi.php?id_payments=' . $id;
     }
 }
 

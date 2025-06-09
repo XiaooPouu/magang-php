@@ -136,13 +136,6 @@ if(isset($_SESSION['alert_update'])) {
                   <li class="breadcrumb-item active" aria-current="page">Tabel Suppliers</li>
                 </ol>
               </div>
-
-              <form action="<?= $BaseUrl->getUrlControllerSupplier(); ?>" method="GET" class="d-flex mt-md-3">
-                <input type="hidden" name="page" value="<?= $page ?>">
-                <input type="text" name="search" class="form-control me-2 mb-2" placeholder="Search">
-                <button class="btn btn-primary me-2 mb-2" type="submit">Search</button>
-                <a href="<?= $BaseUrl->getUrlDataSupplier(); ?>" class="btn btn-secondary me-2 mb-2">Reset</a>
-              </form>
             </div>
 
             <div class="col-md-12">
@@ -152,6 +145,46 @@ if(isset($_SESSION['alert_update'])) {
     <?= isset($hapus) ? $hapus : '' ?>
   </div>
 
+      <!--begin::Input Group-->
+                <div class="card card-primary card-outline mb-4">
+                  <!--begin::Header-->
+                  <div class="card-header"><div class="card-title">Search Suppliers</div>
+                </div>
+                  <!--end::Header-->
+                  <form action="<?= $BaseUrl->getUrlControllerSupplier();?>" method="GET">
+                    <input type="hidden" name="page" value="<?= $page ?>">
+                  <!--begin::Body-->
+                    <div class="card-body">
+                      <div class="row">
+                        <div class="col-md-12">
+                          <label for="supplier_search" class="form-label">Kata Kunci:</label>
+                          <div class="input-group">
+                            <input
+                              type="text"
+                              class="form-control"
+                              placeholder="Search Kata kunci"
+                              aria-label="Ref_No"
+                              name="search"
+                              id="supplier_search"
+                              aria-describedby="basic-addon1"
+                            />
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <!--end::Body-->
+
+                  <!--begin::Footer-->
+                  <div class="card-footer d-flex justify-content-end">
+                          <a href="<?= $BaseUrl->getUrlDataSupplier();?>" class="btn btn-secondary">
+                            <i class="bi bi-arrow-counterclockwise me-1"></i> Reset</a>
+                          <button type="submit" class="btn btn-primary ms-2">
+                            <i class="bi bi-search me-1"></i> Search</button>
+                    </div>
+                  </form>
+                  <!--end::Footer-->
+                  </div>
+                <!--end::Input Group-->
               <!-- tabel Supplier -->
               <div class="card mb-4">
                   <div class="card-header"><h3 class="card-title">Table Suppliers</h3></div>

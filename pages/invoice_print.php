@@ -3,6 +3,7 @@ require_once __DIR__ . '/../config/env.php';
 require_once BASE_PATH . 'config/database.php';
 require_once BASE_PATH . 'models/invoice.php';
 require_once BASE_PATH . 'models/invoice_items.php';
+include_once BASE_PATH . 'models/company.php';
 
 $id_inv = $_GET['id'] ?? null;
 if (!$id_inv) {
@@ -10,124 +11,211 @@ if (!$id_inv) {
     exit;
 }
 
-$invoiceModel = new Invoice($db);
-$itemsModel = new InvoiceItems($db);
-
+$getInvoiceItems = $invoiceItems->getByInvoiceId($id_inv);
+$company = $companyModel->getCompany();
+$getNamePIC = $companyModel->getStatusPIC();
 $data_invoice = $invoiceModel->getById($id_inv);
-$data_items = $itemsModel->getAll();
+
 
 $total_invoice = 0;
 ?>
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <title>Print Invoice</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            margin: 40px;
-            color: #000;
-        }
+  <meta charset="UTF-8">
+  <title>Invoice</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 40px;
+    }
+    .invoice-box {
+      margin: 0 auto;
+      max-width: 800px;
+      border: 1px solid #eee;
+      padding: 30px;
+      line-height: 24px;
+      color: #555;
+    }
+    .invoice-top {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 30px;
+}
+.from-section {
+  font-size: 14px;
+  line-height: 1.6;
+}
+.invoice-label h1 {
+  font-size: 36px;
+  margin: 0;
+  color: black;
+}
+.invoice-info-block {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 30px;
+}
+.bill-to {
+  font-size: 14px;
+  line-height: 1.6;
+}
+.invoice-details table {
+  font-size: 14px;
+}
+.invoice-details td {
+  padding: 5px 10px;
+}
+    table {
+      width: 100%;
+      line-height: inherit;
+      text-align: left;
+      border-collapse: collapse;
+    }
+    table th {
+      background: black;
+      padding: 10px;
+      color: #fff;
+    }
+    .harga-table , .total-table {
+      text-align: right;
+    }
+    table td {
+      padding: 10px;
+      border-bottom: 1px solid #eee;
+    }
+    .total-section {
+      margin-top: 20px;
+      float: right;
+      width: 300px;
+    }
+    .total-section table td {
+      border: none;
+    }
 
-        h2 {
-            text-align: center;
-        }
+    .footer {
+        display: flex;
+        justify-content: space-between;
+        margin-top: 40px;
+    }
 
-        .info {
-            margin-bottom: 20px;
-        }
+    .footer .terms {
+        text-align: right;
+    }
 
-        .info strong {
-            display: inline-block;
-            width: 120px;
-        }
+    .notes i, .terms i {
+        font-size: 14px;
+    }
 
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-top: 25px;
-        }
+    @media print {
+    body {
+      -webkit-print-color-adjust: exact !important;
+      print-color-adjust: exact !important;
+    }
 
-        th, td {
-            border: 1px solid black;
-            padding: 8px;
-            text-align: left;
-        }
-
-        .text-right {
-            text-align: right;
-        }
-
-        .footer {
-            margin-top: 60px;
-            text-align: center;
-        }
-
-        @media print {
-            body {
-                margin: 0;
-            }
-
-            .no-print {
-                display: none;
-            }
-
-            table, th, td {
-                font-size: 12pt;
-            }
-
-            .footer {
-                page-break-after: always;
-            }
-        }
-    </style>
+    table th {
+      background: #000 !important;
+      color: #fff !important;
+      -webkit-print-color-adjust: exact !important;
+      print-color-adjust: exact !important;
+    }
+  }
+  </style>
 </head>
 <body onload="window.print();">
+  <div class="invoice-box">
 
-    <!-- <div class="no-print">
-        <a href="#" onclick="window.print()" style="padding: 10px 15px; background: #007bff; color: #fff; text-decoration: none; border-radius: 4px;">
-            Print Invoice
-        </a>
-    </div> -->
+    <div class="invoice-top">
+  <div class="from-section">
+    <p><?= $company['nama_perusahaan'];?></p>
+    <p><?= $getNamePIC['name'] ?? 'Belum ada PIC yang digunakan'?> (PIC)</p>
+    <p><strong>Phone PIC:</strong> <?= $getNamePIC['nomer'];?></p>
+    <p><strong>Email PIC:</strong> <?= $getNamePIC['email'];?></p>
+    <p><?= $company['alamat'];?></p>
+    <p><?= $company['kota'];?>, <?= $company['provinsi'];?></p>
+    <p><?= $company['negara'];?></p>
+  </div>
+  <div class="invoice-label">
+    <h1>INVOICE</h1>
+  </div>
+</div>
 
-    <h2>INVOICE</h2>
+<div class="invoice-info-block">
+  <div class="bill-to">
+    <strong>Bill To:</strong><br>
+    <?= $data_invoice['name'];?><br>
+    <?= $data_invoice['alamat'];?><br>
+    <?= $data_invoice['nomer'];?><br>
+    <?= $data_invoice['email'];?><br>
+  </div>
+  <div class="invoice-details">
+    <table>
+      <tr>
+        <td><strong>Invoice#</strong></td>
+        <td><?= $data_invoice['kode_inv'];?></td>
+      </tr>
+      <tr>
+        <td><strong>Tanggal Invoice</strong></td>
+        <td><?= $data_invoice['tgl_inv'];?></td>
+      </tr>
+      <tr>
+        <td><strong>Tanggal Jatuh Tempo</strong></td>
+        <td><?= $data_invoice['tgl_tempo'];?></td>
+      </tr>
+    </table>
+  </div>
+</div>
 
-    <div class="info">
-        <p><strong>Kode Invoice:</strong> <?= htmlspecialchars($data_invoice['kode_inv']) ?></p>
-        <p><strong>Tanggal:</strong> <?= htmlspecialchars($data_invoice['tgl_inv']) ?></p>
-        <p><strong>Customer:</strong> <?= htmlspecialchars($data_invoice['name']) ?></p>
-    </div>
 
     <table>
-        <thead>
-            <tr>
-                <th>Nama Barang</th>
-                <th>Qty</th>
-                <th>Harga</th>
-                <th>Total</th>
-            </tr>
-        </thead>
-        <tbody>
-        <?php foreach ($data_items as $item): ?>
-            <?php if ($item['invoice_id'] == $id_inv): ?>
-                <tr>
-                    <td><?= htmlspecialchars($item['name']) ?></td>
-                    <td><?= $item['qty'] ?></td>
-                    <td><?= number_format($item['price'], 3, ',', '.') ?></td>
-                    <td><?= number_format($item['total'], 3, ',', '.') ?></td>
-                </tr>
-                <?php $total_invoice += $item['total']; ?>
-            <?php endif; ?>
+      <thead>
+        <tr>
+          <th>#</th>
+          <th>Kode Item</th>
+          <th>Nama Item</th>
+          <th>Qty</th>
+          <th class="harga-table">Harga</th>
+          <th class="total-table">Total</th>
+        </tr>
+      </thead>
+      <tbody>
+        <?php $i = 0; foreach ($getInvoiceItems as $row) : ?>
+        <tr>
+          <td><?= ++$i;?>.</td>
+          <td><?= $row['ref_no'];?></td>
+          <td><?= $row['name'];?></td>
+          <td><?= $row['qty'];?></td>
+          <td class="harga-table"><?= htmlspecialchars('Rp. ' . number_format($row['price'], 0, ',', '.'))?></td>
+          <td class="total-table"><?= htmlspecialchars('Rp. ' . number_format($row['total'], 0, ',', '.'))?></td>
+        </tr>
+        <?php $total_invoice += $row['total'];?>
         <?php endforeach; ?>
-            <tr>
-                <td colspan="3" class="text-right"><strong>Total</strong></td>
-                <td><strong><?= number_format($total_invoice, 3, ',', '.') ?></strong></td>
-            </tr>
-        </tbody>
+      </tbody>
     </table>
 
-    <div class="footer">
-        <p>Terima kasih atas pembelian Anda.</p>
+    <div class="total-section">
+      <table>
+        <tr>
+          <td><strong>TOTAL:</strong></td>
+          <td><strong><?= htmlspecialchars('Rp. ' . number_format($total_invoice, 0, ',', '.'))?></strong></td>
+        </tr>
+      </table>
     </div>
+
+    <div style="clear: both;"></div>
+
+    <div class="footer">
+    <div class="notes">
+      <strong>Notes</strong><br>
+      <i>Terima Kasih Atas Pembelian Anda</i><br>
+      <i><?= $data_invoice['note'];?></i>
+    </div>
+
+    <div class="terms">
+      <strong>Terms & Conditions</strong><br>
+      <i>Harap lakukan pembayaran sebelum tanggal jatuh tempo.</i>
+    </div>
+    </div>
+  </div>
 </body>
 </html>

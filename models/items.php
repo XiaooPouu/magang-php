@@ -68,7 +68,8 @@ class Item {
             "OR" => [
                 "ref_no[~]" => $keyword,
                 "name[~]"   => $keyword
-            ]
+            ],
+            "ORDER" => ["id" => "DESC"]
         ]);
     }
 }

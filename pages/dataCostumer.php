@@ -137,13 +137,6 @@ if(isset($_SESSION['alert_update'])) {
                   <li class="breadcrumb-item active" aria-current="page">Tabel Costumers</li>
                 </ol>
               </div>
-
-              <form action="<?= $BaseUrl->getUrlControllerCostumer(); ?>" method="GET" class="d-flex mt-md-3">
-                  <input type="hidden" name="page" value="<?= $page ?>">
-                  <input type="text" name="search" class="form-control me-2 mb-2" placeholder="Search">
-                  <button class="btn btn-primary me-2 mb-2" type="submit">Search</button>
-                  <a href="<?= $BaseUrl->getUrlDataCostumer(); ?>" class="btn btn-secondary me-2 mb-2">Reset</a>
-                </form>
             </div>
                 <div class="col-md-12">
         <!-- Alert Message -->
@@ -152,7 +145,48 @@ if(isset($_SESSION['alert_update'])) {
     <?= isset($hapus) ? $hapus : '' ?>
   </div>
 
-              <!-- tabel Supplier -->
+        <!--begin::Input Group-->
+                <div class="card card-primary card-outline mb-4">
+                  <!--begin::Header-->
+                  <div class="card-header"><div class="card-title">Search Costumers</div>
+                </div>
+                  <!--end::Header-->
+                  <form action="<?= $BaseUrl->getUrlControllerCostumer();?>" method="GET">
+                    <input type="hidden" name="page" value="<?= $page ?>">
+                  <!--begin::Body-->
+                    <div class="card-body">
+                      <div class="row">
+                        <div class="col-md-12">
+                          <label for="costumer_search" class="form-label">Kata Kunci:</label>
+                          <div class="input-group">
+                            <input
+                              type="text"
+                              class="form-control"
+                              placeholder="Search Kata kunci"
+                              aria-label="Ref_No"
+                              name="search"
+                              id="costumer_ref_no"
+                              aria-describedby="basic-addon1"
+                            />
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <!--end::Body-->
+
+                  <!--begin::Footer-->
+                  <div class="card-footer d-flex justify-content-end">
+                          <a href="<?= $BaseUrl->getUrlDataCostumer();?>" class="btn btn-secondary">
+                            <i class="bi bi-arrow-counterclockwise me-1"></i> Reset</a>
+                          <button type="submit" class="btn btn-primary ms-2">
+                            <i class="bi bi-search me-1"></i> Search</button>
+                    </div>
+                  </form>
+                  <!--end::Footer-->
+                  </div>
+
+
+              <!-- tabel Customer -->
               <div class="card mb-4">
                   <div class="card-header"><h3 class="card-title">Table Costumers</h3></div>
                   <!-- button create -->
@@ -167,6 +201,9 @@ if(isset($_SESSION['alert_update'])) {
                         <tr>
                           <th>Kode Costumers</th>
                           <th>Nama Costumers</th>
+                          <th>Alamat</th>
+                          <th>No Telepon</th>
+                          <th>Email</th>
                           <th class="text-center">Action</th>
                         </tr>
                       </thead>
@@ -175,6 +212,9 @@ if(isset($_SESSION['alert_update'])) {
                         <tr class="align-middle">
                           <td><?= htmlspecialchars($cs['ref_no'])?></td>
                           <td><?= htmlspecialchars($cs['name'])?></td>
+                          <td><?= htmlspecialchars($cs['alamat'])?></td>
+                          <td><?= htmlspecialchars($cs['nomer'])?></td>
+                          <td><?= htmlspecialchars($cs['email'])?></td>
                           <td class="text-center"><a href="<?= $BaseUrl->getUrlFormCostumer($cs['id'])?>" class="btn btn-sm btn-warning me-1">
                             <i class="bi bi-pencil-square me-1"></i>Edit</a>
                            <a href="<?= $BaseUrl->getUrlControllerDeleteCostumer($cs['id']) ?>" class="btn btn-sm btn-danger" onclick="return confirm('Are you sure?')">

@@ -24,7 +24,7 @@ class Payments {
         "invoice.kode_inv",
         "invoice.tgl_inv",
         "customers.name",
-        "payments.tanggal",
+        "payments.tanggal(tanggal_payments)",
         "payments.nominal"
     ], [
         "GROUP" => "payments.id_payments",
@@ -91,8 +91,7 @@ public function getCount() {
     // Pencarian berdasarkan keyword
     if (!empty($keyword)) {
         $where['OR'] = [
-            'invoice.kode_inv[~]' => $keyword,
-            'payments.nominal[~]' => $keyword,
+            'invoice.kode_inv[~]' => $keyword
         ];
     }
 

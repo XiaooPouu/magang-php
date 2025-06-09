@@ -3,24 +3,22 @@ session_start();
 require_once __DIR__ . '/../config/env.php';
 require_once BASE_PATH . 'config/database.php';
 require_once BASE_PATH . 'function/baseurl.php';
-include_once BASE_PATH . 'models/tunggakan.php';
-
+include_once BASE_PATH . 'models/pic.php';
 
 if(isset($_SESSION['search_data'])){
-  $getTunggakan = $_SESSION['search_data'];
+  $getPIC = $_SESSION['search_data'];
 } else {
-  $getTunggakan = $tunggakan->getTunggakanCustomer();
+  $getPIC = $picModel->getPIC();
 }
 
 ?>
-
 
 <!doctype html>
 <html lang="en">
   <!--begin::Head-->
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title>Data Tunggakan</title>
+    <title>Data PIC</title>
     <!--begin::Primary Meta Tags-->
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="title" content="AdminLTE 4 | General Form Elements" />
@@ -79,11 +77,11 @@ if(isset($_SESSION['search_data'])){
           <div class="container-fluid mb-4">
             <!--begin::Row-->
             <div class="row mb-4">
-              <div class="col-sm-6"><h3 class="mb-4">Data Tunggakan</h3></div>
+              <div class="col-sm-6"><h3 class="mb-4">Data PIC</h3></div>
               <div class="col-sm-6">
                 <ol class="breadcrumb float-sm-end">
-                  <li class="breadcrumb-item"><a href="<?= $BaseUrl->getUrlDataTunggakan();?>">Data Tunggakan</a></li>
-                  <li class="breadcrumb-item active" aria-current="page">Table Tunggakan</li>
+                  <li class="breadcrumb-item"><a href="<?= $BaseUrl->getUrlDataPIC();?>">Data PIC</a></li>
+                  <li class="breadcrumb-item active" aria-current="page">Table PIC</li>
                 </ol>
               </div>
             </div>
@@ -104,15 +102,15 @@ if(isset($_SESSION['search_data'])){
       <!--begin::Input Group-->
                 <div class="card card-primary card-outline mb-4">
                   <!--begin::Header-->
-                  <div class="card-header"><div class="card-title">Search Tunggakan</div>
+                  <div class="card-header"><div class="card-title">Search PIC</div>
                 </div>
                   <!--end::Header-->
-                  <form action="<?= $BaseUrl->getUrlControllerTunggakan();?>" method="GET">
+                  <form action="<?= $BaseUrl->getUrlControllerPIC();?>" method="GET">
                     <input type="hidden" name="page" value="<?= $page ?>">
                   <!--begin::Body-->
                     <div class="card-body">
                       <div class="row">
-                        <div class="col-md-4">
+                        <div class="col-md-6">
                           <label for="item_search" class="form-label">Kata Kunci:</label>
                           <div class="input-group">
                             <input
@@ -128,17 +126,15 @@ if(isset($_SESSION['search_data'])){
                           </div>
                         </div>
 
-                        <div class="col-md-4">
-                          <label for="tgl_dari" class="form-label">Tanggal Dari:</label>
+                        <div class="col-md-6">
+                          <label for="status" class="form-label">Pilih Status:</label>
                           <div class="input-group">
-                             <input type="date" name="tgl_dari" id="tgl_dari" class="form-control" value="<?= $_SESSION['search_tgl_dari'] ?? null?>" placeholder="Tanggal Dari">
-                          </div>
-                        </div>
-
-                        <div class="col-md-4">
-                          <label for="tgl_ke" class="form-label">Tanggal Ke:</label>
-                          <div class="input-group">
-                            <input type="date" name="tgl_ke" id="tgl_ke" class="form-control" value="<?= $_SESSION['search_tgl_ke'] ?? null?>" placeholder="Tanggal Ke">
+                             
+                    <select name="search_status" class="form-control" id="status">
+    <option value="">-- Status --</option>
+    <option value="use" <?= (($_SESSION['search_status'] ?? '') === 'use') ? 'selected' : '' ?>>Use</option>
+    <option value="no use" <?= (($_SESSION['search_status'] ?? '') === 'no use') ? 'selected' : '' ?>>No use</option>
+</select>
 
                           </div>
                         </div>
@@ -148,7 +144,7 @@ if(isset($_SESSION['search_data'])){
 
                   <!--begin::Footer-->
                   <div class="card-footer d-flex justify-content-end">
-                          <a href="<?= $BaseUrl->getUrlControllerTunggakan() . '?reset';?>" class="btn btn-secondary">
+                          <a href="<?= $BaseUrl->getUrlControllerPIC() . '?reset';?>" class="btn btn-secondary">
                             <i class="bi bi-arrow-counterclockwise me-1"></i> Reset</a>
                           <button type="submit" class="btn btn-primary ms-2">
                             <i class="bi bi-search me-1"></i> Search</button>
@@ -162,6 +158,11 @@ if(isset($_SESSION['search_data'])){
                   <div class="card-header"><h3 class="card-title">Tabel Tunggakan</h3>
                 </div>
  
+            <!-- button create -->
+            <div class="mx-3 mt-3">
+              <a href="<?= $BaseUrl->getURLFormPIC();?>" class="btn btn-primary btn-sm">
+              <i class="bi bi-plus-circle me-1"></i> Create New</a>
+            </div>
             <!-- end button create -->
                   <!-- /.card-header -->
                   <div class="card-body">
@@ -169,28 +170,35 @@ if(isset($_SESSION['search_data'])){
                       <thead>
                         <tr>
                           <th>No.</th>
-                          <th>Nama Customer</th>
-                          <th>Tanggal Jatuh Tempo</th>
-                          <th class="text-end">Total Invoice</th>
-                          <th class="text-end">Total Terbayar</th>
-                          <th class="text-end">Sisa Tagihan</th>
+                          <th>Nama PIC</th>
+                          <th>Jabatan</th>
+                          <th>Email</th>
+                          <th>Nomer</th>
+                          <th>Status</th>
                           <th class="text-center">Action</th>
                         </tr>
                       </thead>
                       
                     
                       <tbody>
-                      <?php $i = 0; foreach ($getTunggakan as $row):?>  
+                       <?php $i = 0; foreach ($getPIC as $row):?>
                         <tr class="align-middle">
-                          <td><?= ++$i?></td>
+                          <td><?= ++$i?>.</td>
                           <td><?= htmlspecialchars($row['name'])?></td>
-                          <td><?= htmlspecialchars($row['tgl_tempo'])?></td>
-                          <td class="text-end"><?= htmlspecialchars('Rp ' . number_format($row['grand_total'], 0, ',', '.'))?></td>
-                          <td class="text-end"><?= htmlspecialchars('Rp ' . number_format($row['total_bayar'], 0, ',', '.'))?></td>
-                          <td class="text-end"><?= htmlspecialchars('Rp ' . number_format($row['sisa'], 0, ',', '.'))?></td>
+                          <td><?= htmlspecialchars($row['jabatan'])?></td>
+                          <td><?= htmlspecialchars($row['email'])?></td>
+                          <td><?= htmlspecialchars($row['nomer'])?></td>
+                          <td><?= $row['status'] === 'use' ? 'USE' : 'NO USE' ?></td>
                           <td class="text-center">
-                            <a href="<?= $BaseUrl->getUrlDataDetailTunggakan($row['customer_id'])?>" class="btn btn-sm btn-primary me-1">
-                            <i class="bi bi-file-earmark-text me-1"></i>Detail</a>
+                            <a href="<?= $BaseUrl->getURLFormPIC($row['id'])?>" class="btn btn-sm btn-warning me-1">
+                            <i class="bi bi-pencil-square me-1"></i>Edit</a>
+                            <a href="<?= $BaseUrl->getUrlControllerToggleStatusPIC($row['id']) ?>" 
+                            class="btn btn-sm <?= ($row['status'] === 'use') ? 'btn-success' : 'btn-secondary' ?>">
+                                <i class="bi <?= ($row['status'] === 'use') ? 'bi-toggle-on' : 'bi-toggle-off' ?>"></i>
+                                <?= strtoupper($row['status']) === 'USE' ? 'USE' : 'NO USE' ?>
+                            </a>
+                            <a href="<?= $BaseUrl->getUrlControllerDeletePIC($row['id']) ?>" class="btn btn-sm btn-danger" onclick="return confirm('Are you sure?')">
+                            <i class="bi bi-trash me-1"></i>Delete</a>
                           </td>
                         </tr>
                         <?php endforeach;?>
@@ -319,3 +327,4 @@ if(isset($_SESSION['search_data'])){
   </body>
   <!--end::Body-->
 </html>
+<?php unset($_SESSION['form_data']);?>

@@ -11,11 +11,30 @@ $costumerModel = new Costumer($db);
 $id = $_POST ['id'] ?? null;
 $ref_no = $_POST['ref_no'] ?? null;
 $name = $_POST['name'] ?? null;
+$alamat = $_POST['alamat'] ?? null;
+$nomer = $_POST['nomer'] ?? null;
+$email = $_POST['email'] ?? null;
 
 $_SESSION['form_data'] = [
     'ref_no' => $ref_no,
-    'name' => $name
+    'name' => $name,
+    'alamat' => $alamat,
+    'nomer' => $nomer,
+    'email' => $email
 ];
+
+$emailSama = $costumerModel->getEmailById($id);
+
+if(isset($_POST['add_costumer']) || isset($_POST['update_costumer'])){
+    if($emailSama){
+        $_SESSION['alert'] = [
+            'type' => 'danger',
+            'message' => 'Email sudah ada, silahkan coba lagi!'
+        ];
+        header('Location:' . $BaseUrl->getUrlFormCostumer());
+        exit();
+    }
+}
 
 // Tambah costumer
 if (isset($_POST['add_costumer'])) {
@@ -33,7 +52,7 @@ if (isset($_POST['add_costumer'])) {
         exit();
     } else {
         // Simpan alert ke session
-        $costumerModel->insert($ref_no, $name);
+        $costumerModel->insert($ref_no, $name, $alamat, $nomer, $email);
         $_SESSION['alert'] = [
             'type' => 'success',
             'message' => 'Costumer berhasil ditambahkan!'
@@ -49,7 +68,7 @@ if (isset($_POST['add_costumer'])) {
 // Update costumer
 else if (isset($_POST['update_costumer'])) {
     if($id && $ref_no && $name){
-        $costumerModel->update($id, $ref_no, $name);
+        $costumerModel->update($id, $ref_no, $name, $alamat, $nomer, $email);
         $_SESSION['alert_update'] = [
             'type' => 'success',
             'message' => 'Costumer berhasil diupdate!'

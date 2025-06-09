@@ -108,6 +108,20 @@ require_once BASE_PATH . 'function/baseurl.php';
             <p>Tunggakan</p>
           </a>
         </li>
+
+        <li class="nav-item">
+          <a href="<?= $BaseUrl->getUrlDataPIC(); ?>" class="nav-link">
+            <i class="nav-icon bi bi-person-circle"></i>
+            <p>PIC</p>
+          </a>
+        </li>
+
+        <li class="nav-item">
+          <a href="<?= $BaseUrl->getInformasiPerusahaan(); ?>" class="nav-link">
+            <i class="nav-icon bi bi-building"></i>
+            <p>Pengaturan Perusahaan</p>
+          </a>
+        </li>
       </ul>
       <!--end::Sidebar Menu-->
     </nav>
