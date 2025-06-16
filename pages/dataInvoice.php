@@ -7,8 +7,6 @@ include BASE_PATH . 'models/costumer.php';
 require_once BASE_PATH . 'config/database.php';
 require_once BASE_PATH . 'function/baseurl.php';
 
-$invoiceModel = new Invoice($db);
-$costumerModel = new Costumer($db);
 $customers = $costumerModel->getAll();
 
 $page = isset($_GET['page']) ? $_GET['page'] : 1;
@@ -20,18 +18,6 @@ $total_invoice = $invoiceModel->getCount();
 
 // hitung total halaman
 $totalPages = ceil($total_invoice / $perPage);
-
-$keyword = $_GET['search'] ?? '';
-
-// Jika tombol reset ditekan, bersihkan semua session pencarian
-if (isset($_GET['reset'])) {
-  unset($_SESSION['search_data']);
-  unset($_SESSION['search_keyword']);
-  unset($_SESSION['search_customer']);
-  unset($_SESSION['search_tgl_dari']);
-  unset($_SESSION['search_tgl_ke']);
-  unset($_SESSION['search_status_lunas']); 
-}
 
 if (isset($_SESSION['search_data'])) {
   $data = $_SESSION['search_data'];
@@ -230,7 +216,7 @@ if(isset($_SESSION['alert_delete'])) {
 
                   <!--begin::Footer-->
                   <div class="card-footer d-flex justify-content-end">
-                          <a href="<?= $BaseUrl->getUrlDataInvoiceReset();?>" class="btn btn-secondary">
+                          <a href="<?= $BaseUrl->getUrlControllerInvoice() . '?reset';?>" class="btn btn-secondary">
                             <i class="bi bi-arrow-counterclockwise me-1"></i> Reset</a>
                           <button type="submit" class="btn btn-primary ms-2">
                             <i class="bi bi-search me-1"></i> Search</button>

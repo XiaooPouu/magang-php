@@ -5,8 +5,6 @@ require_once BASE_PATH . 'config/database.php';
 require_once BASE_PATH . 'models/items_costumer.php';
 require_once BASE_PATH . 'function/baseurl.php';
 
-$model = new ItemsCostumer($db);
-
 
 $id_ic = $_POST['id_ic'] ?? null;
 $item_id = $_POST['items_id'] ?? null;
@@ -15,7 +13,7 @@ $price = $_POST['price'] ?? null;
 
 // Tambah data
 if (isset($_POST['add_ic'])) {
-    $success = $model->insert($item_id, $customer_id, $price);
+    $success = $itemsCostumerModel->insert($item_id, $customer_id, $price);
     $_SESSION['alert'] = [
         'type' => $success ? 'success' : 'danger',
         'message' => $success ? 'Items Customer berhasil ditambahkan!' : 'Gagal menambahkan data.'
@@ -27,11 +25,12 @@ if (isset($_POST['add_ic'])) {
 // Hapus data
 else if (isset($_GET['delete_ic'])) {
     $id_ic = $_GET['delete_ic'];
-    $success = $model->delete($id_ic);
+    $success = $itemsCostumerModel->delete($id_ic);
     $_SESSION['alert_delete'] = [
         'type' => 'success',
         'message' => 'Item Customer berhasil dihapus!'
     ];
+    unset($_SESSION['search_data']);
     header('Location: ' . $BaseUrl->getUrlDataItemsCostumer());
     exit();
 }
@@ -39,7 +38,7 @@ else if (isset($_GET['delete_ic'])) {
 // Update data
 else if (isset($_POST['update_ic'])) {
     if ($id_ic && $item_id && $customer_id && $price) {
-        $success = $model->update($id_ic, $item_id, $customer_id, $price);
+        $success = $itemsCostumerModel->update($id_ic, $item_id, $customer_id, $price);
         $_SESSION['alert_update'] = [
             'type' => 'success',
             'message' => 'Item Customer berhasil diupdate!'
@@ -57,7 +56,7 @@ else if (isset($_POST['update_ic'])) {
 // Cari data
 else if (isset($_GET['search'])) {
     $keyword = trim($_GET['search']);
-    $data = $model->search($keyword);
+    $data = $itemsCostumerModel->search($keyword);
 
     $_SESSION['search_data'] = $data;
     $_SESSION['search_keyword'] = $keyword;
@@ -65,11 +64,18 @@ else if (isset($_GET['search'])) {
     header('Location: ' . $BaseUrl->getUrlDataItemsCostumer());
     exit();
 }
+else if(isset($_GET['reset'])){
+    unset($_SESSION['search_data']);
+    unset($_SESSION['search_keyword']);
+    header('Location: ' . $BaseUrl->getUrlDataItemsCostumer());
+    exit();
+
+}
 
 // Ambil data untuk edit
 else if (isset($_GET['edit_ic'])) {
     $id_ic = $_GET['edit_ic'];
-    $editData = $model->getById($id_ic);
+    $editData = $itemsCostumerModel->getById($id_ic);
 
     if ($editData) {
         $_SESSION['edit_ic'] = $editData;

@@ -5,13 +5,9 @@ require_once BASE_PATH . 'config/database.php';
 include_once BASE_PATH . 'models/items.php';
 require_once BASE_PATH . 'function/baseurl.php';
 
-$itemModel = new Item($db);
 
 // Ambil data dari session kalau ada
 $search = $_SESSION['items_data'] ?? [];
-
-// Setelah diambil, hapus session biar tidak terus muncul
-unset($_SESSION['items_data']);
 
 // pagination
 $page = isset($_GET['page']) ? $_GET['page'] : 1;
@@ -167,6 +163,7 @@ if(isset($_SESSION['alert_update'])) {
                               name="search"
                               id="item_ref_no"
                               aria-describedby="basic-addon1"
+                              value="<?= $_SESSION['search_keyword'] ?? null?>"
                             />
                           </div>
                         </div>
@@ -176,7 +173,7 @@ if(isset($_SESSION['alert_update'])) {
 
                   <!--begin::Footer-->
                   <div class="card-footer d-flex justify-content-end">
-                          <a href="<?= $BaseUrl->getUrlDataItems();?>" class="btn btn-secondary">
+                          <a href="<?= $BaseUrl->getUrlControllerItems() . '?reset'?>" class="btn btn-secondary">
                             <i class="bi bi-arrow-counterclockwise me-1"></i> Reset</a>
                           <button type="submit" class="btn btn-primary ms-2">
                             <i class="bi bi-search me-1"></i> Search</button>
@@ -343,3 +340,4 @@ if(isset($_SESSION['alert_update'])) {
   </body>
   <!--end::Body-->
 </html>
+<?php unset($_SESSION['form_data'])?>

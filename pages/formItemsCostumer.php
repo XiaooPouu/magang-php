@@ -7,9 +7,6 @@ include BASE_PATH . 'models/items.php';
 include BASE_PATH . 'models/costumer.php';
 require_once BASE_PATH . 'function/baseurl.php';
 
-$itemModel = new Item($db);
-$costumerModel = new Costumer($db);
-
 $items = $itemModel->getAll();
 $customers = $costumerModel->getAll();
 

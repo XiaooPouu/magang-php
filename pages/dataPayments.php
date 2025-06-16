@@ -12,19 +12,9 @@ $offset = ($page - 1) * $perPage;
 $totalPayments = $payments->getCount();
 $totalPages = ceil($totalPayments / $perPage);
 
-$keyword = $_GET['search'] ?? '';
-$tgl_dari = $_GET['tgl_dari'] ?? null;
-$tgl_ke = $_GET['tgl_ke'] ?? null;
-
-if(isset($_GET['reset'])){
-  $keyword = null;
-  $tgl_dari = null;
-  $tgl_ke = null;
-}
-
-if(isset($keyword) || isset($tgl_dari) || isset($tgl_ke)){
+if(isset($_SESSION['search_data'])){
   // Mengambil data berdasarkan parameter pencarian
-  $dataPayments = $payments->search($keyword, $tgl_dari, $tgl_ke, $offset, $perPage);
+  $dataPayments = $_SESSION['search_data'];
 } else {
   $dataPayments = $payments->getPayments($offset, $perPage);
 }
@@ -125,7 +115,7 @@ if(isset($keyword) || isset($tgl_dari) || isset($tgl_ke)){
                   <div class="card-header"><div class="card-title">Search Payments</div>
                 </div>
                   <!--end::Header-->
-                  <form action="<?= $BaseUrl->getUrlDataPayments();?>" method="GET">
+                  <form action="<?= $BaseUrl->getUrlControllerPayments();?>" method="GET">
                     <input type="hidden" name="page" value="<?= $page ?>">
                   <!--begin::Body-->
                     <div class="card-body">
@@ -141,7 +131,7 @@ if(isset($keyword) || isset($tgl_dari) || isset($tgl_ke)){
                               name="search"
                               id="costumer_ref_no"
                               aria-describedby="basic-addon1"
-                              value="<?= $keyword?>"
+                              value="<?= $_SESSION['search_keyword'] ?? null?>"
                             />
                           </div>
                         </div>
@@ -149,14 +139,14 @@ if(isset($keyword) || isset($tgl_dari) || isset($tgl_ke)){
                         <div class="col-md-4">
                           <label for="tgl_dari" class="form-label">Tanggal Dari:</label>
                           <div class="input-group">
-                             <input type="date" name="tgl_dari" id="tgl_dari" class="form-control" value="<?= $tgl_dari ?>" placeholder="Tanggal Dari">
+                             <input type="date" name="tgl_dari" id="tgl_dari" class="form-control" value="<?= $_SESSION['search_tgl_dari'] ?? null?>" placeholder="Tanggal Dari">
                           </div>
                         </div>
 
                         <div class="col-md-4">
                           <label for="tgl_ke" class="form-label">Tanggal Ke:</label>
                           <div class="input-group">
-                            <input type="date" name="tgl_ke" id="tgl_ke" class="form-control" value="<?= $tgl_ke ?>" placeholder="Tanggal Ke">
+                            <input type="date" name="tgl_ke" id="tgl_ke" class="form-control" value="<?= $_SESSION['search_tgl_ke'] ?? null ?>" placeholder="Tanggal Ke">
 
                           </div>
                         </div>
@@ -166,7 +156,7 @@ if(isset($keyword) || isset($tgl_dari) || isset($tgl_ke)){
 
                   <!--begin::Footer-->
                   <div class="card-footer d-flex justify-content-end">
-                          <a href="<?= $BaseUrl->getUrlDataPaymentsReset();?>" class="btn btn-secondary">
+                          <a href="<?= $BaseUrl->getUrlControllerPayments() . '?reset';?>" class="btn btn-secondary">
                             <i class="bi bi-arrow-counterclockwise me-1"></i> Reset</a>
                           <button type="submit" class="btn btn-primary ms-2">
                             <i class="bi bi-search me-1"></i> Search</button>
@@ -209,12 +199,12 @@ if(isset($keyword) || isset($tgl_dari) || isset($tgl_ke)){
                           <td><?= htmlspecialchars($row['kode_inv'])?></td>
                           <td class="text-end"><?= htmlspecialchars('Rp. ' . number_format($row['nominal'], 0, ',', '.'))?></td>
                           <td class="text-center">
-                          <a href="<?= $BaseUrl->getUrlFormPayments($row['id']);?>" class="btn btn-sm btn-warning me-1">
+                          <a href="<?= $BaseUrl->getUrlFormPayments($row['id_payments'], $row['invoice_id'])?>" class="btn btn-sm btn-warning me-1">
               <i class="bi bi-pencil-square me-1"></i>Edit</a>
-              <a href="<?= $BaseUrl->getPrintKwitansi($row['id']) ?>" class="btn btn-success btn-sm">
+              <a href="<?= $BaseUrl->getPrintKwitansi($row['id_payments']) ?>" class="btn btn-success btn-sm">
                 <i class="bi bi-printer me-1"></i> Print
                 </a>
-              <a href="<?= $BaseUrl->getUrlControllerDeletePayments($row['id']) ?>" class="btn btn-sm btn-danger" onclick="return confirm('Are you sure?')">
+              <a href="<?= $BaseUrl->getUrlControllerDeletePayments($row['id_payments']) ?>" class="btn btn-sm btn-danger" onclick="return confirm('Are you sure?')">
               <i class="bi bi-trash me-1"></i>Delete</a>
                           </td>
                         </tr>

@@ -31,10 +31,6 @@ class Costumer {
         return $this->db->count("customers");
     }
 
-    public function getEmailById($id){
-        return $this->db->get("customers", "email", ["id" => $id]);
-    }
-
     public function getWhitLimit($limit, $offset) {
         return $this->db->select("customers", "*",[
             "LIMIT" => [$offset, $limit],
@@ -53,6 +49,10 @@ class Costumer {
         return $this->db->get("customers", "*", ["id" => $id]);
     }
 
+    public function getByEmail($email) {
+        return $this->db->get("customers", "*", ["email" => $email]);
+    }
+
     public function update($id, $ref_no, $name, $alamat, $nomer, $email) {
         return $this->db->update("customers", [
             "ref_no" => $ref_no,
@@ -69,13 +69,21 @@ class Costumer {
         return $this->db->delete("customers", ["id" => $id]);
     }
 
-    public function search($keyword) {
-        return $this->db->select("customers", "*", [
-            "OR" => [
+    public function search($keyword, $offset = null, $limit = null) {
+        $where = [
+            "LIMIT" => [$offset, $limit],
+            "ORDER" => ["id" => "DESC"]
+        ];
+
+        if(!empty($keyword)){
+            $where["OR"] = [
                 "ref_no[~]" => $keyword,
                 "name[~]"   => $keyword
-            ],
-            "ORDER" => ["id" => "DESC"]
-        ]);
+            ];
+        }
+
+        return $this->db->select("customers", "*", $where);
     }
 }
+
+$costumerModel = new Costumer($db);

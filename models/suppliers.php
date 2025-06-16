@@ -52,12 +52,21 @@ class Supplier {
         return $this->db->delete("suppliers", ["id" => $id]);
     }
 
-    public function search($keyword) {
-        return $this->db->select("suppliers", "*", [
-            "OR" => [
+    public function search($keyword, $offset = null, $limit = null) {
+        $where = [
+            "LIMIT" => [$offset, $limit],
+            "ORDER" => ["id" => "DESC"]
+        ];
+
+        if(!empty($keyword)){
+            $where["OR"] = [
                 "ref_no[~]" => $keyword,
                 "name[~]"   => $keyword
-            ]
-        ]);
+            ];
+        }
+
+        return $this->db->select("suppliers", "*", $where);
     }
 }
+
+$supplierModel = new Supplier($db);

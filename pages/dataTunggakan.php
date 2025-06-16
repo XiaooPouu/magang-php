@@ -112,7 +112,7 @@ if(isset($_SESSION['search_data'])){
                   <!--begin::Body-->
                     <div class="card-body">
                       <div class="row">
-                        <div class="col-md-4">
+                        <div class="col-md-12">
                           <label for="item_search" class="form-label">Kata Kunci:</label>
                           <div class="input-group">
                             <input
@@ -128,20 +128,6 @@ if(isset($_SESSION['search_data'])){
                           </div>
                         </div>
 
-                        <div class="col-md-4">
-                          <label for="tgl_dari" class="form-label">Tanggal Dari:</label>
-                          <div class="input-group">
-                             <input type="date" name="tgl_dari" id="tgl_dari" class="form-control" value="<?= $_SESSION['search_tgl_dari'] ?? null?>" placeholder="Tanggal Dari">
-                          </div>
-                        </div>
-
-                        <div class="col-md-4">
-                          <label for="tgl_ke" class="form-label">Tanggal Ke:</label>
-                          <div class="input-group">
-                            <input type="date" name="tgl_ke" id="tgl_ke" class="form-control" value="<?= $_SESSION['search_tgl_ke'] ?? null?>" placeholder="Tanggal Ke">
-
-                          </div>
-                        </div>
                       </div>
                     </div>
                     <!--end::Body-->
@@ -170,7 +156,6 @@ if(isset($_SESSION['search_data'])){
                         <tr>
                           <th>No.</th>
                           <th>Nama Customer</th>
-                          <th>Tanggal Jatuh Tempo</th>
                           <th class="text-end">Total Invoice</th>
                           <th class="text-end">Total Terbayar</th>
                           <th class="text-end">Sisa Tagihan</th>
@@ -182,9 +167,8 @@ if(isset($_SESSION['search_data'])){
                       <tbody>
                       <?php $i = 0; foreach ($getTunggakan as $row):?>  
                         <tr class="align-middle">
-                          <td><?= ++$i?></td>
+                          <td><?= ++$i?>.</td>
                           <td><?= htmlspecialchars($row['name'])?></td>
-                          <td><?= htmlspecialchars($row['tgl_tempo'])?></td>
                           <td class="text-end"><?= htmlspecialchars('Rp ' . number_format($row['grand_total'], 0, ',', '.'))?></td>
                           <td class="text-end"><?= htmlspecialchars('Rp ' . number_format($row['total_bayar'], 0, ',', '.'))?></td>
                           <td class="text-end"><?= htmlspecialchars('Rp ' . number_format($row['sisa'], 0, ',', '.'))?></td>

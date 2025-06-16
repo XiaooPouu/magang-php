@@ -18,7 +18,7 @@ $payment = null;
 
 $getInvoices = $invoiceModel->getAllInvoicesWithCustomer();
 $invoice = $_POST['invoice_id'] ?? $_GET['invoice_id'] ?? null;
-if(isset($_GET['id_payments'])){
+if(isset($_GET['id_payments']) ){
     $id = $_GET['id_payments'];
     $paymentModel = new Payments($db);
     $payment = $paymentModel->getById($id); // Mengambil data item berdasarkan id

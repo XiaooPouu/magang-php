@@ -5,12 +5,7 @@ require_once BASE_PATH . 'config/database.php';
 include BASE_PATH . 'models/costumer.php';
 require_once BASE_PATH . 'function/baseurl.php';
 
-
-$costumerModel = new Costumer($db);
-
 $search = $_SESSION['costumers_data'] ?? [];
-
-unset($_SESSION['costumers_data']);
 
 $page = isset($_GET['page']) ? $_GET['page'] : 1;
 $perPage = 5;
@@ -167,6 +162,7 @@ if(isset($_SESSION['alert_update'])) {
                               name="search"
                               id="costumer_ref_no"
                               aria-describedby="basic-addon1"
+                              value="<?= $_SESSION['search_keyword'] ?? null ?>"
                             />
                           </div>
                         </div>
@@ -176,7 +172,7 @@ if(isset($_SESSION['alert_update'])) {
 
                   <!--begin::Footer-->
                   <div class="card-footer d-flex justify-content-end">
-                          <a href="<?= $BaseUrl->getUrlDataCostumer();?>" class="btn btn-secondary">
+                          <a href="<?= $BaseUrl->getUrlControllerCostumer() . '?reset'?>" class="btn btn-secondary">
                             <i class="bi bi-arrow-counterclockwise me-1"></i> Reset</a>
                           <button type="submit" class="btn btn-primary ms-2">
                             <i class="bi bi-search me-1"></i> Search</button>
@@ -347,3 +343,4 @@ if(isset($_SESSION['alert_update'])) {
   </body>
   <!--end::Body-->
 </html>
+<?php unset($_SESSION['form_data'])?>

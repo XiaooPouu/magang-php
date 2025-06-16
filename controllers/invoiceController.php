@@ -111,4 +111,15 @@ else if (isset($_GET['search']) || isset($_GET['customer']) || isset($_GET['tgl_
     header('Location: ' . $BaseUrl->getUrlDataInvoice());
     exit();
 }
+else if(isset($_GET['reset'])){
+    unset($_SESSION['search_data']);
+    unset($_SESSION['search_keyword']);
+    unset($_SESSION['search_customer']);
+    unset($_SESSION['search_tgl_dari']);
+    unset($_SESSION['search_tgl_ke']);
+    unset($_SESSION['search_status_lunas']);
+    header('Location: ' . $BaseUrl->getUrlDataInvoice());
+    exit();
+
+}
 

@@ -84,10 +84,6 @@ class Baseurl
         return BASE_URL . 'controllers/items_costumersController.php?delete_ic=' . $id;
     }
 
-    public function getUrlDataItemsCostumerReset() {
-        return BASE_URL . 'pages/dataItems_Costumer.php?reset=true';
-    }
-
     public function getUrlDataInvoice() {
         return BASE_URL . 'pages/dataInvoice.php';
     }
@@ -111,11 +107,7 @@ class Baseurl
     public function getUrlControllerDeleteInvoice($id){
         return BASE_URL . 'controllers/invoiceController.php?delete_invoice=' . $id;
     }
-
-    public function getUrlDataInvoiceReset() {
-        return BASE_URL . 'pages/dataInvoice.php?reset=true';
-    }
-
+    
     public function getUrlDetailInvoice($id){
         return BASE_URL . 'pages/dataInvoiceItems.php?id_inv=' . $id;
     }
@@ -157,13 +149,13 @@ class Baseurl
         return BASE_URL . 'pages/dataPayments.php';
     }
 
-    public function getUrlFormPayments($id = null){
-        if(!empty($id)){
-            return BASE_URL . 'pages/formPayments.php?id_payments=' . $id;
-        } else {
-            return BASE_URL . 'pages/formPayments.php';
-        }
+    public function getUrlFormPayments($id = null, $id_inv = null){
+    if(!empty($id)){
+        return BASE_URL . 'pages/formPayments.php?id_payments=' . $id . '&invoice_id=' . $id_inv;
+    } else {
+        return BASE_URL . 'pages/formPayments.php';
     }
+}
 
     public function getUrlFormPaymentsInvoice($id){
         return BASE_URL . 'pages/formPayments.php?invoice_id=' . $id;

@@ -5,8 +5,6 @@ require_once BASE_PATH . 'config/database.php';
 require_once BASE_PATH . 'models/costumer.php';
 require_once BASE_PATH . 'function/baseurl.php';
 
-$costumerModel = new Costumer($db);
-
 // Tangkap data dari form
 $id = $_POST ['id'] ?? null;
 $ref_no = $_POST['ref_no'] ?? null;
@@ -23,7 +21,7 @@ $_SESSION['form_data'] = [
     'email' => $email
 ];
 
-$emailSama = $costumerModel->getEmailById($id);
+$emailSama = $costumerModel->getByEmail($email);
 
 if(isset($_POST['add_costumer']) || isset($_POST['update_costumer'])){
     if($emailSama){
@@ -102,6 +100,8 @@ else if (isset($_GET['delete_costumer'])) {
             'type' => 'danger',
             'message' => 'Customer tidak dapat dihapus karena masih digunakan di invoice, atau items customers.'
         ];
+        header('Location:' . $BaseUrl->getUrlDataCostumer());
+        exit();
      } else {
     $costumerModel->delete($id);
 
@@ -110,18 +110,29 @@ else if (isset($_GET['delete_costumer'])) {
       'type' => 'success',
       'message' => 'Costumer berhasil dihapus!'  
     ];
-}
-
+    unset($_SESSION['costumers_data']);
     header('Location:' . $BaseUrl->getUrlDataCostumer());
     exit();
+}
 }
 
 else if(isset($_GET['search'])){
+    $page = isset($_GET['page']) ? $_GET['page'] : 1;
+    $perPage = 5;
+    $offset = ($page - 1) * $perPage;
     $keyword = $_GET['search'];
-    $results = $costumerModel->search($keyword);
+    $results = $costumerModel->search($keyword, $offset, $perPage);
     $_SESSION['costumers_data'] = $results;
+    $_SESSION['search_keyword'] = $keyword;
     header('Location:' . $BaseUrl->getUrlDataCostumer());
     exit();
+}
+else if(isset($_GET['reset'])){
+    unset($_SESSION['costumers_data']);
+    unset($_SESSION['search_keyword']);
+    header('Location:' . $BaseUrl->getUrlDataCostumer());
+    exit();
+
 }
 
 else {

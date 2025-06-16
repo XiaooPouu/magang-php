@@ -20,7 +20,8 @@ class Payments {
         "[>]invoice" => ["invoice_id" => "id_inv"],
         "[>]customers" => ["invoice.customers_id" => "id"]
     ], [
-        "payments.id_payments(id)",
+        "payments.id_payments",
+        "payments.invoice_id",
         "invoice.kode_inv",
         "invoice.tgl_inv",
         "customers.name",
@@ -112,7 +113,8 @@ public function getCount() {
         "[>]invoice" => ["invoice_id" => "id_inv"],
         "[>]customers" => ["invoice.customers_id" => "id"]
     ], [
-        "payments.id_payments(id)",
+        "payments.id_payments",
+        "payments.invoice_id",
         "invoice.kode_inv",
         "invoice.tgl_inv",
         "customers.name(customer_name)",

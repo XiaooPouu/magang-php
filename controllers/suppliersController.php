@@ -5,8 +5,6 @@ require_once BASE_PATH . 'config/database.php';
 require_once BASE_PATH . 'models/suppliers.php';
 require_once BASE_PATH . 'function/baseurl.php';
 
-$supplierModel = new Supplier($db);
-
 $id = $_POST['id'] ?? null;
 $ref_no = $_POST['ref_no'] ?? null;
 $name = $_POST['name'] ?? null;
@@ -83,16 +81,29 @@ else if (isset($_GET['delete_supplier'])) {
             'type' => 'success',
             'message' => 'Supplier berhasil dihapus!'
         ];
+    unset($_SESSION['suppliers_data']);
     header('Location:' . $BaseUrl->getUrlDataSupplier());
     exit();
 }
 
 else if (isset($_GET['search'])) {
+    // pagination
+    $page = isset($_GET['page']) ? $_GET['page'] : 1;
+    $perPage = 5;
+    $offset = ($page - 1) * $perPage;
     $keyword = $_GET['search'];
-    $results = $supplierModel->search($keyword);
+    $results = $supplierModel->search($keyword,$offset, $perPage);
     $_SESSION['suppliers_data'] = $results;
+    $_SESSION['search_keyword'] = $keyword;
     header('Location:' . $BaseUrl->getUrlDataSupplier());
     exit();
+}
+else if(isset($_GET['reset'])){
+    unset($_SESSION['suppliers_data']);
+    unset($_SESSION['search_keyword']);
+    header('Location:' . $BaseUrl->getUrlDataSupplier());
+    exit();
+
 }
 
 else {

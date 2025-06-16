@@ -160,6 +160,7 @@ if(isset($_GET['id'])){
                               name="jabatan"
                               id="jabatan"
                               required
+                              pattern="[a-zA-Z\s]+"
                               aria-describedby="basic-addon3 basic-addon4"
                               placeholder="Contoh: Manager"
                               value="<?= htmlspecialchars($formData['jabatan'] ?? '')?>"

@@ -9,8 +9,6 @@ require_once BASE_PATH . 'function/baseurl.php';
 
 $itemsCostumerModel = new ItemsCostumer($db);
 
-$keyword = $_GET['search'] ?? '';
-
 $page = isset($_GET['page']) ? $_GET['page'] : 1;
 $perPage = 5;
 $offset = ($page - 1) * $perPage;
@@ -20,12 +18,6 @@ $totalItems_Costumers = $itemsCostumerModel->getCount();
 
 // hitung total halaman
 $totalPages = ceil($totalItems_Costumers / $perPage);
-
-if(isset($_GET['reset'])){
-  unset($_SESSION['search_data']);
-  unset($_SESSION['search_keyword']);
-}
-
 
 if (isset($_SESSION['search_data'])) {
   $data = $_SESSION['search_data'];
@@ -147,7 +139,7 @@ $alert = isset($_SESSION['alert_delete']);
 
                   <!--begin::Footer-->
                   <div class="card-footer d-flex justify-content-end">
-                          <a href="<?= $BaseUrl->getUrlDataItemsCostumerReset();?>" class="btn btn-secondary">
+                          <a href="<?= $BaseUrl->getUrlControllerItemsCostumer() . '?reset';?>" class="btn btn-secondary">
                             <i class="bi bi-arrow-counterclockwise me-1"></i> Reset</a>
                           <button type="submit" class="btn btn-primary ms-2">
                             <i class="bi bi-search me-1"></i> Search</button>

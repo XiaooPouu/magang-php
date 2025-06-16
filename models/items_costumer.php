@@ -87,3 +87,5 @@ class ItemsCostumer {
         ]);
     }
 }
+
+$itemsCostumerModel = new ItemsCostumer($db);

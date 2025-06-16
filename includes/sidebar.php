@@ -118,7 +118,7 @@ require_once BASE_PATH . 'function/baseurl.php';
 
         <li class="nav-item">
           <a href="<?= $BaseUrl->getInformasiPerusahaan(); ?>" class="nav-link">
-            <i class="nav-icon bi bi-building"></i>
+            <i class="nav-icon bi bi-gear"></i>
             <p>Pengaturan Perusahaan</p>
           </a>
         </li>

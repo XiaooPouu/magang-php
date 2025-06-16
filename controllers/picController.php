@@ -36,6 +36,13 @@ if(isset($_POST['add_pic'])|| isset($_POST['update_pic'])){
         ];
         header('Location:' . $BaseUrl->getUrlFormPIC());
         exit();
+    } else if(!filter_var($email, FILTER_VALIDATE_EMAIL)){
+        $_SESSION['alert'] = [
+            'type' => 'danger',
+            'message' => 'Email tidak valid!'  
+        ];
+        header('Location:' . $BaseUrl->getUrlFormPIC());
+        exit();
     }
 }
 

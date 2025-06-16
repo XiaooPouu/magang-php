@@ -15,7 +15,7 @@ $dataCustomer = $tunggakan->getById($id_customer);
   <!--begin::Head-->
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title>Data Invoice Items</title>
+    <title>Detail Tunggakan</title>
     <!--begin::Primary Meta Tags-->
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="title" content="AdminLTE 4 | General Form Elements" />
@@ -78,7 +78,7 @@ $dataCustomer = $tunggakan->getById($id_customer);
               <div class="col-md-6">
                 <ol class="breadcrumb float-sm-end">
                   <li class="breadcrumb-item"><a href="<?= $BaseUrl->getUrlDataTunggakan();?>">Data Tunggakan</a></li>
-                  <li class="breadcrumb-item active" aria-current="page">Table Tunggakan</li>
+                  <li class="breadcrumb-item active" aria-current="page">Table Detail Tunggakan</li>
                 </ol>
               </div>
             </div>
@@ -141,9 +141,10 @@ $dataCustomer = $tunggakan->getById($id_customer);
             <table class="table table-bordered align-middle table-striped">
               <thead class="table-light">
                 <tr>
-                  <th>No.</th>
-                  <th>Tanggal Bayar</th>
+                  <th class="text-center">No.</th>
                   <th>Kode Invoice</th>
+                  <th class="text-end">Tanggal Jatuh Tempo</th>
+                  <th class="text-end">Tanggal Bayar</th>
                   <th class="text-end">Grand Total</th>
                   <th class="text-end">Jumlah Bayar</th>
                   <th class="text-end">Sisa</th>
@@ -154,9 +155,10 @@ $dataCustomer = $tunggakan->getById($id_customer);
                 <?php if (!empty($detailTunggakan)) : ?>
                   <?php $i=0; foreach ($detailTunggakan as $row) : ?>
                     <tr>
-                      <td><?= ++$i ?>.</td>
-                      <td><?= htmlspecialchars($row['tanggal_bayar']) ?></td>
+                      <td class="text-center"><?= ++$i ?>.</td>
                       <td><?= htmlspecialchars($row['kode_inv']) ?></td>
+                      <td class="text-end"><?= htmlspecialchars($row['tgl_tempo'])?></td>
+                      <td class="text-end"><?= htmlspecialchars($row['tanggal_bayar']) ?></td>
                       <td class="text-end">Rp. <?= number_format($row['grand_total'], 0, ',', '.') ?></td>
                       <td class="text-end">Rp. <?= number_format($row['jumlah_bayar'], 0, ',', '.') ?></td>
                       <td class="text-end">Rp. <?= number_format($row['sisa'], 0, ',', '.') ?></td>

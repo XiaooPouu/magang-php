@@ -63,13 +63,21 @@ class Item {
         return $this->db->delete("items", ["id" => $id]);
     }
 
-    public function search($keyword) {
-        return $this->db->select("items", "*", [
-            "OR" => [
-                "ref_no[~]" => $keyword,
-                "name[~]"   => $keyword
-            ],
-            "ORDER" => ["id" => "DESC"]
-        ]);
+    public function search($keyword, $offset = null, $limit = null) {
+        $where = [
+            'LIMIT' => [$offset, $limit],
+            'ORDER' => ['id' => 'DESC']
+        ];
+
+        if (!empty($keyword)) {
+            $where['OR'] = [
+                'ref_no[~]' => $keyword,
+                'name[~]'   => $keyword
+            ];
+        }
+
+        return $this->db->select("items", "*", $where);
     }
 }
+
+$itemModel = new Item($db);

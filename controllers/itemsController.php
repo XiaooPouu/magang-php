@@ -5,8 +5,6 @@ require_once BASE_PATH . 'config/database.php';
 require_once BASE_PATH . 'models/items.php';
 require_once BASE_PATH . 'function/baseurl.php';
 
-$itemModel = new Item($db);
-
 // Tangkap data dari form
 $ref_no = $_POST['ref_no'] ?? null;
 $name   = $_POST['name'] ?? null;
@@ -81,6 +79,7 @@ else if (isset($_GET['delete_item'])) {
             'type' => 'success',
             'message' => 'Item berhasil dihapus!'
         ];
+        unset($_SESSION['items_data']);
     }
     
     header('Location:' . $BaseUrl->getUrlDataItems());
@@ -89,9 +88,20 @@ else if (isset($_GET['delete_item'])) {
 
 // Pencarian item
 else if (isset($_GET['search'])) {
+    // pagination
+    $page = isset($_GET['page']) ? $_GET['page'] : 1;
+    $perPage = 5;
+    $offset = ($page - 1) * $perPage;
     $keyword = $_GET['search'];
-    $results = $itemModel->search($keyword);
+    $results = $itemModel->search($keyword, $offset, $perPage);
     $_SESSION['items_data'] = $results;
+    $_SESSION['search_keyword'] = $keyword;
+    header('Location:' . $BaseUrl->getUrlDataItems());
+    exit();
+}
+else if (isset($_GET['reset'])) {
+    unset($_SESSION['items_data']);
+    unset($_SESSION['search_keyword']);
     header('Location:' . $BaseUrl->getUrlDataItems());
     exit();
 }
