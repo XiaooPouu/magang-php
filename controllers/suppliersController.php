@@ -18,7 +18,7 @@ $name = $_POST['name'] ?? null;
 // Tambah supplier
 if (isset($_POST['add_supplier'])) {
 
-    $existingSupplier = $supplierModel->getByRefNo($ref_no);
+    $existingSupplier = $supplierModel->getByRefNo($ref_no, $id);
     // cek apakah ref no sudah ada
     if($existingSupplier){
         // jika sudah ada maka notif error muncul
@@ -46,7 +46,16 @@ if (isset($_POST['add_supplier'])) {
 // Update supplier
 else if (isset($_POST['update_supplier'])) {
 
-    if($id && $ref_no && $name){
+    // validasi ref_no
+    $existingSupplier = $supplierModel->getByRefNo($ref_no, $id);
+
+    if($existingSupplier){
+        $_SESSION['alert_update'] = [
+            'type' => 'danger',
+            'message' => 'Ref No sudah ada, silahkan coba lagi!'
+        ];
+    } else {
+         if($id && $ref_no && $name){
         $supplierModel->update($id, $ref_no, $name);
         $_SESSION['alert_update'] = [
             'type' => 'success',
@@ -62,6 +71,7 @@ else if (isset($_POST['update_supplier'])) {
         ];
         header('Location:' . $BaseUrl->getUrlFormSupplier());
         exit();
+    }
     }
 }
 

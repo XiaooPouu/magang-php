@@ -190,6 +190,7 @@ if(isset($_SESSION['alert_delete'])) {
 <select name="status_lunas" class="form-control" id="status">
     <option value="">-- Status --</option>
     <option value="lunas" <?= $status === 'lunas' ? 'selected' : '' ?>>Lunas</option>
+    <option value="belum_ada_item" <?= $status === 'belum_ada_item' ? 'selected' : '' ?>>Belum Ada Item</option>
     <option value="belum_lunas" <?= $status === 'belum_lunas' ? 'selected' : '' ?>>Belum Lunas</option>
 </select>
 
@@ -283,13 +284,26 @@ if(isset($_SESSION['alert_delete'])) {
                           </span>
                           </td>
                           <td class="text-center">
-                          <a href="<?= $BaseUrl->getUrlFormInvoice($row['id_inv'])?>" class="btn btn-sm btn-warning me-1">
-              <i class="bi bi-pencil-square me-1"></i>Edit</a>
-              <a href="<?= $BaseUrl->getUrlDetailInvoice($row['id_inv'])?>" class="btn btn-sm btn-primary me-1">
-              <i class="bi bi-file-earmark-text me-1"></i>Detail</a>
-              <a href="<?= $BaseUrl->getUrlControllerDeleteInvoice($row['id_inv']) ?>" class="btn btn-sm btn-danger" onclick="return confirm('Are you sure?')">
-              <i class="bi bi-trash me-1"></i>Delete</a>
-                          </td>
+                            <div class="btn-group">
+                      <a href="<?= $BaseUrl->getUrlDetailInvoice($row['id_inv']) ?>" class="btn btn-primary"><i class="bi bi-file-text-fill me-1"></i>Detail</a>
+                      <button
+                        type="button"
+                        class="btn btn-primary dropdown-toggle dropdown-toggle-split"
+                        data-bs-toggle="dropdown"
+                        aria-expanded="false"
+                      >
+                        <span class="visually-hidden">Toggle Dropdown</span>
+                      </button>
+                      <ul class="dropdown-menu">
+                        <li><a class="dropdown-item" href="<?= $BaseUrl->getUrlFormInvoice($row['id_inv']) ?>"><i class="bi bi-pencil me-1"></i> Edit</a></li>
+                        <li><a class="dropdown-item" href="<?= $BaseUrl->getUrlControllerDeleteInvoice($row['id_inv']) ?>"><i class="bi bi-trash me-1" onclick="return confirm('Are you sure?')"></i> Delete</a></li>
+                        <li><hr class="dropdown-divider" /></li>
+                        <li><a class="dropdown-item" href="<?= $BaseUrl->getCetakPDF($row['id_inv']) . '&lihat' ?>"><i class="bi bi-eye me-1"></i> Lihat PDF</a></li>
+                        <li><a class="dropdown-item" href="<?= $BaseUrl->getCetakPDF($row['id_inv']) . '&download' ?>"><i class="bi bi-download me-1"></i> PDF</a></li>
+                      </ul>
+                    </div>
+                        </td>
+
                         </tr>
                         <?php endforeach;?>
 
@@ -300,19 +314,25 @@ if(isset($_SESSION['alert_delete'])) {
                    <!-- /.card-body -->
                   <div class="card-footer clearfix">
                     <ul class="pagination pagination-sm m-0 float-end">
-                      <?php if ($page > 1): ?>
-                        <li class="page-item"><a class="page-link" href="?page=<?= $page - 1 ?>">&laquo;</a></li>
-                      <?php endif; ?>
+                      <?php if ($page > 4): ?>
+                      <li class="page-item"><a class="page-link" href="?page=1">1</a></li>
+                      <li class="page-item disabled"><span class="page-link">...</span></li>
+                    <?php endif; ?>
 
-                      <?php for ($i = 1; $i <= $totalPages; $i++): ?>
-                        <li class="page-item <?= $i == $page ? 'active' : '' ?>">
-                          <a class="page-link" href="?page=<?= $i ?>"><?= $i ?></a>
-                        </li>
-                      <?php endfor; ?>
+                    <?php
+                      $startPage = max(1, $page - 2);
+                      $endPage = min($totalPages, $page + 2);
+                      for ($i = $startPage; $i <= $endPage; $i++):
+                    ?>
+                      <li class="page-item <?= ($i == $page) ? 'active' : '' ?>">
+                        <a class="page-link" href="?page=<?= $i ?>"><?= $i ?></a>
+                      </li>
+                    <?php endfor; ?>
 
-                      <?php if ($page < $totalPages): ?>
-                        <li class="page-item"><a class="page-link" href="?page=<?= $page + 1 ?>">&raquo;</a></li>
-                      <?php endif; ?>
+                    <?php if ($page < $totalPages - 3): ?>
+                      <li class="page-item disabled"><span class="page-link">...</span></li>
+                      <li class="page-item"><a class="page-link" href="?page=<?= $totalPages ?>"><?= $totalPages ?></a></li>
+                    <?php endif; ?>
                     </ul>
                   </div>
                 </div>

@@ -24,39 +24,6 @@ if (!empty($search)) {
   $customers = $costumerModel->getWhitLimit($perPage, $offset);
 }
 
-if(isset($_SESSION['alert'])) {
-  $type = $_SESSION['alert']['type'];
-  $message = $_SESSION['alert']['message'];
-  $input = "<div class='alert alert-{$type} alert-dismissible fade show' role='alert'>
-      {$message}
-      <button type='button' class='btn-close' data-bs-dismiss='alert' aria-label='Close'></button>
-      </div>";
-  
-  unset($_SESSION['alert']); // agar hanya tampil sekali
-}
-
-if(isset($_SESSION['alert_delete'])) {
-  $type = $_SESSION['alert_delete']['type'];
-  $message = $_SESSION['alert_delete']['message'];
-  $hapus = "<div class='alert alert-{$type} alert-dismissible fade show' role='alert'>
-      {$message}
-      <button type='button' class='btn-close' data-bs-dismiss='alert' aria-label='Close'></button>
-      </div>";
-  
-  unset($_SESSION['alert_delete']); // agar hanya tampil sekali
-}
-
-if(isset($_SESSION['alert_update'])) {
-  $type = $_SESSION['alert_update']['type'];
-  $message = $_SESSION['alert_update']['message'];
-  $edit = "<div class='alert alert-{$type} alert-dismissible fade show' role='alert'>
-      {$message}
-      <button type='button' class='btn-close' data-bs-dismiss='alert' aria-label='Close'></button>
-      </div>";
-  
-  unset($_SESSION['alert_update']); // agar hanya tampil sekali
-}
-
 ?>
 
 
@@ -134,10 +101,13 @@ if(isset($_SESSION['alert_update'])) {
               </div>
             </div>
                 <div class="col-md-12">
-        <!-- Alert Message -->
-    <?= isset($input) ? $input : '' ?>
-    <?= isset($edit) ? $edit : '' ?>
-    <?= isset($hapus) ? $hapus : '' ?>
+        <?php if (isset($_SESSION['alert'])): ?>
+    <div class="alert alert-<?= $_SESSION['alert']['type'] ?> alert-dismissible fade show" role="alert">
+        <?= $_SESSION['alert']['message'] ?>
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+    <?php unset($_SESSION['alert']); ?>
+<?php endif; ?>
   </div>
 
         <!--begin::Input Group-->
@@ -186,8 +156,24 @@ if(isset($_SESSION['alert_update'])) {
               <div class="card mb-4">
                   <div class="card-header"><h3 class="card-title">Table Costumers</h3></div>
                   <!-- button create -->
-                    <div class="mt-3 mx-3">
+                    <div class="mt-3 mx-3 d-flex justify-content-between align-items-center">
                       <a href="<?= $BaseUrl->getUrlFormCostumer();?>" class="btn btn-primary btn-sm"><i class="bi bi-plus-circle me-1"></i> Create New</a>
+                      <nav class="nav-item dropdown">
+                              <a
+                                class="btn btn-success dropdown-toggle"
+                                href="#"
+                                role="button"
+                                data-bs-toggle="dropdown"
+                                aria-expanded="false"
+                              >
+                              File  CSV
+                              </a>
+                              <ul class="dropdown-menu">
+                                <li><a class="dropdown-item" href="<?= $BaseUrl->getUrlFormImportCSV();?>"><i class="bi bi-upload me-1"></i>Import CSV</a></li>
+                                <li><hr class="dropdown-divider" /></li>
+                                <li><a class="dropdown-item" href="<?= $BaseUrl->getUrlCSV() . '?export' ?>"><i class="bi bi-download me-1"></i>Export CSV</a></li>
+                              </ul>
+</nav>
                     </div>
                     <!-- end button create -->
                   <!-- /.card-header -->
@@ -200,7 +186,7 @@ if(isset($_SESSION['alert_update'])) {
                           <th>Alamat</th>
                           <th>No Telepon</th>
                           <th>Email</th>
-                          <th class="text-center">Action</th>
+                          <th class="text-center">Actions</th>
                         </tr>
                       </thead>
                       <?php foreach ($customers as $cs):?>
@@ -211,10 +197,21 @@ if(isset($_SESSION['alert_update'])) {
                           <td><?= htmlspecialchars($cs['alamat'])?></td>
                           <td><?= htmlspecialchars($cs['nomer'])?></td>
                           <td><?= htmlspecialchars($cs['email'])?></td>
-                          <td class="text-center"><a href="<?= $BaseUrl->getUrlFormCostumer($cs['id'])?>" class="btn btn-sm btn-warning me-1">
-                            <i class="bi bi-pencil-square me-1"></i>Edit</a>
-                           <a href="<?= $BaseUrl->getUrlControllerDeleteCostumer($cs['id']) ?>" class="btn btn-sm btn-danger" onclick="return confirm('Are you sure?')">
-                            <i class="bi bi-trash me-1"></i>Delete</a>
+                          <td class="text-center">
+                            <div class="btn-group">
+                              <button
+                                type="button"
+                                class="btn btn-primary dropdown-toggle"
+                                data-bs-toggle="dropdown"
+                                aria-expanded="false"
+                              >
+                                Actions
+                              </button>
+                              <ul class="dropdown-menu">
+                                <li><a class="dropdown-item" href="<?= $BaseUrl->getUrlFormCostumer($cs['id'])?>"><i class="bi bi-pencil me-1"></i> Edit</a></li>
+                                <li><a class="dropdown-item" href="<?= $BaseUrl->getUrlControllerDeleteCostumer($cs['id']) ?>" onclick="return confirm('Are you sure?')"><i class="bi bi-trash me-1"></i>Delete</a></li>
+                              </ul>
+                            </div>
                           </td>
                         </tr>
                       </tbody>
@@ -225,19 +222,27 @@ if(isset($_SESSION['alert_update'])) {
                     <!-- /.card-body -->
                   <div class="card-footer clearfix">
                     <ul class="pagination pagination-sm m-0 float-end">
-                      <?php if ($page > 1): ?>
-                        <li class="page-item"><a class="page-link" href="?page=<?= $page - 1 ?>">&laquo;</a></li>
-                      <?php endif; ?>
 
-                      <?php for ($i = 1; $i <= $totalPages; $i++): ?>
-                        <li class="page-item <?= $i == $page ? 'active' : '' ?>">
-                          <a class="page-link" href="?page=<?= $i ?>"><?= $i ?></a>
-                        </li>
-                      <?php endfor; ?>
+                      <?php if ($page > 4): ?>
+                      <li class="page-item"><a class="page-link" href="?page=1">1</a></li>
+                      <li class="page-item disabled"><span class="page-link">...</span></li>
+                    <?php endif; ?>
 
-                      <?php if ($page < $totalPages): ?>
-                        <li class="page-item"><a class="page-link" href="?page=<?= $page + 1 ?>">&raquo;</a></li>
-                      <?php endif; ?>
+                    <?php
+                      $startPage = max(1, $page - 2);
+                      $endPage = min($totalPages, $page + 2);
+                      for ($i = $startPage; $i <= $endPage; $i++):
+                    ?>
+                      <li class="page-item <?= ($i == $page) ? 'active' : '' ?>">
+                        <a class="page-link" href="?page=<?= $i ?>"><?= $i ?></a>
+                      </li>
+                    <?php endfor; ?>
+
+                    <?php if ($page < $totalPages - 3): ?>
+                      <li class="page-item disabled"><span class="page-link">...</span></li>
+                      <li class="page-item"><a class="page-link" href="?page=<?= $totalPages ?>"><?= $totalPages ?></a></li>
+                    <?php endif; ?>
+
                     </ul>
                   </div>
                 </div>

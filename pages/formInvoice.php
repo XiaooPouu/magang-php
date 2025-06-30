@@ -9,6 +9,14 @@ require_once BASE_PATH . 'function/baseurl.php';
 $formData = isset($_SESSION['form_data']) ? $_SESSION['form_data'] : ['kode_inv' => '', 'tgl_inv' => '', 'customers_id' => '', 'tgl_tempo' => '', 'note' => ''];
 $alert = isset($_SESSION['alert']);
 
+$back = $_GET['back'] ?? null;
+if(isset($back)){
+  $id_inv = $_GET['id_inv'];
+  $backUrl = $BaseUrl->getUrlDetailInvoice($id_inv);
+} else {
+  $backUrl = $BaseUrl->getUrlDataInvoice();
+}
+
 $customersModel = new Costumer($db); // Ambil data customer
 $customers = $customersModel->getAll();
 
@@ -30,6 +38,7 @@ if(isset($_GET['id_inv'])){
   }
   $isEdit = true;
 }
+
 ?>
 <!doctype html>
 <html lang="en">
@@ -127,9 +136,12 @@ if(isset($_GET['id_inv'])){
                   <div class="card-header">
                     <div class="card-title"><?= $isEdit ? 'Edit Invoice' : 'Input Invoice'?></div>
                   </div>
-                  <form action="<?= $BaseUrl->getUrlControllerInvoice(); ?>" method="POST">
+                  <form action="<?= $BaseUrl->getUrlControllerInvoice()?>" method="POST">
                     <?php if ($isEdit): ?>
                       <input type="hidden" name="id_inv" value="<?= htmlspecialchars($invoice['id_inv']) ?>">
+                      <?php if(isset($back)):?>
+                        <input type="hidden" name="back" value="true">
+                        <?php endif;?>
                       <?php endif;?>
                     <div class="card-body row g-3">
                       <div class="col-md-3">
@@ -163,7 +175,7 @@ if(isset($_GET['id_inv'])){
                       </div>
                     </div>
                     <div class="card-footer d-flex align-items-center">
-                      <a href="<?= $BaseUrl->getUrlDataInvoice(); ?>" class="btn btn-secondary" style="padding: 8px 16px;">
+                      <a href="<?= $backUrl; ?>" class="btn btn-secondary" style="padding: 8px 16px;">
                         <i class="bi bi-x-circle me-1"></i> Cancel</a>
                       <button type="submit" name="<?= $isEdit ? 'update_invoice' : 'save_invoice'?>" class="btn btn-primary ms-auto" style="padding: 8px 16px;"><i class="bi bi-check-circle-fill me-1"></i> Submit</button>
                     </div>

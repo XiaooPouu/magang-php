@@ -5,6 +5,7 @@ require_once BASE_PATH . 'config/database.php';
 include BASE_PATH . 'models/invoice.php';
 require_once BASE_PATH . 'function/baseurl.php';
 
+
 $model = new Invoice($db);
 
 $id_inv = $_POST['id_inv'] ?? null;
@@ -13,6 +14,8 @@ $tgl_inv = $_POST['tgl_inv'] ?? null;
 $tgl_tempo = $_POST['tgl_tempo'] ?? null;
 $customer_id = $_POST['customers_id'] ?? null;
 $note = $_POST['note'] ?? null;
+
+$back = $_POST['back'] ?? null;
 
 // menyimpan session form data
     $_SESSION['form_data'] = [
@@ -38,7 +41,7 @@ if(isset($_POST['save_invoice']) || isset($_POST['update_invoice'])){
 
 if(isset($_POST['save_invoice'])){
 
-    $existingInvoice = $model->getBykode_inv($kode_inv);
+    $existingInvoice = $model->getBykode_inv($kode_inv, $id_inv);
 
     if($existingInvoice){
         $_SESSION['alert'] = [
@@ -77,15 +80,37 @@ else if (isset($_GET['delete_invoice'])) {
 // update invoice 
 else if (isset($_POST['update_invoice'])){
 
-    if($id_inv && $kode_inv && $tgl_inv && $customer_id && $tgl_tempo) {
+    // validasi ref_no
+    $existingInvoice = $invoiceModel->getBykode_inv($kode_inv, $id_inv);
+
+    if($existingInvoice){
+        $_SESSION['alert'] = [
+            "type" => "danger",
+            "message" => "Ref No sudah ada, silahkan coba lagi!"
+        ];
+    } else {
+        if($id_inv && $kode_inv && $tgl_inv && $customer_id && $tgl_tempo) {
         $model->update($id_inv, $kode_inv, $tgl_inv, $customer_id, $tgl_tempo, $note);
         $_SESSION['alert'] = [
             'type' => 'success',
             'message' => 'Invoice berhasil diupdate!'
         ];
         unset($_SESSION['form_data']);
-        header('Location:' . $BaseUrl->getUrlDataInvoice());
+            if(isset($back)){
+                header('Location: ' . $BaseUrl->getUrlDetailInvoice($id_inv));
+                exit();
+            } else {
+                header('Location: ' . $BaseUrl->getUrlDataInvoice());
+                exit();
+            }
+    } else {
+        $_SESSION['alert'] = [
+            'type' => 'danger',
+            'message' => 'Semua field harus diisi!'
+        ];
+        header('Location:' . $BaseUrl->getUrlFormInvoice());
         exit();
+    }
     }
 }
 

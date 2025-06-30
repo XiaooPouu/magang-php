@@ -190,15 +190,25 @@ if(isset($_SESSION['search_data'])){
                           <td><?= htmlspecialchars($row['nomer'])?></td>
                           <td><?= $row['status'] === 'use' ? 'USE' : 'NO USE' ?></td>
                           <td class="text-center">
-                            <a href="<?= $BaseUrl->getURLFormPIC($row['id'])?>" class="btn btn-sm btn-warning me-1">
-                            <i class="bi bi-pencil-square me-1"></i>Edit</a>
+                            <div class="btn-group">
+                              <button
+                                type="button"
+                                class="btn btn-primary dropdown-toggle"
+                                data-bs-toggle="dropdown"
+                                aria-expanded="false"
+                              >
+                                Actions
+                              </button>
+                              <ul class="dropdown-menu">
+                                <li><a class="dropdown-item" href="<?= $BaseUrl->getURLFormPIC($row['id'])?>"><i class="bi bi-pencil me-1"></i> Edit</a></li>
+                                <li><a class="dropdown-item" href="<?= $BaseUrl->getUrlControllerDeletePIC($row['id']) ?>" onclick="return confirm('Are you sure?')"><i class="bi bi-trash me-1"></i>Delete</a></li>
+                              </ul>
+                            </div>
                             <a href="<?= $BaseUrl->getUrlControllerToggleStatusPIC($row['id']) ?>" 
                             class="btn btn-sm <?= ($row['status'] === 'use') ? 'btn-success' : 'btn-secondary' ?>">
                                 <i class="bi <?= ($row['status'] === 'use') ? 'bi-toggle-on' : 'bi-toggle-off' ?>"></i>
                                 <?= strtoupper($row['status']) === 'USE' ? 'USE' : 'NO USE' ?>
                             </a>
-                            <a href="<?= $BaseUrl->getUrlControllerDeletePIC($row['id']) ?>" class="btn btn-sm btn-danger" onclick="return confirm('Are you sure?')">
-                            <i class="bi bi-trash me-1"></i>Delete</a>
                           </td>
                         </tr>
                         <?php endforeach;?>

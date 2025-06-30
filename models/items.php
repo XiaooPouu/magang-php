@@ -27,8 +27,11 @@ class Item {
         return $this->db->get("items", "*", ["id" => $id]);
     }
 
-    public function getByRefNo($ref_no) {
-        return $this->db->get("items", "*", ["ref_no" => $ref_no]);
+    public function getByRefNo($ref_no,$id) {
+        return $this->db->has("items",[
+            "ref_no" => $ref_no,
+            "id[!]" => $id
+        ]);
     }
 
     public function isUseId($id){

@@ -20,7 +20,9 @@ class Company {
             "kode_pos",
             "negara",
             "email",
-            "telepon"
+            "telepon",
+            "logo",
+            "tanda_tangan"
         ]);
     }
 
@@ -55,6 +57,22 @@ class Company {
         ],[
             "id" => $id
     ]);
+    }
+
+    public function updateLogo($id,$logo) {
+        return $this->db->update("company", [
+            "logo" => $logo,
+        ],[
+            "id" => $id
+        ]);
+    }
+
+    public function updateTTD($id, $ttd) {
+        return $this->db->update("company", [
+            "tanda_tangan" => $ttd,
+        ],[
+            "id" => $id
+        ]);
     }
 }
 

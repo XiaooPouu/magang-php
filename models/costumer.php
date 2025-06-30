@@ -23,12 +23,44 @@ class Costumer {
         return $this->db->select("customers", "*");
     }
 
-    public function getByRefNo($ref_no) {
-        return $this->db->get("customers", "*", ["ref_no" => $ref_no]);
+    public function getAllNoID(){
+        return $this->db->select("customers", [
+            "ref_no",
+            "name",
+            "alamat",
+            "nomer",
+            "email"
+        ]);
+    }
+
+    public function getByRefNo($ref_no, $id = null) {
+        return $this->db->has("customers",[
+            "ref_no" => $ref_no,
+            "id[!]" => $id
+        ]);
     }
 
     public function getCount() {
         return $this->db->count("customers");
+    }
+
+    public function updateByKode($name, $alamat, $nomer, $email,$ref_no) {
+        return $this->db->update("customers", [
+            "name"   => $name,
+            "alamat" => $alamat,
+            "nomer" => $nomer,
+            "email" => $email
+        ], ["ref_no" => $ref_no]);
+    }
+
+    public function insertData($ref_no, $name, $alamat, $nomer, $email) {
+        return $this->db->insert("customers", [
+            "ref_no" => $ref_no,
+            "name"   => $name,
+            "alamat" => $alamat,
+            "nomer" => $nomer,
+            "email" => $email
+        ]);
     }
 
     public function getWhitLimit($limit, $offset) {
@@ -49,8 +81,11 @@ class Costumer {
         return $this->db->get("customers", "*", ["id" => $id]);
     }
 
-    public function getByEmail($email) {
-        return $this->db->get("customers", "*", ["email" => $email]);
+    public function getByEmail($email, $id){
+        return $this->db->has("customers", [
+            "email" => $email,
+            "id[!]" => $id
+        ]);
     }
 
     public function update($id, $ref_no, $name, $alamat, $nomer, $email) {

@@ -6,10 +6,10 @@ include BASE_PATH . "models/invoice.php";
 include BASE_PATH . 'models/invoice_items.php';
 include BASE_PATH . 'models/costumer.php';
 include BASE_PATH . 'models/items.php';
+include_once BASE_PATH . 'models/company.php';
 require_once BASE_PATH . 'function/baseurl.php';
 
-
-$id_inv = $_GET['id_inv'] ?? $_SESSION['invoice_id'] ?? null;
+$id_inv = $_GET['id_inv'] ?? null;
 $invoiceItemsModel = new InvoiceItems($db);
 
 $invoiceModel = new Invoice($db);
@@ -42,6 +42,8 @@ $totalPages = ceil($totalInvoiceItems / $perPage);
 $dataSisa = $invoiceModel->getSisa($id_inv);
 $sisa = $dataSisa['sisa'];
 
+$getCompany = $companyModel->getCompany();
+$penandaTangan = $companyModel->getStatusPIC();
 
 // Hitung total dan jumlah barang
 $totalHarga = 0;
@@ -54,6 +56,18 @@ foreach ($invoiceItems as $item) {
 $itemsModel = new Item($db);
 $items = $itemsModel->getAll();
 
+$dataSisa = $invoiceModel->getSisa($id_inv);
+$sisa = $dataSisa['sisa'];
+
+if($totalHarga == 0){
+  $status = "Belum ada Item";
+  $warna = "bg-secondary";
+} else {
+  $status = $sisa <= 0 ? 'Lunas' : 'Belum Lunas';
+  $warna = $sisa <= 0 ? 'bg-success' : 'bg-danger';
+}
+
+$BaseUrl->setBackUrl('data_invoice_items');
 
 ?>
 
@@ -62,7 +76,7 @@ $items = $itemsModel->getAll();
   <!--begin::Head-->
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title>Data Invoice Items</title>
+    <title>Detail Invoice</title>
     <!--begin::Primary Meta Tags-->
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="title" content="AdminLTE 4 | General Form Elements" />
@@ -132,9 +146,6 @@ $items = $itemsModel->getAll();
             <!--end::Row-->
           </div>
           <!--end::Container-->
-          <!--begin::Container-->
-          <div class="container-fluid">
-          <div class="row g-4">
       <div class="col-md-12">
        <!-- notifikasi tambah -->
     <?php if (isset($_SESSION['alert'])): ?>
@@ -157,67 +168,95 @@ $items = $itemsModel->getAll();
 
 
 <div class="container mt-2">
-        <div class="card p-4">
-          <h3 class="text-center mb-4"><span class="badge bg-primary"><i class="bi bi-info-circle-fill me-1"></i> Kode Invoice: <?= htmlspecialchars($invoice['kode_inv']) ?></span></h3>
+        <div class="card p-5">
+          <!-- header invoice -->
+<div class="d-flex justify-content-between align-items-start flex-wrap mb-5">
+  <!-- Logo Perusahaan -->
+  <div style="min-width: 300px;">
+    <img src="<?= $BaseUrl->getLogoPerusahaan() . htmlspecialchars($getCompany['logo']) ?>" 
+         alt="Logo Perusahaan"
+         class="img-fluid"
+         style="max-width: 300px; max-height: 200px; object-fit: contain;">
+  </div>
 
-          <!-- Info Invoice -->
-          <div class="mb-3">
-            <span class="badge bg-info"><i class="bi bi-calendar2-week-fill me-1"></i> Tanggal: <?= htmlspecialchars($invoice['tgl_inv']) ?></span>
-          </div>
-          <div class="mb-4">
-            <span class="badge bg-primary"><i class="bi bi-person-circle me-1"></i> Customer: <?= htmlspecialchars($invoice['name']) ?></span>
-          </div>
+  <!-- Info Invoice -->
+  <div class="text-end" style="min-width: 300px;">
+    <h3 class="fs-2 mb-4">Invoice</h3>
+    <table class="table table-borderless table-sm mb-0">
+      <tbody>
+        <tr>
+          <td class="text-dark fw-semibold" style="width: 130px;">Tanggal</td>
+          <td style="width: 10px;">:</td>
+          <td><?= date('d-m-Y', strtotime($invoice['tgl_inv'])) ?></td>
+        </tr>
+        <tr>
+          <td class="text-dark fw-semibold">Tgl. Jatuh Tempo</td>
+          <td>:</td>
+          <td><?= date('d-m-Y', strtotime($invoice['tgl_tempo'])) ?></td>
+        </tr>
+        <tr>
+          <td class="text-dark fw-semibold">Ref. No.</td>
+          <td>:</td>
+          <td><?= htmlspecialchars($invoice['kode_inv']) ?></td>
+        </tr>
+        <tr>
+          <td class="text-dark fw-semibold">Status</td>
+          <td>:</td>
+          <td><span class="badge <?= $warna ?>"><?= $status ?></span></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+<!-- end header invoice -->
+
+
+          
+
+          <!-- Informasi Invoice -->
+            <div class="d-flex justify-content-between mb-3 mt-4">
+            <!-- Informasi perusahan -->
+             <div class="flex-grow-1 text-start">
+                <h5>Informasi Perusahaan:</h5>
+                <ul class="list-unstyled mt-3">
+                  <li class="mb-2"><h4 class="fw-bold"><?= htmlspecialchars($getCompany['nama_perusahaan'])?></h4></li>
+                  <li class="mb-2">Alamat: <?= htmlspecialchars($getCompany['alamat'])?></li>
+                  <li class="mb-2"><?= htmlspecialchars($getCompany['kota'])?>, <?= htmlspecialchars($getCompany['kode_pos'])?></li>
+                  <li class="mb-2"><?= htmlspecialchars($getCompany['negara'])?></li>
+                  <li class="mb-2">Telp: <?= htmlspecialchars($getCompany['telepon'])?></li>
+                  <li>Email: <?= htmlspecialchars($getCompany['email'])?></li>
+                </ul>
+             </div>
+             <!-- end Informasi Perusahaan -->
+
+             <!-- tagihan untuk -->
+              <div class="flex-grow-1 text-start">     
+                  <h5>Tagihan Untuk:</h5>
+                <ul class="list-unstyled mt-3">
+                  <li class="mb-2"><h4 class="fw-bold"><?= htmlspecialchars($invoice['name'])?></h4></li>
+                  <li class="mb-2">Telp: <?= htmlspecialchars($invoice['nomer'])?></li>
+                  <li>Email: <?=htmlspecialchars($invoice['email'])?></li>
+                </ul>
+                
+              </div>
+              <!-- end tagihan untuk -->
+            </div>
+          <!-- end Informasi Invoice -->
 
           <!-- 2 tombol -->
             <div class="d-flex justify-content-lg-start align-items-center mb-3">
             <!-- button create -->
             <div class="mb-2 me-2">
-                <a href="<?= $BaseUrl->getUrlFormInvoice($id_inv) ?>" class="btn btn-warning btn-sm">
-                <i class="bi bi-pencil-square me-1"></i> Edit Customer
+                <a href="<?= $BaseUrl->getUrlFormInvoice($id_inv) . '&back'?>" class="btn btn-warning btn-sm me-1">
+                <i class="bi bi-pencil-square me-1"></i> Edit Invoice
                 </a>
+
+                <a href="<?= $BaseUrl->getUrlFormPayments()?>" class="btn btn-success btn-sm"><i class="bi bi-wallet2 me-1"></i> Pembayaran</a>
             </div>
             <!-- end button create -->
-
-            <!-- button print -->
-            <div class="mb-2 mx-2">
-                <a href="<?= $BaseUrl->getPrint($id_inv) ?>" class="btn btn-success btn-sm">
-                <i class="bi bi-printer me-1"></i> Print
-                </a>
-            </div>
-            <!-- end button print -->
             </div>
 
-
-          <!-- Ringkasan -->
-          <div class="d-flex justify-content-between align-items-center mb-3">
-            <div>
-              <strong>Jumlah Barang:</strong> <?= count($invoiceItems) ?> &nbsp;&nbsp;
-              <strong>Total Harga:</strong> Rp. <?= number_format($totalHarga, 0, ',', '.') ?>
-            </div>
-          </div>
-          
-          <?php if(!empty($invoice['note'])): ?>
-          <div class="mb-3">
-            <strong>Catatan:</strong>
-              <div class="border p-2 bg-light rounded">
-                <?= nl2br(htmlspecialchars($invoice['note'])) ?>
-              </div>
-          </div>
-          <?php else: ?>
-            <div class="mb-3">
-            <strong>Catatan:</strong>
-              <div class="border p-2 bg-light rounded">
-                Tidak ada catatan
-              </div>
-          </div>
-          <?php endif; ?>
-
-          <!-- Tombol -->
-          <div class="mb-3 d-flex justify-content-between align-items-center">
-            <a href="<?= $BaseUrl->getUrlFormInvoiceItems($id_inv) ?>" class="btn btn-primary btn-sm">
-              <i class="bi bi-plus-circle me-1"></i> Tambah Item
-            </a>
-          </div>
+         
 
           <!-- Tabel Item -->
           <div class="table-responsive">
@@ -264,11 +303,65 @@ $items = $itemsModel->getAll();
               </tbody>
             </table>
           </div>
+
+          <!-- bawah tabel -->
+          <div class="my-4 d-flex justify-content-between align-items-start flex-wrap">
+            <!-- Tombol Tambah Item -->
+            <div class="flex-grow-1 mb-3">
+              <a href="<?= $BaseUrl->getUrlFormInvoiceItems($id_inv) ?>" class="btn btn-primary btn-sm">
+                <i class="bi bi-plus-circle me-1"></i> Tambah Item
+              </a>
+            </div>
+
+            <!-- Subtotal dan Total -->
+            <div class="text-end" style="min-width: 250px;">
+              <table class="table table-borderless mb-0">
+                <tbody>
+                  <tr>
+                    <td class="fw-bold border-0 p-1">Subtotal</td>
+                    <td class="border-0 p-1">Rp. <?= number_format($totalHarga, 0, ',', '.')?></td>
+                  </tr>
+                  <tr>
+                    <td class="fw-bold border-0 p-1">Total</td>
+                    <td class="border-0 p-1">Rp. <?= number_format($totalHarga, 0, ',', '.')?></td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+          <!-- end bawah tabel -->
+
+      <!-- footer invoice -->
+      <div class="my-5 d-flex justify-content-between align-items-start flex-wrap">
+        <!-- Keterangan dan terms Condition -->
+        <div class="flex-grow-1 me-3" style="min-width: 300px;">
+          <h5>Keterangan:</h5>
+          <p><?= $invoice['note']?></p>
+          <div class="mt-5">
+            <h5>Syarat dan Ketentuan:</h5>
+          </div>
+        </div>
+
+        <!-- Tanda tangan -->
+        <div class="text-center" style="min-width: 300px;">
+          <h5 class="fw-bold fs-5"><?= date('d F Y', strtotime($invoice['tgl_inv']))?></h5>
+          <div class="tanda-tangan my-3">
+            <img src="<?= $BaseUrl->getTandaTanganPerusahaan() . htmlspecialchars($getCompany['tanda_tangan']) ?>" 
+                alt="Tanda Tangan"
+                class="img-fluid"
+                style="max-width: 300px; max-height: 200px;">
+          </div>
+          <p class="fw-bold fs-6"><?= $penandaTangan['name']?></p>
+        </div>
+      </div>
+      <!-- end footer invoice -->
+
+
         </div>
       </div>
 
             </div>
-</div>
+
                   <!-- begin::JavaScript-->
                   <!-- <script>
                     // Example starter JavaScript for disabling form submissions if there are invalid fields
@@ -296,7 +389,7 @@ $items = $itemsModel->getAll();
                     })();
                   </script> -->
                   <!--end::JavaScript -->
-                </div>
+        
                 <!--end::Form Validation-->
               </div>
               <!--end::Col-->

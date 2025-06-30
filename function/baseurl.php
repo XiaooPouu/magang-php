@@ -221,8 +221,16 @@ class Baseurl
         return BASE_URL . 'pages/formPerusahaan.php?id=' . $id;
     }
 
+    public function getUrlFormPerusahaanLogoTTD($id){
+        return BASE_URL . 'pages/formLogoTandaTangan.php?id=' . $id;
+    }
+
     public function getUrlControllerPerusahaan(){
         return BASE_URL . 'controllers/perusahaanController.php';
+    }
+
+    public function getUrlFormImportCSV(){
+        return BASE_URL . 'pages/formImportCSV.php';
     }
 
     public function getUrlCSS () {
@@ -233,6 +241,22 @@ class Baseurl
         return BASE_URL . 'index.php';
     }
 
+    public function getUploadsLogo(){
+        return BASE_PATH . 'uploads/logo/';
+    }
+
+    public function getUploadsTTD(){
+        return BASE_PATH . 'uploads/tanda_tangan/';
+    }
+
+    public function getTandaTanganPerusahaan(){
+        return BASE_URL . 'uploads/tanda_tangan/';
+    }
+
+    public function getLogoPerusahaan(){
+        return BASE_URL . 'uploads/logo/';
+    }
+
     public function getLogo(){
         return BASE_URL . 'src/img/AdminLTELogo.png';
     }
@@ -241,8 +265,38 @@ class Baseurl
         return BASE_URL . 'pages/invoice_print.php?id=' . $id;
     }
 
+    public function getCetakPDF($id){
+        return BASE_URL . 'function/cetakPDF.php?id_inv=' . $id;
+    }
+
+    public function getExportCSV(){
+        return BASE_PATH . 'csv/export/';
+    }
+
+    public function getImportCSV(){
+        return BASE_PATH . 'csv/import/';
+    }
+
+    public function getUrlCSV(){
+        return BASE_URL . 'function/csv.php';
+    }
+
     public function getPrintKwitansi($id){
         return BASE_URL . 'pages/printKwitansi.php?id_payments=' . $id;
+    }
+
+    function setBackUrl($key) {
+        $_SESSION[$key] = $_SERVER['REQUEST_URI'];
+    }
+
+    function getBackUrl($key, $default) {
+    $url = $_SESSION[$key] ?? null;
+       if($url) {
+           unset($_SESSION[$key]);
+           return $url;
+       } else {
+           return $default;
+       }
     }
 }
 

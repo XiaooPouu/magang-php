@@ -1,5 +1,6 @@
 {
     "require": {
-        "catfan/medoo": "^2.2"
+        "catfan/medoo": "^2.2",
+        "dompdf/dompdf": "^3.1"
     }
 }

@@ -31,8 +31,11 @@ class Supplier {
         ]);
     }
 
-    public function getByRefNo($ref_no) {
-        return $this->db->get("suppliers", "*", ["ref_no" => $ref_no]);
+    public function getByRefNo($ref_no, $id) {
+        return $this->db->has("suppliers", [
+            "ref_no" => $ref_no,
+            "id[!]" => $id
+        ]);
     }
 
     public function getById($id) {

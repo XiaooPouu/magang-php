@@ -97,13 +97,14 @@ class InvoiceItems {
         ], [
             'inv_items.id',
             'inv_items.invoice_id',
-            'items.name AS item_name',
+            'items.name',
             'items.ref_no',
             'inv_items.qty',
             'inv_items.price',
             'inv_items.total',
         ], [
             'inv_items.invoice_id' => $invoice_id,  // Menyaring berdasarkan invoice_id
+            'GROUP' => 'inv_items.id',
             'LIMIT' => [$offset, $limit],  // Menentukan limit dan offset
             'ORDER' => ['inv_items.id' => 'DESC']  // Mengurutkan berdasarkan id inv_items secara descending
         ]);

@@ -1,110 +1,716 @@
--- phpMyAdmin SQL Dump
--- version 5.2.1
--- https://www.phpmyadmin.net/
---
--- Host: 127.0.0.1
--- Generation Time: Apr 24, 2025 at 11:07 AM
--- Server version: 10.4.32-MariaDB
--- PHP Version: 8.2.12
-
-SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
+-- sample-data.sql
 START TRANSACTION;
-SET time_zone = "+00:00";
-
-SET NAMES utf8mb4;
-/*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
-/*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
-/*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
-
---
--- Database: `magang_php`
---
-
---
--- Dumping data for table `customers`
---
-
--- Data Dummy untuk tabel customers
-INSERT INTO `customers` (`id`, `ref_no`, `name`) VALUES
-(1, 'CUST001', 'Andi Setiawan'),
-(2, 'CUST002', 'Budi Santoso'),
-(3, 'CUST003', 'Citra Wijaya'),
-(4, 'CUST004', 'Dewi Saraswati'),
-(5, 'CUST005', 'Eko Prabowo'),
-(6, 'CUST006', 'Fajar Ahmad'),
-(7, 'CUST007', 'Gina Rahayu'),
-(8, 'CUST008', 'Hendra Kusuma'),
-(9, 'CUST009', 'Indah Sari'),
-(10, 'CUST010', 'Joko Susanto');
-
--- Data Dummy untuk tabel suppliers
-INSERT INTO `suppliers` (`id`, `ref_no`, `name`) VALUES
-(1, 'SUP001', 'Niko Electronics'),
-(2, 'SUP002', 'Nevil Industries'),
-(3, 'SUP003', 'Safira Gadgets'),
-(4, 'SUP004', 'Tony Supplies'),
-(5, 'SUP005', 'Rina Tech'),
-(6, 'SUP006', 'Maya Store'),
-(7, 'SUP007', 'Budi Mart'),
-(8, 'SUP008', 'Citra Wholesale'),
-(9, 'SUP009', 'Dedi Electronics');
-
--- Data Dummy untuk tabel items
-INSERT INTO `items` (`id`, `ref_no`, `name`, `price`) VALUES
-(1, 'ITEM001', 'Laptop Dell', 7000000.00),
-(2, 'ITEM002', 'PS5', 8000000.00),
-(3, 'ITEM003', 'Smartphone Samsung', 5000000.00),
-(4, 'ITEM004', 'Headset Sony', 1500000.00),
-(5, 'ITEM005', 'Keyboard Logitech', 600000.00),
-(6, 'ITEM006', 'Mouse Razer', 450000.00),
-(7, 'ITEM007', 'Monitor LG', 3500000.00),
-(8, 'ITEM008', 'External Hard Drive', 1200000.00),
-(9, 'ITEM009', 'Smartwatch Apple', 4500000.00),
-(10, 'ITEM010', 'Wireless Earbuds', 700000.00);
-
--- Data Dummy untuk tabel items_customers
-INSERT INTO `items_customers` (`id_ic`, `price`, `id_items`, `id_customers`) VALUES
-(1, 7000000.00, 1, 1),
-(2, 8000000.00, 2, 2),
-(3, 5000000.00, 3, 3),
-(4, 1500000.00, 4, 4),
-(5, 600000.00, 5, 5),
-(6, 450000.00, 6, 6),
-(7, 3500000.00, 7, 7),
-(8, 1200000.00, 8, 8),
-(9, 4500000.00, 9, 9),
-(10, 700000.00, 10, 10);
-
--- Data Dummy untuk tabel invoice
-INSERT INTO `invoice` (`id_inv`, `kode_inv`, `tgl_inv`, `customers_id`) VALUES
-(1, 'INV001', '2025-04-01', 1),
-(2, 'INV002', '2025-04-02', 2),
-(3, 'INV003', '2025-04-03', 3),
-(4, 'INV004', '2025-04-04', 4),
-(5, 'INV005', '2025-04-05', 5),
-(6, 'INV006', '2025-04-06', 6),
-(7, 'INV007', '2025-04-07', 7),
-(8, 'INV008', '2025-04-08', 8),
-(9, 'INV009', '2025-04-09', 9),
-(10, 'INV010', '2025-04-10', 10);
-
--- Data Dummy untuk tabel inv_items
-INSERT INTO `inv_items` (`id`, `invoice_id`, `items_id`, `qty`, `price`, `total`) VALUES
-(1, 1, 1, 1, 7000000.00, 7000000.00),
-(2, 2, 2, 1, 8000000.00, 8000000.00),
-(3, 3, 3, 2, 5000000.00, 10000000.00),
-(4, 4, 4, 1, 1500000.00, 1500000.00),
-(5, 5, 5, 3, 600000.00, 1800000.00),
-(6, 6, 6, 2, 450000.00, 900000.00),
-(7, 7, 7, 1, 3500000.00, 3500000.00),
-(8, 8, 8, 1, 1200000.00, 1200000.00),
-(9, 9, 9, 1, 4500000.00, 4500000.00),
-(10, 10, 10, 5, 700000.00, 3500000.00);
-
-
+INSERT INTO company (id, nama_perusahaan, alamat, kota, provinsi, kode_pos, negara, telepon, email, logo, tanda_tangan) VALUES (1, 'Perusahaan_1', 'Jl. Contoh Alamat No.1', 'Kota_1', 'Provinsi_1', '10001', 'Indonesia', '081674407756', 'perusahaan_1@example.com', 'logo_1.png', 'ttd_1.png');
+-- sample-data.sql
+START TRANSACTION;
+INSERT INTO customers (id, ref_no, name, alamat, nomer, email) VALUES (1, 'CUST001', 'Customer_1', 'Alamat Customer 1', '089757665221', 'customer_1@example.com');
+INSERT INTO customers (id, ref_no, name, alamat, nomer, email) VALUES (2, 'CUST002', 'Customer_2', 'Alamat Customer 2', '080563871428', 'customer_2@example.com');
+INSERT INTO customers (id, ref_no, name, alamat, nomer, email) VALUES (3, 'CUST003', 'Customer_3', 'Alamat Customer 3', '080156989059', 'customer_3@example.com');
+INSERT INTO customers (id, ref_no, name, alamat, nomer, email) VALUES (4, 'CUST004', 'Customer_4', 'Alamat Customer 4', '086300547185', 'customer_4@example.com');
+INSERT INTO customers (id, ref_no, name, alamat, nomer, email) VALUES (5, 'CUST005', 'Customer_5', 'Alamat Customer 5', '083874786204', 'customer_5@example.com');
+INSERT INTO customers (id, ref_no, name, alamat, nomer, email) VALUES (6, 'CUST006', 'Customer_6', 'Alamat Customer 6', '082030753138', 'customer_6@example.com');
+INSERT INTO customers (id, ref_no, name, alamat, nomer, email) VALUES (7, 'CUST007', 'Customer_7', 'Alamat Customer 7', '082805723227', 'customer_7@example.com');
+INSERT INTO customers (id, ref_no, name, alamat, nomer, email) VALUES (8, 'CUST008', 'Customer_8', 'Alamat Customer 8', '084399062941', 'customer_8@example.com');
+INSERT INTO customers (id, ref_no, name, alamat, nomer, email) VALUES (9, 'CUST009', 'Customer_9', 'Alamat Customer 9', '086000027698', 'customer_9@example.com');
+INSERT INTO customers (id, ref_no, name, alamat, nomer, email) VALUES (10, 'CUST010', 'Customer_10', 'Alamat Customer 10', '083478966481', 'customer_10@example.com');
+INSERT INTO customers (id, ref_no, name, alamat, nomer, email) VALUES (11, 'CUST011', 'Customer_11', 'Alamat Customer 11', '080667136239', 'customer_11@example.com');
+INSERT INTO customers (id, ref_no, name, alamat, nomer, email) VALUES (12, 'CUST012', 'Customer_12', 'Alamat Customer 12', '083378543064', 'customer_12@example.com');
+INSERT INTO customers (id, ref_no, name, alamat, nomer, email) VALUES (13, 'CUST013', 'Customer_13', 'Alamat Customer 13', '082261318959', 'customer_13@example.com');
+INSERT INTO customers (id, ref_no, name, alamat, nomer, email) VALUES (14, 'CUST014', 'Customer_14', 'Alamat Customer 14', '084545807946', 'customer_14@example.com');
+INSERT INTO customers (id, ref_no, name, alamat, nomer, email) VALUES (15, 'CUST015', 'Customer_15', 'Alamat Customer 15', '082948473983', 'customer_15@example.com');
+INSERT INTO customers (id, ref_no, name, alamat, nomer, email) VALUES (16, 'CUST016', 'Customer_16', 'Alamat Customer 16', '082543152798', 'customer_16@example.com');
+INSERT INTO customers (id, ref_no, name, alamat, nomer, email) VALUES (17, 'CUST017', 'Customer_17', 'Alamat Customer 17', '087173248307', 'customer_17@example.com');
+INSERT INTO customers (id, ref_no, name, alamat, nomer, email) VALUES (18, 'CUST018', 'Customer_18', 'Alamat Customer 18', '080623539800', 'customer_18@example.com');
+INSERT INTO customers (id, ref_no, name, alamat, nomer, email) VALUES (19, 'CUST019', 'Customer_19', 'Alamat Customer 19', '084758729536', 'customer_19@example.com');
+INSERT INTO customers (id, ref_no, name, alamat, nomer, email) VALUES (20, 'CUST020', 'Customer_20', 'Alamat Customer 20', '086301250412', 'customer_20@example.com');
+INSERT INTO customers (id, ref_no, name, alamat, nomer, email) VALUES (21, 'CUST021', 'Customer_21', 'Alamat Customer 21', '086693110412', 'customer_21@example.com');
+INSERT INTO customers (id, ref_no, name, alamat, nomer, email) VALUES (22, 'CUST022', 'Customer_22', 'Alamat Customer 22', '086266486601', 'customer_22@example.com');
+INSERT INTO customers (id, ref_no, name, alamat, nomer, email) VALUES (23, 'CUST023', 'Customer_23', 'Alamat Customer 23', '085444261119', 'customer_23@example.com');
+INSERT INTO customers (id, ref_no, name, alamat, nomer, email) VALUES (24, 'CUST024', 'Customer_24', 'Alamat Customer 24', '083272972140', 'customer_24@example.com');
+INSERT INTO customers (id, ref_no, name, alamat, nomer, email) VALUES (25, 'CUST025', 'Customer_25', 'Alamat Customer 25', '083656335397', 'customer_25@example.com');
+INSERT INTO customers (id, ref_no, name, alamat, nomer, email) VALUES (26, 'CUST026', 'Customer_26', 'Alamat Customer 26', '086822320097', 'customer_26@example.com');
+INSERT INTO customers (id, ref_no, name, alamat, nomer, email) VALUES (27, 'CUST027', 'Customer_27', 'Alamat Customer 27', '081374244112', 'customer_27@example.com');
+INSERT INTO customers (id, ref_no, name, alamat, nomer, email) VALUES (28, 'CUST028', 'Customer_28', 'Alamat Customer 28', '089334677617', 'customer_28@example.com');
+INSERT INTO customers (id, ref_no, name, alamat, nomer, email) VALUES (29, 'CUST029', 'Customer_29', 'Alamat Customer 29', '080157441230', 'customer_29@example.com');
+INSERT INTO customers (id, ref_no, name, alamat, nomer, email) VALUES (30, 'CUST030', 'Customer_30', 'Alamat Customer 30', '087287724693', 'customer_30@example.com');
+INSERT INTO customers (id, ref_no, name, alamat, nomer, email) VALUES (31, 'CUST031', 'Customer_31', 'Alamat Customer 31', '080818933194', 'customer_31@example.com');
+INSERT INTO customers (id, ref_no, name, alamat, nomer, email) VALUES (32, 'CUST032', 'Customer_32', 'Alamat Customer 32', '083051146959', 'customer_32@example.com');
+INSERT INTO customers (id, ref_no, name, alamat, nomer, email) VALUES (33, 'CUST033', 'Customer_33', 'Alamat Customer 33', '087853179943', 'customer_33@example.com');
+INSERT INTO customers (id, ref_no, name, alamat, nomer, email) VALUES (34, 'CUST034', 'Customer_34', 'Alamat Customer 34', '084887039094', 'customer_34@example.com');
+INSERT INTO customers (id, ref_no, name, alamat, nomer, email) VALUES (35, 'CUST035', 'Customer_35', 'Alamat Customer 35', '086284482948', 'customer_35@example.com');
+INSERT INTO customers (id, ref_no, name, alamat, nomer, email) VALUES (36, 'CUST036', 'Customer_36', 'Alamat Customer 36', '087851545570', 'customer_36@example.com');
+INSERT INTO customers (id, ref_no, name, alamat, nomer, email) VALUES (37, 'CUST037', 'Customer_37', 'Alamat Customer 37', '080367699250', 'customer_37@example.com');
+INSERT INTO customers (id, ref_no, name, alamat, nomer, email) VALUES (38, 'CUST038', 'Customer_38', 'Alamat Customer 38', '084467577324', 'customer_38@example.com');
+INSERT INTO customers (id, ref_no, name, alamat, nomer, email) VALUES (39, 'CUST039', 'Customer_39', 'Alamat Customer 39', '087629196354', 'customer_39@example.com');
+INSERT INTO customers (id, ref_no, name, alamat, nomer, email) VALUES (40, 'CUST040', 'Customer_40', 'Alamat Customer 40', '085456501809', 'customer_40@example.com');
+INSERT INTO customers (id, ref_no, name, alamat, nomer, email) VALUES (41, 'CUST041', 'Customer_41', 'Alamat Customer 41', '081670808776', 'customer_41@example.com');
+INSERT INTO customers (id, ref_no, name, alamat, nomer, email) VALUES (42, 'CUST042', 'Customer_42', 'Alamat Customer 42', '081424803681', 'customer_42@example.com');
+INSERT INTO customers (id, ref_no, name, alamat, nomer, email) VALUES (43, 'CUST043', 'Customer_43', 'Alamat Customer 43', '085895008237', 'customer_43@example.com');
+INSERT INTO customers (id, ref_no, name, alamat, nomer, email) VALUES (44, 'CUST044', 'Customer_44', 'Alamat Customer 44', '082586719960', 'customer_44@example.com');
+INSERT INTO customers (id, ref_no, name, alamat, nomer, email) VALUES (45, 'CUST045', 'Customer_45', 'Alamat Customer 45', '082001793002', 'customer_45@example.com');
+INSERT INTO customers (id, ref_no, name, alamat, nomer, email) VALUES (46, 'CUST046', 'Customer_46', 'Alamat Customer 46', '088542683067', 'customer_46@example.com');
+INSERT INTO customers (id, ref_no, name, alamat, nomer, email) VALUES (47, 'CUST047', 'Customer_47', 'Alamat Customer 47', '083066944319', 'customer_47@example.com');
+INSERT INTO customers (id, ref_no, name, alamat, nomer, email) VALUES (48, 'CUST048', 'Customer_48', 'Alamat Customer 48', '084097117112', 'customer_48@example.com');
+INSERT INTO customers (id, ref_no, name, alamat, nomer, email) VALUES (49, 'CUST049', 'Customer_49', 'Alamat Customer 49', '080542205898', 'customer_49@example.com');
+INSERT INTO customers (id, ref_no, name, alamat, nomer, email) VALUES (50, 'CUST050', 'Customer_50', 'Alamat Customer 50', '084849292052', 'customer_50@example.com');
+INSERT INTO customers (id, ref_no, name, alamat, nomer, email) VALUES (51, 'CUST051', 'Customer_51', 'Alamat Customer 51', '086836994928', 'customer_51@example.com');
+INSERT INTO customers (id, ref_no, name, alamat, nomer, email) VALUES (52, 'CUST052', 'Customer_52', 'Alamat Customer 52', '086879228381', 'customer_52@example.com');
+INSERT INTO customers (id, ref_no, name, alamat, nomer, email) VALUES (53, 'CUST053', 'Customer_53', 'Alamat Customer 53', '085247703280', 'customer_53@example.com');
+INSERT INTO customers (id, ref_no, name, alamat, nomer, email) VALUES (54, 'CUST054', 'Customer_54', 'Alamat Customer 54', '080275254460', 'customer_54@example.com');
+INSERT INTO customers (id, ref_no, name, alamat, nomer, email) VALUES (55, 'CUST055', 'Customer_55', 'Alamat Customer 55', '083136889248', 'customer_55@example.com');
+INSERT INTO customers (id, ref_no, name, alamat, nomer, email) VALUES (56, 'CUST056', 'Customer_56', 'Alamat Customer 56', '081914667515', 'customer_56@example.com');
+INSERT INTO customers (id, ref_no, name, alamat, nomer, email) VALUES (57, 'CUST057', 'Customer_57', 'Alamat Customer 57', '085340592552', 'customer_57@example.com');
+INSERT INTO customers (id, ref_no, name, alamat, nomer, email) VALUES (58, 'CUST058', 'Customer_58', 'Alamat Customer 58', '082146384704', 'customer_58@example.com');
+INSERT INTO customers (id, ref_no, name, alamat, nomer, email) VALUES (59, 'CUST059', 'Customer_59', 'Alamat Customer 59', '080360278174', 'customer_59@example.com');
+INSERT INTO customers (id, ref_no, name, alamat, nomer, email) VALUES (60, 'CUST060', 'Customer_60', 'Alamat Customer 60', '084314696271', 'customer_60@example.com');
+INSERT INTO customers (id, ref_no, name, alamat, nomer, email) VALUES (61, 'CUST061', 'Customer_61', 'Alamat Customer 61', '083241341342', 'customer_61@example.com');
+INSERT INTO customers (id, ref_no, name, alamat, nomer, email) VALUES (62, 'CUST062', 'Customer_62', 'Alamat Customer 62', '087381264317', 'customer_62@example.com');
+INSERT INTO customers (id, ref_no, name, alamat, nomer, email) VALUES (63, 'CUST063', 'Customer_63', 'Alamat Customer 63', '081351157708', 'customer_63@example.com');
+INSERT INTO customers (id, ref_no, name, alamat, nomer, email) VALUES (64, 'CUST064', 'Customer_64', 'Alamat Customer 64', '086002413515', 'customer_64@example.com');
+INSERT INTO customers (id, ref_no, name, alamat, nomer, email) VALUES (65, 'CUST065', 'Customer_65', 'Alamat Customer 65', '080493254480', 'customer_65@example.com');
+INSERT INTO customers (id, ref_no, name, alamat, nomer, email) VALUES (66, 'CUST066', 'Customer_66', 'Alamat Customer 66', '089105759371', 'customer_66@example.com');
+INSERT INTO customers (id, ref_no, name, alamat, nomer, email) VALUES (67, 'CUST067', 'Customer_67', 'Alamat Customer 67', '086595086121', 'customer_67@example.com');
+INSERT INTO customers (id, ref_no, name, alamat, nomer, email) VALUES (68, 'CUST068', 'Customer_68', 'Alamat Customer 68', '084930092757', 'customer_68@example.com');
+INSERT INTO customers (id, ref_no, name, alamat, nomer, email) VALUES (69, 'CUST069', 'Customer_69', 'Alamat Customer 69', '080992965923', 'customer_69@example.com');
+INSERT INTO customers (id, ref_no, name, alamat, nomer, email) VALUES (70, 'CUST070', 'Customer_70', 'Alamat Customer 70', '083031228746', 'customer_70@example.com');
+INSERT INTO customers (id, ref_no, name, alamat, nomer, email) VALUES (71, 'CUST071', 'Customer_71', 'Alamat Customer 71', '087780540536', 'customer_71@example.com');
+INSERT INTO customers (id, ref_no, name, alamat, nomer, email) VALUES (72, 'CUST072', 'Customer_72', 'Alamat Customer 72', '082230311009', 'customer_72@example.com');
+INSERT INTO customers (id, ref_no, name, alamat, nomer, email) VALUES (73, 'CUST073', 'Customer_73', 'Alamat Customer 73', '087489677422', 'customer_73@example.com');
+INSERT INTO customers (id, ref_no, name, alamat, nomer, email) VALUES (74, 'CUST074', 'Customer_74', 'Alamat Customer 74', '087074706754', 'customer_74@example.com');
+INSERT INTO customers (id, ref_no, name, alamat, nomer, email) VALUES (75, 'CUST075', 'Customer_75', 'Alamat Customer 75', '080247437461', 'customer_75@example.com');
+INSERT INTO customers (id, ref_no, name, alamat, nomer, email) VALUES (76, 'CUST076', 'Customer_76', 'Alamat Customer 76', '083367873830', 'customer_76@example.com');
+INSERT INTO customers (id, ref_no, name, alamat, nomer, email) VALUES (77, 'CUST077', 'Customer_77', 'Alamat Customer 77', '083673695787', 'customer_77@example.com');
+INSERT INTO customers (id, ref_no, name, alamat, nomer, email) VALUES (78, 'CUST078', 'Customer_78', 'Alamat Customer 78', '087298526420', 'customer_78@example.com');
+INSERT INTO customers (id, ref_no, name, alamat, nomer, email) VALUES (79, 'CUST079', 'Customer_79', 'Alamat Customer 79', '082887512495', 'customer_79@example.com');
+INSERT INTO customers (id, ref_no, name, alamat, nomer, email) VALUES (80, 'CUST080', 'Customer_80', 'Alamat Customer 80', '082145532063', 'customer_80@example.com');
+INSERT INTO customers (id, ref_no, name, alamat, nomer, email) VALUES (81, 'CUST081', 'Customer_81', 'Alamat Customer 81', '086561305784', 'customer_81@example.com');
+INSERT INTO customers (id, ref_no, name, alamat, nomer, email) VALUES (82, 'CUST082', 'Customer_82', 'Alamat Customer 82', '081504277120', 'customer_82@example.com');
+INSERT INTO customers (id, ref_no, name, alamat, nomer, email) VALUES (83, 'CUST083', 'Customer_83', 'Alamat Customer 83', '080895640612', 'customer_83@example.com');
+INSERT INTO customers (id, ref_no, name, alamat, nomer, email) VALUES (84, 'CUST084', 'Customer_84', 'Alamat Customer 84', '080526365883', 'customer_84@example.com');
+INSERT INTO customers (id, ref_no, name, alamat, nomer, email) VALUES (85, 'CUST085', 'Customer_85', 'Alamat Customer 85', '082125123407', 'customer_85@example.com');
+INSERT INTO customers (id, ref_no, name, alamat, nomer, email) VALUES (86, 'CUST086', 'Customer_86', 'Alamat Customer 86', '087993137778', 'customer_86@example.com');
+INSERT INTO customers (id, ref_no, name, alamat, nomer, email) VALUES (87, 'CUST087', 'Customer_87', 'Alamat Customer 87', '085342736581', 'customer_87@example.com');
+INSERT INTO customers (id, ref_no, name, alamat, nomer, email) VALUES (88, 'CUST088', 'Customer_88', 'Alamat Customer 88', '087128423726', 'customer_88@example.com');
+INSERT INTO customers (id, ref_no, name, alamat, nomer, email) VALUES (89, 'CUST089', 'Customer_89', 'Alamat Customer 89', '082441342413', 'customer_89@example.com');
+INSERT INTO customers (id, ref_no, name, alamat, nomer, email) VALUES (90, 'CUST090', 'Customer_90', 'Alamat Customer 90', '081875214957', 'customer_90@example.com');
+INSERT INTO customers (id, ref_no, name, alamat, nomer, email) VALUES (91, 'CUST091', 'Customer_91', 'Alamat Customer 91', '084014728796', 'customer_91@example.com');
+INSERT INTO customers (id, ref_no, name, alamat, nomer, email) VALUES (92, 'CUST092', 'Customer_92', 'Alamat Customer 92', '082534610235', 'customer_92@example.com');
+INSERT INTO customers (id, ref_no, name, alamat, nomer, email) VALUES (93, 'CUST093', 'Customer_93', 'Alamat Customer 93', '088718697324', 'customer_93@example.com');
+INSERT INTO customers (id, ref_no, name, alamat, nomer, email) VALUES (94, 'CUST094', 'Customer_94', 'Alamat Customer 94', '082994806046', 'customer_94@example.com');
+INSERT INTO customers (id, ref_no, name, alamat, nomer, email) VALUES (95, 'CUST095', 'Customer_95', 'Alamat Customer 95', '087741593597', 'customer_95@example.com');
+INSERT INTO customers (id, ref_no, name, alamat, nomer, email) VALUES (96, 'CUST096', 'Customer_96', 'Alamat Customer 96', '088167558879', 'customer_96@example.com');
+INSERT INTO customers (id, ref_no, name, alamat, nomer, email) VALUES (97, 'CUST097', 'Customer_97', 'Alamat Customer 97', '080057358159', 'customer_97@example.com');
+INSERT INTO customers (id, ref_no, name, alamat, nomer, email) VALUES (98, 'CUST098', 'Customer_98', 'Alamat Customer 98', '081829586673', 'customer_98@example.com');
+INSERT INTO customers (id, ref_no, name, alamat, nomer, email) VALUES (99, 'CUST099', 'Customer_99', 'Alamat Customer 99', '084424736997', 'customer_99@example.com');
+INSERT INTO customers (id, ref_no, name, alamat, nomer, email) VALUES (100, 'CUST100', 'Customer_100', 'Alamat Customer 100', '082486192719', 'customer_100@example.com');
+INSERT INTO items (id, ref_no, name, price) VALUES (1, 'ITEM001', 'Item_1', 950242.92);
+INSERT INTO items (id, ref_no, name, price) VALUES (2, 'ITEM002', 'Item_2', 556014.96);
+INSERT INTO items (id, ref_no, name, price) VALUES (3, 'ITEM003', 'Item_3', 527394.87);
+INSERT INTO items (id, ref_no, name, price) VALUES (4, 'ITEM004', 'Item_4', 275863.46);
+INSERT INTO items (id, ref_no, name, price) VALUES (5, 'ITEM005', 'Item_5', 639555.15);
+INSERT INTO items (id, ref_no, name, price) VALUES (6, 'ITEM006', 'Item_6', 648138.02);
+INSERT INTO items (id, ref_no, name, price) VALUES (7, 'ITEM007', 'Item_7', 298293.85);
+INSERT INTO items (id, ref_no, name, price) VALUES (8, 'ITEM008', 'Item_8', 494714.04);
+INSERT INTO items (id, ref_no, name, price) VALUES (9, 'ITEM009', 'Item_9', 55566.65);
+INSERT INTO items (id, ref_no, name, price) VALUES (10, 'ITEM010', 'Item_10', 866218.47);
+INSERT INTO items (id, ref_no, name, price) VALUES (11, 'ITEM011', 'Item_11', 751715.13);
+INSERT INTO items (id, ref_no, name, price) VALUES (12, 'ITEM012', 'Item_12', 998787.55);
+INSERT INTO items (id, ref_no, name, price) VALUES (13, 'ITEM013', 'Item_13', 701236.14);
+INSERT INTO items (id, ref_no, name, price) VALUES (14, 'ITEM014', 'Item_14', 55345.05);
+INSERT INTO items (id, ref_no, name, price) VALUES (15, 'ITEM015', 'Item_15', 13815.32);
+INSERT INTO items (id, ref_no, name, price) VALUES (16, 'ITEM016', 'Item_16', 356280.18);
+INSERT INTO items (id, ref_no, name, price) VALUES (17, 'ITEM017', 'Item_17', 486774.78);
+INSERT INTO items (id, ref_no, name, price) VALUES (18, 'ITEM018', 'Item_18', 923823.87);
+INSERT INTO items (id, ref_no, name, price) VALUES (19, 'ITEM019', 'Item_19', 908302.19);
+INSERT INTO items (id, ref_no, name, price) VALUES (20, 'ITEM020', 'Item_20', 61876.99);
+INSERT INTO items (id, ref_no, name, price) VALUES (21, 'ITEM021', 'Item_21', 21137.91);
+INSERT INTO items (id, ref_no, name, price) VALUES (22, 'ITEM022', 'Item_22', 541368.93);
+INSERT INTO items (id, ref_no, name, price) VALUES (23, 'ITEM023', 'Item_23', 783049.99);
+INSERT INTO items (id, ref_no, name, price) VALUES (24, 'ITEM024', 'Item_24', 118534.28);
+INSERT INTO items (id, ref_no, name, price) VALUES (25, 'ITEM025', 'Item_25', 364302.33);
+INSERT INTO items (id, ref_no, name, price) VALUES (26, 'ITEM026', 'Item_26', 648228.42);
+INSERT INTO items (id, ref_no, name, price) VALUES (27, 'ITEM027', 'Item_27', 473954.66);
+INSERT INTO items (id, ref_no, name, price) VALUES (28, 'ITEM028', 'Item_28', 166987.77);
+INSERT INTO items (id, ref_no, name, price) VALUES (29, 'ITEM029', 'Item_29', 251821.81);
+INSERT INTO items (id, ref_no, name, price) VALUES (30, 'ITEM030', 'Item_30', 227897.21);
+INSERT INTO items (id, ref_no, name, price) VALUES (31, 'ITEM031', 'Item_31', 721055.67);
+INSERT INTO items (id, ref_no, name, price) VALUES (32, 'ITEM032', 'Item_32', 509588.66);
+INSERT INTO items (id, ref_no, name, price) VALUES (33, 'ITEM033', 'Item_33', 748234.11);
+INSERT INTO items (id, ref_no, name, price) VALUES (34, 'ITEM034', 'Item_34', 99330.99);
+INSERT INTO items (id, ref_no, name, price) VALUES (35, 'ITEM035', 'Item_35', 386292.23);
+INSERT INTO items (id, ref_no, name, price) VALUES (36, 'ITEM036', 'Item_36', 120035.19);
+INSERT INTO items (id, ref_no, name, price) VALUES (37, 'ITEM037', 'Item_37', 203917.79);
+INSERT INTO items (id, ref_no, name, price) VALUES (38, 'ITEM038', 'Item_38', 292773.0);
+INSERT INTO items (id, ref_no, name, price) VALUES (39, 'ITEM039', 'Item_39', 632329.64);
+INSERT INTO items (id, ref_no, name, price) VALUES (40, 'ITEM040', 'Item_40', 982470.68);
+INSERT INTO items (id, ref_no, name, price) VALUES (41, 'ITEM041', 'Item_41', 394414.04);
+INSERT INTO items (id, ref_no, name, price) VALUES (42, 'ITEM042', 'Item_42', 801931.87);
+INSERT INTO items (id, ref_no, name, price) VALUES (43, 'ITEM043', 'Item_43', 779354.41);
+INSERT INTO items (id, ref_no, name, price) VALUES (44, 'ITEM044', 'Item_44', 168909.0);
+INSERT INTO items (id, ref_no, name, price) VALUES (45, 'ITEM045', 'Item_45', 700979.09);
+INSERT INTO items (id, ref_no, name, price) VALUES (46, 'ITEM046', 'Item_46', 868455.07);
+INSERT INTO items (id, ref_no, name, price) VALUES (47, 'ITEM047', 'Item_47', 960848.18);
+INSERT INTO items (id, ref_no, name, price) VALUES (48, 'ITEM048', 'Item_48', 182025.94);
+INSERT INTO items (id, ref_no, name, price) VALUES (49, 'ITEM049', 'Item_49', 939090.69);
+INSERT INTO items (id, ref_no, name, price) VALUES (50, 'ITEM050', 'Item_50', 953355.52);
+INSERT INTO items (id, ref_no, name, price) VALUES (51, 'ITEM051', 'Item_51', 548329.27);
+INSERT INTO items (id, ref_no, name, price) VALUES (52, 'ITEM052', 'Item_52', 382203.4);
+INSERT INTO items (id, ref_no, name, price) VALUES (53, 'ITEM053', 'Item_53', 736156.8);
+INSERT INTO items (id, ref_no, name, price) VALUES (54, 'ITEM054', 'Item_54', 444733.46);
+INSERT INTO items (id, ref_no, name, price) VALUES (55, 'ITEM055', 'Item_55', 234994.05);
+INSERT INTO items (id, ref_no, name, price) VALUES (56, 'ITEM056', 'Item_56', 396639.93);
+INSERT INTO items (id, ref_no, name, price) VALUES (57, 'ITEM057', 'Item_57', 421919.63);
+INSERT INTO items (id, ref_no, name, price) VALUES (58, 'ITEM058', 'Item_58', 272529.58);
+INSERT INTO items (id, ref_no, name, price) VALUES (59, 'ITEM059', 'Item_59', 612560.89);
+INSERT INTO items (id, ref_no, name, price) VALUES (60, 'ITEM060', 'Item_60', 898402.29);
+INSERT INTO items (id, ref_no, name, price) VALUES (61, 'ITEM061', 'Item_61', 847104.07);
+INSERT INTO items (id, ref_no, name, price) VALUES (62, 'ITEM062', 'Item_62', 192678.18);
+INSERT INTO items (id, ref_no, name, price) VALUES (63, 'ITEM063', 'Item_63', 447197.79);
+INSERT INTO items (id, ref_no, name, price) VALUES (64, 'ITEM064', 'Item_64', 516051.9);
+INSERT INTO items (id, ref_no, name, price) VALUES (65, 'ITEM065', 'Item_65', 433770.44);
+INSERT INTO items (id, ref_no, name, price) VALUES (66, 'ITEM066', 'Item_66', 547365.85);
+INSERT INTO items (id, ref_no, name, price) VALUES (67, 'ITEM067', 'Item_67', 109641.62);
+INSERT INTO items (id, ref_no, name, price) VALUES (68, 'ITEM068', 'Item_68', 879683.23);
+INSERT INTO items (id, ref_no, name, price) VALUES (69, 'ITEM069', 'Item_69', 337093.43);
+INSERT INTO items (id, ref_no, name, price) VALUES (70, 'ITEM070', 'Item_70', 550690.89);
+INSERT INTO items (id, ref_no, name, price) VALUES (71, 'ITEM071', 'Item_71', 978922.73);
+INSERT INTO items (id, ref_no, name, price) VALUES (72, 'ITEM072', 'Item_72', 803949.4);
+INSERT INTO items (id, ref_no, name, price) VALUES (73, 'ITEM073', 'Item_73', 972299.34);
+INSERT INTO items (id, ref_no, name, price) VALUES (74, 'ITEM074', 'Item_74', 251137.56);
+INSERT INTO items (id, ref_no, name, price) VALUES (75, 'ITEM075', 'Item_75', 223829.59);
+INSERT INTO items (id, ref_no, name, price) VALUES (76, 'ITEM076', 'Item_76', 933205.74);
+INSERT INTO items (id, ref_no, name, price) VALUES (77, 'ITEM077', 'Item_77', 985938.87);
+INSERT INTO items (id, ref_no, name, price) VALUES (78, 'ITEM078', 'Item_78', 871545.28);
+INSERT INTO items (id, ref_no, name, price) VALUES (79, 'ITEM079', 'Item_79', 124122.21);
+INSERT INTO items (id, ref_no, name, price) VALUES (80, 'ITEM080', 'Item_80', 832260.85);
+INSERT INTO items (id, ref_no, name, price) VALUES (81, 'ITEM081', 'Item_81', 126510.67);
+INSERT INTO items (id, ref_no, name, price) VALUES (82, 'ITEM082', 'Item_82', 657831.87);
+INSERT INTO items (id, ref_no, name, price) VALUES (83, 'ITEM083', 'Item_83', 783722.1);
+INSERT INTO items (id, ref_no, name, price) VALUES (84, 'ITEM084', 'Item_84', 393548.3);
+INSERT INTO items (id, ref_no, name, price) VALUES (85, 'ITEM085', 'Item_85', 410133.28);
+INSERT INTO items (id, ref_no, name, price) VALUES (86, 'ITEM086', 'Item_86', 354826.01);
+INSERT INTO items (id, ref_no, name, price) VALUES (87, 'ITEM087', 'Item_87', 677607.42);
+INSERT INTO items (id, ref_no, name, price) VALUES (88, 'ITEM088', 'Item_88', 795769.8);
+INSERT INTO items (id, ref_no, name, price) VALUES (89, 'ITEM089', 'Item_89', 839685.0);
+INSERT INTO items (id, ref_no, name, price) VALUES (90, 'ITEM090', 'Item_90', 63411.42);
+INSERT INTO items (id, ref_no, name, price) VALUES (91, 'ITEM091', 'Item_91', 139744.05);
+INSERT INTO items (id, ref_no, name, price) VALUES (92, 'ITEM092', 'Item_92', 284853.56);
+INSERT INTO items (id, ref_no, name, price) VALUES (93, 'ITEM093', 'Item_93', 85897.25);
+INSERT INTO items (id, ref_no, name, price) VALUES (94, 'ITEM094', 'Item_94', 908554.3);
+INSERT INTO items (id, ref_no, name, price) VALUES (95, 'ITEM095', 'Item_95', 41856.54);
+INSERT INTO items (id, ref_no, name, price) VALUES (96, 'ITEM096', 'Item_96', 923101.59);
+INSERT INTO items (id, ref_no, name, price) VALUES (97, 'ITEM097', 'Item_97', 422961.01);
+INSERT INTO items (id, ref_no, name, price) VALUES (98, 'ITEM098', 'Item_98', 973682.59);
+INSERT INTO items (id, ref_no, name, price) VALUES (99, 'ITEM099', 'Item_99', 173707.56);
+INSERT INTO items (id, ref_no, name, price) VALUES (100, 'ITEM100', 'Item_100', 648267.27);
+INSERT INTO suppliers (id, ref_no, name) VALUES (1, 'SUP001', 'Supplier_1');
+INSERT INTO suppliers (id, ref_no, name) VALUES (2, 'SUP002', 'Supplier_2');
+INSERT INTO suppliers (id, ref_no, name) VALUES (3, 'SUP003', 'Supplier_3');
+INSERT INTO suppliers (id, ref_no, name) VALUES (4, 'SUP004', 'Supplier_4');
+INSERT INTO suppliers (id, ref_no, name) VALUES (5, 'SUP005', 'Supplier_5');
+INSERT INTO suppliers (id, ref_no, name) VALUES (6, 'SUP006', 'Supplier_6');
+INSERT INTO suppliers (id, ref_no, name) VALUES (7, 'SUP007', 'Supplier_7');
+INSERT INTO suppliers (id, ref_no, name) VALUES (8, 'SUP008', 'Supplier_8');
+INSERT INTO suppliers (id, ref_no, name) VALUES (9, 'SUP009', 'Supplier_9');
+INSERT INTO suppliers (id, ref_no, name) VALUES (10, 'SUP010', 'Supplier_10');
+INSERT INTO suppliers (id, ref_no, name) VALUES (11, 'SUP011', 'Supplier_11');
+INSERT INTO suppliers (id, ref_no, name) VALUES (12, 'SUP012', 'Supplier_12');
+INSERT INTO suppliers (id, ref_no, name) VALUES (13, 'SUP013', 'Supplier_13');
+INSERT INTO suppliers (id, ref_no, name) VALUES (14, 'SUP014', 'Supplier_14');
+INSERT INTO suppliers (id, ref_no, name) VALUES (15, 'SUP015', 'Supplier_15');
+INSERT INTO suppliers (id, ref_no, name) VALUES (16, 'SUP016', 'Supplier_16');
+INSERT INTO suppliers (id, ref_no, name) VALUES (17, 'SUP017', 'Supplier_17');
+INSERT INTO suppliers (id, ref_no, name) VALUES (18, 'SUP018', 'Supplier_18');
+INSERT INTO suppliers (id, ref_no, name) VALUES (19, 'SUP019', 'Supplier_19');
+INSERT INTO suppliers (id, ref_no, name) VALUES (20, 'SUP020', 'Supplier_20');
+INSERT INTO suppliers (id, ref_no, name) VALUES (21, 'SUP021', 'Supplier_21');
+INSERT INTO suppliers (id, ref_no, name) VALUES (22, 'SUP022', 'Supplier_22');
+INSERT INTO suppliers (id, ref_no, name) VALUES (23, 'SUP023', 'Supplier_23');
+INSERT INTO suppliers (id, ref_no, name) VALUES (24, 'SUP024', 'Supplier_24');
+INSERT INTO suppliers (id, ref_no, name) VALUES (25, 'SUP025', 'Supplier_25');
+INSERT INTO suppliers (id, ref_no, name) VALUES (26, 'SUP026', 'Supplier_26');
+INSERT INTO suppliers (id, ref_no, name) VALUES (27, 'SUP027', 'Supplier_27');
+INSERT INTO suppliers (id, ref_no, name) VALUES (28, 'SUP028', 'Supplier_28');
+INSERT INTO suppliers (id, ref_no, name) VALUES (29, 'SUP029', 'Supplier_29');
+INSERT INTO suppliers (id, ref_no, name) VALUES (30, 'SUP030', 'Supplier_30');
+INSERT INTO suppliers (id, ref_no, name) VALUES (31, 'SUP031', 'Supplier_31');
+INSERT INTO suppliers (id, ref_no, name) VALUES (32, 'SUP032', 'Supplier_32');
+INSERT INTO suppliers (id, ref_no, name) VALUES (33, 'SUP033', 'Supplier_33');
+INSERT INTO suppliers (id, ref_no, name) VALUES (34, 'SUP034', 'Supplier_34');
+INSERT INTO suppliers (id, ref_no, name) VALUES (35, 'SUP035', 'Supplier_35');
+INSERT INTO suppliers (id, ref_no, name) VALUES (36, 'SUP036', 'Supplier_36');
+INSERT INTO suppliers (id, ref_no, name) VALUES (37, 'SUP037', 'Supplier_37');
+INSERT INTO suppliers (id, ref_no, name) VALUES (38, 'SUP038', 'Supplier_38');
+INSERT INTO suppliers (id, ref_no, name) VALUES (39, 'SUP039', 'Supplier_39');
+INSERT INTO suppliers (id, ref_no, name) VALUES (40, 'SUP040', 'Supplier_40');
+INSERT INTO suppliers (id, ref_no, name) VALUES (41, 'SUP041', 'Supplier_41');
+INSERT INTO suppliers (id, ref_no, name) VALUES (42, 'SUP042', 'Supplier_42');
+INSERT INTO suppliers (id, ref_no, name) VALUES (43, 'SUP043', 'Supplier_43');
+INSERT INTO suppliers (id, ref_no, name) VALUES (44, 'SUP044', 'Supplier_44');
+INSERT INTO suppliers (id, ref_no, name) VALUES (45, 'SUP045', 'Supplier_45');
+INSERT INTO suppliers (id, ref_no, name) VALUES (46, 'SUP046', 'Supplier_46');
+INSERT INTO suppliers (id, ref_no, name) VALUES (47, 'SUP047', 'Supplier_47');
+INSERT INTO suppliers (id, ref_no, name) VALUES (48, 'SUP048', 'Supplier_48');
+INSERT INTO suppliers (id, ref_no, name) VALUES (49, 'SUP049', 'Supplier_49');
+INSERT INTO suppliers (id, ref_no, name) VALUES (50, 'SUP050', 'Supplier_50');
+INSERT INTO suppliers (id, ref_no, name) VALUES (51, 'SUP051', 'Supplier_51');
+INSERT INTO suppliers (id, ref_no, name) VALUES (52, 'SUP052', 'Supplier_52');
+INSERT INTO suppliers (id, ref_no, name) VALUES (53, 'SUP053', 'Supplier_53');
+INSERT INTO suppliers (id, ref_no, name) VALUES (54, 'SUP054', 'Supplier_54');
+INSERT INTO suppliers (id, ref_no, name) VALUES (55, 'SUP055', 'Supplier_55');
+INSERT INTO suppliers (id, ref_no, name) VALUES (56, 'SUP056', 'Supplier_56');
+INSERT INTO suppliers (id, ref_no, name) VALUES (57, 'SUP057', 'Supplier_57');
+INSERT INTO suppliers (id, ref_no, name) VALUES (58, 'SUP058', 'Supplier_58');
+INSERT INTO suppliers (id, ref_no, name) VALUES (59, 'SUP059', 'Supplier_59');
+INSERT INTO suppliers (id, ref_no, name) VALUES (60, 'SUP060', 'Supplier_60');
+INSERT INTO suppliers (id, ref_no, name) VALUES (61, 'SUP061', 'Supplier_61');
+INSERT INTO suppliers (id, ref_no, name) VALUES (62, 'SUP062', 'Supplier_62');
+INSERT INTO suppliers (id, ref_no, name) VALUES (63, 'SUP063', 'Supplier_63');
+INSERT INTO suppliers (id, ref_no, name) VALUES (64, 'SUP064', 'Supplier_64');
+INSERT INTO suppliers (id, ref_no, name) VALUES (65, 'SUP065', 'Supplier_65');
+INSERT INTO suppliers (id, ref_no, name) VALUES (66, 'SUP066', 'Supplier_66');
+INSERT INTO suppliers (id, ref_no, name) VALUES (67, 'SUP067', 'Supplier_67');
+INSERT INTO suppliers (id, ref_no, name) VALUES (68, 'SUP068', 'Supplier_68');
+INSERT INTO suppliers (id, ref_no, name) VALUES (69, 'SUP069', 'Supplier_69');
+INSERT INTO suppliers (id, ref_no, name) VALUES (70, 'SUP070', 'Supplier_70');
+INSERT INTO suppliers (id, ref_no, name) VALUES (71, 'SUP071', 'Supplier_71');
+INSERT INTO suppliers (id, ref_no, name) VALUES (72, 'SUP072', 'Supplier_72');
+INSERT INTO suppliers (id, ref_no, name) VALUES (73, 'SUP073', 'Supplier_73');
+INSERT INTO suppliers (id, ref_no, name) VALUES (74, 'SUP074', 'Supplier_74');
+INSERT INTO suppliers (id, ref_no, name) VALUES (75, 'SUP075', 'Supplier_75');
+INSERT INTO suppliers (id, ref_no, name) VALUES (76, 'SUP076', 'Supplier_76');
+INSERT INTO suppliers (id, ref_no, name) VALUES (77, 'SUP077', 'Supplier_77');
+INSERT INTO suppliers (id, ref_no, name) VALUES (78, 'SUP078', 'Supplier_78');
+INSERT INTO suppliers (id, ref_no, name) VALUES (79, 'SUP079', 'Supplier_79');
+INSERT INTO suppliers (id, ref_no, name) VALUES (80, 'SUP080', 'Supplier_80');
+INSERT INTO suppliers (id, ref_no, name) VALUES (81, 'SUP081', 'Supplier_81');
+INSERT INTO suppliers (id, ref_no, name) VALUES (82, 'SUP082', 'Supplier_82');
+INSERT INTO suppliers (id, ref_no, name) VALUES (83, 'SUP083', 'Supplier_83');
+INSERT INTO suppliers (id, ref_no, name) VALUES (84, 'SUP084', 'Supplier_84');
+INSERT INTO suppliers (id, ref_no, name) VALUES (85, 'SUP085', 'Supplier_85');
+INSERT INTO suppliers (id, ref_no, name) VALUES (86, 'SUP086', 'Supplier_86');
+INSERT INTO suppliers (id, ref_no, name) VALUES (87, 'SUP087', 'Supplier_87');
+INSERT INTO suppliers (id, ref_no, name) VALUES (88, 'SUP088', 'Supplier_88');
+INSERT INTO suppliers (id, ref_no, name) VALUES (89, 'SUP089', 'Supplier_89');
+INSERT INTO suppliers (id, ref_no, name) VALUES (90, 'SUP090', 'Supplier_90');
+INSERT INTO suppliers (id, ref_no, name) VALUES (91, 'SUP091', 'Supplier_91');
+INSERT INTO suppliers (id, ref_no, name) VALUES (92, 'SUP092', 'Supplier_92');
+INSERT INTO suppliers (id, ref_no, name) VALUES (93, 'SUP093', 'Supplier_93');
+INSERT INTO suppliers (id, ref_no, name) VALUES (94, 'SUP094', 'Supplier_94');
+INSERT INTO suppliers (id, ref_no, name) VALUES (95, 'SUP095', 'Supplier_95');
+INSERT INTO suppliers (id, ref_no, name) VALUES (96, 'SUP096', 'Supplier_96');
+INSERT INTO suppliers (id, ref_no, name) VALUES (97, 'SUP097', 'Supplier_97');
+INSERT INTO suppliers (id, ref_no, name) VALUES (98, 'SUP098', 'Supplier_98');
+INSERT INTO suppliers (id, ref_no, name) VALUES (99, 'SUP099', 'Supplier_99');
+INSERT INTO suppliers (id, ref_no, name) VALUES (100, 'SUP100', 'Supplier_100');
+INSERT INTO invoice (id_inv, kode_inv, tgl_inv, customers_id, tgl_tempo, note) VALUES (1, 'INV0001', '2023-08-27', 88, '2023-09-13', 'Catatan invoice 1');
+INSERT INTO invoice (id_inv, kode_inv, tgl_inv, customers_id, tgl_tempo, note) VALUES (2, 'INV0002', '2023-03-27', 61, '2023-04-23', 'Catatan invoice 2');
+INSERT INTO invoice (id_inv, kode_inv, tgl_inv, customers_id, tgl_tempo, note) VALUES (3, 'INV0003', '2022-12-19', 70, '2023-01-13', 'Catatan invoice 3');
+INSERT INTO invoice (id_inv, kode_inv, tgl_inv, customers_id, tgl_tempo, note) VALUES (4, 'INV0004', '2022-01-17', 69, '2022-01-24', 'Catatan invoice 4');
+INSERT INTO invoice (id_inv, kode_inv, tgl_inv, customers_id, tgl_tempo, note) VALUES (5, 'INV0005', '2024-11-22', 5, '2024-12-13', 'Catatan invoice 5');
+INSERT INTO invoice (id_inv, kode_inv, tgl_inv, customers_id, tgl_tempo, note) VALUES (6, 'INV0006', '2024-12-31', 10, '2025-01-26', 'Catatan invoice 6');
+INSERT INTO invoice (id_inv, kode_inv, tgl_inv, customers_id, tgl_tempo, note) VALUES (7, 'INV0007', '2023-06-08', 70, '2023-07-08', 'Catatan invoice 7');
+INSERT INTO invoice (id_inv, kode_inv, tgl_inv, customers_id, tgl_tempo, note) VALUES (8, 'INV0008', '2024-07-03', 76, '2024-07-18', 'Catatan invoice 8');
+INSERT INTO invoice (id_inv, kode_inv, tgl_inv, customers_id, tgl_tempo, note) VALUES (9, 'INV0009', '2022-07-30', 18, '2022-08-06', 'Catatan invoice 9');
+INSERT INTO invoice (id_inv, kode_inv, tgl_inv, customers_id, tgl_tempo, note) VALUES (10, 'INV0010', '2023-07-07', 15, '2023-07-28', 'Catatan invoice 10');
+INSERT INTO invoice (id_inv, kode_inv, tgl_inv, customers_id, tgl_tempo, note) VALUES (11, 'INV0011', '2025-03-31', 5, '2025-04-20', 'Catatan invoice 11');
+INSERT INTO invoice (id_inv, kode_inv, tgl_inv, customers_id, tgl_tempo, note) VALUES (12, 'INV0012', '2024-03-25', 39, '2024-04-18', 'Catatan invoice 12');
+INSERT INTO invoice (id_inv, kode_inv, tgl_inv, customers_id, tgl_tempo, note) VALUES (13, 'INV0013', '2025-06-04', 18, '2025-06-13', 'Catatan invoice 13');
+INSERT INTO invoice (id_inv, kode_inv, tgl_inv, customers_id, tgl_tempo, note) VALUES (14, 'INV0014', '2024-06-26', 6, '2024-07-21', 'Catatan invoice 14');
+INSERT INTO invoice (id_inv, kode_inv, tgl_inv, customers_id, tgl_tempo, note) VALUES (15, 'INV0015', '2022-02-20', 3, '2022-03-21', 'Catatan invoice 15');
+INSERT INTO invoice (id_inv, kode_inv, tgl_inv, customers_id, tgl_tempo, note) VALUES (16, 'INV0016', '2022-02-08', 58, '2022-02-18', 'Catatan invoice 16');
+INSERT INTO invoice (id_inv, kode_inv, tgl_inv, customers_id, tgl_tempo, note) VALUES (17, 'INV0017', '2022-07-03', 74, '2022-07-14', 'Catatan invoice 17');
+INSERT INTO invoice (id_inv, kode_inv, tgl_inv, customers_id, tgl_tempo, note) VALUES (18, 'INV0018', '2022-07-02', 34, '2022-07-24', 'Catatan invoice 18');
+INSERT INTO invoice (id_inv, kode_inv, tgl_inv, customers_id, tgl_tempo, note) VALUES (19, 'INV0019', '2025-08-24', 51, '2025-09-11', 'Catatan invoice 19');
+INSERT INTO invoice (id_inv, kode_inv, tgl_inv, customers_id, tgl_tempo, note) VALUES (20, 'INV0020', '2025-09-29', 29, '2025-10-18', 'Catatan invoice 20');
+INSERT INTO invoice (id_inv, kode_inv, tgl_inv, customers_id, tgl_tempo, note) VALUES (21, 'INV0021', '2023-08-17', 50, '2023-08-25', 'Catatan invoice 21');
+INSERT INTO invoice (id_inv, kode_inv, tgl_inv, customers_id, tgl_tempo, note) VALUES (22, 'INV0022', '2025-09-02', 83, '2025-09-21', 'Catatan invoice 22');
+INSERT INTO invoice (id_inv, kode_inv, tgl_inv, customers_id, tgl_tempo, note) VALUES (23, 'INV0023', '2022-08-16', 79, '2022-08-23', 'Catatan invoice 23');
+INSERT INTO invoice (id_inv, kode_inv, tgl_inv, customers_id, tgl_tempo, note) VALUES (24, 'INV0024', '2024-02-25', 48, '2024-03-23', 'Catatan invoice 24');
+INSERT INTO invoice (id_inv, kode_inv, tgl_inv, customers_id, tgl_tempo, note) VALUES (25, 'INV0025', '2023-11-01', 17, '2023-11-19', 'Catatan invoice 25');
+INSERT INTO invoice (id_inv, kode_inv, tgl_inv, customers_id, tgl_tempo, note) VALUES (26, 'INV0026', '2025-08-22', 80, '2025-08-31', 'Catatan invoice 26');
+INSERT INTO invoice (id_inv, kode_inv, tgl_inv, customers_id, tgl_tempo, note) VALUES (27, 'INV0027', '2023-10-09', 51, '2023-11-08', 'Catatan invoice 27');
+INSERT INTO invoice (id_inv, kode_inv, tgl_inv, customers_id, tgl_tempo, note) VALUES (28, 'INV0028', '2022-06-13', 74, '2022-06-26', 'Catatan invoice 28');
+INSERT INTO invoice (id_inv, kode_inv, tgl_inv, customers_id, tgl_tempo, note) VALUES (29, 'INV0029', '2024-02-23', 8, '2024-03-15', 'Catatan invoice 29');
+INSERT INTO invoice (id_inv, kode_inv, tgl_inv, customers_id, tgl_tempo, note) VALUES (30, 'INV0030', '2024-02-26', 69, '2024-03-11', 'Catatan invoice 30');
+INSERT INTO invoice (id_inv, kode_inv, tgl_inv, customers_id, tgl_tempo, note) VALUES (31, 'INV0031', '2022-06-09', 17, '2022-06-30', 'Catatan invoice 31');
+INSERT INTO invoice (id_inv, kode_inv, tgl_inv, customers_id, tgl_tempo, note) VALUES (32, 'INV0032', '2022-04-21', 78, '2022-05-20', 'Catatan invoice 32');
+INSERT INTO invoice (id_inv, kode_inv, tgl_inv, customers_id, tgl_tempo, note) VALUES (33, 'INV0033', '2025-05-20', 98, '2025-06-16', 'Catatan invoice 33');
+INSERT INTO invoice (id_inv, kode_inv, tgl_inv, customers_id, tgl_tempo, note) VALUES (34, 'INV0034', '2023-01-27', 38, '2023-02-22', 'Catatan invoice 34');
+INSERT INTO invoice (id_inv, kode_inv, tgl_inv, customers_id, tgl_tempo, note) VALUES (35, 'INV0035', '2025-06-20', 75, '2025-07-10', 'Catatan invoice 35');
+INSERT INTO invoice (id_inv, kode_inv, tgl_inv, customers_id, tgl_tempo, note) VALUES (36, 'INV0036', '2022-11-07', 22, '2022-12-07', 'Catatan invoice 36');
+INSERT INTO invoice (id_inv, kode_inv, tgl_inv, customers_id, tgl_tempo, note) VALUES (37, 'INV0037', '2025-10-27', 36, '2025-11-06', 'Catatan invoice 37');
+INSERT INTO invoice (id_inv, kode_inv, tgl_inv, customers_id, tgl_tempo, note) VALUES (38, 'INV0038', '2023-08-31', 98, '2023-09-16', 'Catatan invoice 38');
+INSERT INTO invoice (id_inv, kode_inv, tgl_inv, customers_id, tgl_tempo, note) VALUES (39, 'INV0039', '2024-10-06', 71, '2024-10-29', 'Catatan invoice 39');
+INSERT INTO invoice (id_inv, kode_inv, tgl_inv, customers_id, tgl_tempo, note) VALUES (40, 'INV0040', '2025-03-08', 96, '2025-04-05', 'Catatan invoice 40');
+INSERT INTO invoice (id_inv, kode_inv, tgl_inv, customers_id, tgl_tempo, note) VALUES (41, 'INV0041', '2022-06-15', 68, '2022-07-04', 'Catatan invoice 41');
+INSERT INTO invoice (id_inv, kode_inv, tgl_inv, customers_id, tgl_tempo, note) VALUES (42, 'INV0042', '2025-06-21', 98, '2025-07-01', 'Catatan invoice 42');
+INSERT INTO invoice (id_inv, kode_inv, tgl_inv, customers_id, tgl_tempo, note) VALUES (43, 'INV0043', '2024-10-09', 48, '2024-10-17', 'Catatan invoice 43');
+INSERT INTO invoice (id_inv, kode_inv, tgl_inv, customers_id, tgl_tempo, note) VALUES (44, 'INV0044', '2023-02-25', 81, '2023-03-11', 'Catatan invoice 44');
+INSERT INTO invoice (id_inv, kode_inv, tgl_inv, customers_id, tgl_tempo, note) VALUES (45, 'INV0045', '2024-06-14', 95, '2024-07-09', 'Catatan invoice 45');
+INSERT INTO invoice (id_inv, kode_inv, tgl_inv, customers_id, tgl_tempo, note) VALUES (46, 'INV0046', '2022-07-15', 25, '2022-08-08', 'Catatan invoice 46');
+INSERT INTO invoice (id_inv, kode_inv, tgl_inv, customers_id, tgl_tempo, note) VALUES (47, 'INV0047', '2024-09-04', 23, '2024-09-29', 'Catatan invoice 47');
+INSERT INTO invoice (id_inv, kode_inv, tgl_inv, customers_id, tgl_tempo, note) VALUES (48, 'INV0048', '2023-12-27', 63, '2024-01-11', 'Catatan invoice 48');
+INSERT INTO invoice (id_inv, kode_inv, tgl_inv, customers_id, tgl_tempo, note) VALUES (49, 'INV0049', '2024-09-09', 73, '2024-09-16', 'Catatan invoice 49');
+INSERT INTO invoice (id_inv, kode_inv, tgl_inv, customers_id, tgl_tempo, note) VALUES (50, 'INV0050', '2025-10-12', 61, '2025-10-24', 'Catatan invoice 50');
+INSERT INTO invoice (id_inv, kode_inv, tgl_inv, customers_id, tgl_tempo, note) VALUES (51, 'INV0051', '2023-04-28', 47, '2023-05-11', 'Catatan invoice 51');
+INSERT INTO invoice (id_inv, kode_inv, tgl_inv, customers_id, tgl_tempo, note) VALUES (52, 'INV0052', '2022-03-11', 40, '2022-04-04', 'Catatan invoice 52');
+INSERT INTO invoice (id_inv, kode_inv, tgl_inv, customers_id, tgl_tempo, note) VALUES (53, 'INV0053', '2025-01-28', 100, '2025-02-04', 'Catatan invoice 53');
+INSERT INTO invoice (id_inv, kode_inv, tgl_inv, customers_id, tgl_tempo, note) VALUES (54, 'INV0054', '2025-11-16', 67, '2025-12-07', 'Catatan invoice 54');
+INSERT INTO invoice (id_inv, kode_inv, tgl_inv, customers_id, tgl_tempo, note) VALUES (55, 'INV0055', '2025-12-19', 9, '2026-01-11', 'Catatan invoice 55');
+INSERT INTO invoice (id_inv, kode_inv, tgl_inv, customers_id, tgl_tempo, note) VALUES (56, 'INV0056', '2023-09-03', 13, '2023-10-02', 'Catatan invoice 56');
+INSERT INTO invoice (id_inv, kode_inv, tgl_inv, customers_id, tgl_tempo, note) VALUES (57, 'INV0057', '2023-06-18', 26, '2023-06-25', 'Catatan invoice 57');
+INSERT INTO invoice (id_inv, kode_inv, tgl_inv, customers_id, tgl_tempo, note) VALUES (58, 'INV0058', '2024-03-17', 46, '2024-03-24', 'Catatan invoice 58');
+INSERT INTO invoice (id_inv, kode_inv, tgl_inv, customers_id, tgl_tempo, note) VALUES (59, 'INV0059', '2023-12-26', 7, '2024-01-11', 'Catatan invoice 59');
+INSERT INTO invoice (id_inv, kode_inv, tgl_inv, customers_id, tgl_tempo, note) VALUES (60, 'INV0060', '2025-04-27', 82, '2025-05-10', 'Catatan invoice 60');
+INSERT INTO invoice (id_inv, kode_inv, tgl_inv, customers_id, tgl_tempo, note) VALUES (61, 'INV0061', '2023-05-17', 63, '2023-06-12', 'Catatan invoice 61');
+INSERT INTO invoice (id_inv, kode_inv, tgl_inv, customers_id, tgl_tempo, note) VALUES (62, 'INV0062', '2022-04-14', 98, '2022-04-22', 'Catatan invoice 62');
+INSERT INTO invoice (id_inv, kode_inv, tgl_inv, customers_id, tgl_tempo, note) VALUES (63, 'INV0063', '2024-04-26', 98, '2024-05-20', 'Catatan invoice 63');
+INSERT INTO invoice (id_inv, kode_inv, tgl_inv, customers_id, tgl_tempo, note) VALUES (64, 'INV0064', '2023-06-14', 59, '2023-07-11', 'Catatan invoice 64');
+INSERT INTO invoice (id_inv, kode_inv, tgl_inv, customers_id, tgl_tempo, note) VALUES (65, 'INV0065', '2023-08-05', 35, '2023-08-15', 'Catatan invoice 65');
+INSERT INTO invoice (id_inv, kode_inv, tgl_inv, customers_id, tgl_tempo, note) VALUES (66, 'INV0066', '2022-09-03', 80, '2022-09-26', 'Catatan invoice 66');
+INSERT INTO invoice (id_inv, kode_inv, tgl_inv, customers_id, tgl_tempo, note) VALUES (67, 'INV0067', '2024-11-10', 98, '2024-11-19', 'Catatan invoice 67');
+INSERT INTO invoice (id_inv, kode_inv, tgl_inv, customers_id, tgl_tempo, note) VALUES (68, 'INV0068', '2025-06-20', 95, '2025-07-13', 'Catatan invoice 68');
+INSERT INTO invoice (id_inv, kode_inv, tgl_inv, customers_id, tgl_tempo, note) VALUES (69, 'INV0069', '2023-08-27', 44, '2023-09-03', 'Catatan invoice 69');
+INSERT INTO invoice (id_inv, kode_inv, tgl_inv, customers_id, tgl_tempo, note) VALUES (70, 'INV0070', '2024-04-01', 49, '2024-04-18', 'Catatan invoice 70');
+INSERT INTO invoice (id_inv, kode_inv, tgl_inv, customers_id, tgl_tempo, note) VALUES (71, 'INV0071', '2023-07-23', 67, '2023-08-21', 'Catatan invoice 71');
+INSERT INTO invoice (id_inv, kode_inv, tgl_inv, customers_id, tgl_tempo, note) VALUES (72, 'INV0072', '2022-01-04', 46, '2022-01-22', 'Catatan invoice 72');
+INSERT INTO invoice (id_inv, kode_inv, tgl_inv, customers_id, tgl_tempo, note) VALUES (73, 'INV0073', '2025-12-23', 26, '2026-01-13', 'Catatan invoice 73');
+INSERT INTO invoice (id_inv, kode_inv, tgl_inv, customers_id, tgl_tempo, note) VALUES (74, 'INV0074', '2025-02-05', 9, '2025-02-27', 'Catatan invoice 74');
+INSERT INTO invoice (id_inv, kode_inv, tgl_inv, customers_id, tgl_tempo, note) VALUES (75, 'INV0075', '2024-01-28', 42, '2024-02-20', 'Catatan invoice 75');
+INSERT INTO invoice (id_inv, kode_inv, tgl_inv, customers_id, tgl_tempo, note) VALUES (76, 'INV0076', '2024-01-30', 84, '2024-02-10', 'Catatan invoice 76');
+INSERT INTO invoice (id_inv, kode_inv, tgl_inv, customers_id, tgl_tempo, note) VALUES (77, 'INV0077', '2025-07-20', 15, '2025-08-14', 'Catatan invoice 77');
+INSERT INTO invoice (id_inv, kode_inv, tgl_inv, customers_id, tgl_tempo, note) VALUES (78, 'INV0078', '2023-05-14', 59, '2023-05-25', 'Catatan invoice 78');
+INSERT INTO invoice (id_inv, kode_inv, tgl_inv, customers_id, tgl_tempo, note) VALUES (79, 'INV0079', '2022-03-21', 62, '2022-04-03', 'Catatan invoice 79');
+INSERT INTO invoice (id_inv, kode_inv, tgl_inv, customers_id, tgl_tempo, note) VALUES (80, 'INV0080', '2024-12-31', 38, '2025-01-29', 'Catatan invoice 80');
+INSERT INTO invoice (id_inv, kode_inv, tgl_inv, customers_id, tgl_tempo, note) VALUES (81, 'INV0081', '2023-03-15', 22, '2023-03-23', 'Catatan invoice 81');
+INSERT INTO invoice (id_inv, kode_inv, tgl_inv, customers_id, tgl_tempo, note) VALUES (82, 'INV0082', '2024-08-03', 89, '2024-08-18', 'Catatan invoice 82');
+INSERT INTO invoice (id_inv, kode_inv, tgl_inv, customers_id, tgl_tempo, note) VALUES (83, 'INV0083', '2023-01-24', 3, '2023-01-31', 'Catatan invoice 83');
+INSERT INTO invoice (id_inv, kode_inv, tgl_inv, customers_id, tgl_tempo, note) VALUES (84, 'INV0084', '2022-05-25', 12, '2022-06-16', 'Catatan invoice 84');
+INSERT INTO invoice (id_inv, kode_inv, tgl_inv, customers_id, tgl_tempo, note) VALUES (85, 'INV0085', '2023-10-09', 70, '2023-10-25', 'Catatan invoice 85');
+INSERT INTO invoice (id_inv, kode_inv, tgl_inv, customers_id, tgl_tempo, note) VALUES (86, 'INV0086', '2025-02-23', 6, '2025-03-22', 'Catatan invoice 86');
+INSERT INTO invoice (id_inv, kode_inv, tgl_inv, customers_id, tgl_tempo, note) VALUES (87, 'INV0087', '2023-03-23', 12, '2023-04-06', 'Catatan invoice 87');
+INSERT INTO invoice (id_inv, kode_inv, tgl_inv, customers_id, tgl_tempo, note) VALUES (88, 'INV0088', '2023-07-12', 17, '2023-07-19', 'Catatan invoice 88');
+INSERT INTO invoice (id_inv, kode_inv, tgl_inv, customers_id, tgl_tempo, note) VALUES (89, 'INV0089', '2022-01-20', 60, '2022-02-11', 'Catatan invoice 89');
+INSERT INTO invoice (id_inv, kode_inv, tgl_inv, customers_id, tgl_tempo, note) VALUES (90, 'INV0090', '2022-08-01', 81, '2022-08-19', 'Catatan invoice 90');
+INSERT INTO invoice (id_inv, kode_inv, tgl_inv, customers_id, tgl_tempo, note) VALUES (91, 'INV0091', '2022-05-23', 65, '2022-06-08', 'Catatan invoice 91');
+INSERT INTO invoice (id_inv, kode_inv, tgl_inv, customers_id, tgl_tempo, note) VALUES (92, 'INV0092', '2025-11-18', 62, '2025-11-30', 'Catatan invoice 92');
+INSERT INTO invoice (id_inv, kode_inv, tgl_inv, customers_id, tgl_tempo, note) VALUES (93, 'INV0093', '2022-08-17', 57, '2022-08-26', 'Catatan invoice 93');
+INSERT INTO invoice (id_inv, kode_inv, tgl_inv, customers_id, tgl_tempo, note) VALUES (94, 'INV0094', '2022-09-21', 80, '2022-10-08', 'Catatan invoice 94');
+INSERT INTO invoice (id_inv, kode_inv, tgl_inv, customers_id, tgl_tempo, note) VALUES (95, 'INV0095', '2025-12-02', 15, '2025-12-24', 'Catatan invoice 95');
+INSERT INTO invoice (id_inv, kode_inv, tgl_inv, customers_id, tgl_tempo, note) VALUES (96, 'INV0096', '2022-09-18', 8, '2022-10-02', 'Catatan invoice 96');
+INSERT INTO invoice (id_inv, kode_inv, tgl_inv, customers_id, tgl_tempo, note) VALUES (97, 'INV0097', '2025-01-17', 68, '2025-01-24', 'Catatan invoice 97');
+INSERT INTO invoice (id_inv, kode_inv, tgl_inv, customers_id, tgl_tempo, note) VALUES (98, 'INV0098', '2022-04-13', 80, '2022-04-22', 'Catatan invoice 98');
+INSERT INTO invoice (id_inv, kode_inv, tgl_inv, customers_id, tgl_tempo, note) VALUES (99, 'INV0099', '2022-09-19', 40, '2022-10-16', 'Catatan invoice 99');
+INSERT INTO invoice (id_inv, kode_inv, tgl_inv, customers_id, tgl_tempo, note) VALUES (100, 'INV0100', '2022-07-10', 52, '2022-08-04', 'Catatan invoice 100');
+INSERT INTO inv_items (id, invoice_id, items_id, qty, price, total) VALUES (1, 42, 24, 3, 775375.45, 2326126.35);
+INSERT INTO inv_items (id, invoice_id, items_id, qty, price, total) VALUES (2, 25, 9, 1, 187599.7, 187599.7);
+INSERT INTO inv_items (id, invoice_id, items_id, qty, price, total) VALUES (3, 3, 5, 7, 985722.74, 6900059.18);
+INSERT INTO inv_items (id, invoice_id, items_id, qty, price, total) VALUES (4, 89, 77, 1, 975106.03, 975106.03);
+INSERT INTO inv_items (id, invoice_id, items_id, qty, price, total) VALUES (5, 90, 53, 4, 435278.28, 1741113.12);
+INSERT INTO inv_items (id, invoice_id, items_id, qty, price, total) VALUES (6, 83, 95, 7, 279168.55, 1954179.85);
+INSERT INTO inv_items (id, invoice_id, items_id, qty, price, total) VALUES (7, 18, 8, 10, 214087.98, 2140879.8);
+INSERT INTO inv_items (id, invoice_id, items_id, qty, price, total) VALUES (8, 95, 12, 2, 441216.69, 882433.38);
+INSERT INTO inv_items (id, invoice_id, items_id, qty, price, total) VALUES (9, 7, 16, 1, 208584.91, 208584.91);
+INSERT INTO inv_items (id, invoice_id, items_id, qty, price, total) VALUES (10, 39, 64, 5, 683785.06, 3418925.3);
+INSERT INTO inv_items (id, invoice_id, items_id, qty, price, total) VALUES (11, 74, 15, 4, 559766.71, 2239066.84);
+INSERT INTO inv_items (id, invoice_id, items_id, qty, price, total) VALUES (12, 49, 22, 7, 460178.63, 3221250.41);
+INSERT INTO inv_items (id, invoice_id, items_id, qty, price, total) VALUES (13, 83, 78, 2, 696062.37, 1392124.74);
+INSERT INTO inv_items (id, invoice_id, items_id, qty, price, total) VALUES (14, 98, 75, 5, 401222.98, 2006114.9);
+INSERT INTO inv_items (id, invoice_id, items_id, qty, price, total) VALUES (15, 95, 23, 4, 59955.25, 239821.0);
+INSERT INTO inv_items (id, invoice_id, items_id, qty, price, total) VALUES (16, 15, 67, 10, 72111.69, 721116.9);
+INSERT INTO inv_items (id, invoice_id, items_id, qty, price, total) VALUES (17, 33, 97, 1, 264320.93, 264320.93);
+INSERT INTO inv_items (id, invoice_id, items_id, qty, price, total) VALUES (18, 74, 11, 5, 493849.37, 2469246.85);
+INSERT INTO inv_items (id, invoice_id, items_id, qty, price, total) VALUES (19, 90, 15, 7, 727617.03, 5093319.21);
+INSERT INTO inv_items (id, invoice_id, items_id, qty, price, total) VALUES (20, 77, 36, 4, 356374.66, 1425498.64);
+INSERT INTO inv_items (id, invoice_id, items_id, qty, price, total) VALUES (21, 36, 57, 4, 840782.56, 3363130.24);
+INSERT INTO inv_items (id, invoice_id, items_id, qty, price, total) VALUES (22, 45, 14, 6, 604424.47, 3626546.82);
+INSERT INTO inv_items (id, invoice_id, items_id, qty, price, total) VALUES (23, 31, 82, 1, 829042.93, 829042.93);
+INSERT INTO inv_items (id, invoice_id, items_id, qty, price, total) VALUES (24, 2, 63, 9, 731779.87, 6586018.83);
+INSERT INTO inv_items (id, invoice_id, items_id, qty, price, total) VALUES (25, 17, 81, 10, 631077.29, 6310772.9);
+INSERT INTO inv_items (id, invoice_id, items_id, qty, price, total) VALUES (26, 12, 60, 6, 417942.55, 2507655.3);
+INSERT INTO inv_items (id, invoice_id, items_id, qty, price, total) VALUES (27, 42, 19, 4, 935765.32, 3743061.28);
+INSERT INTO inv_items (id, invoice_id, items_id, qty, price, total) VALUES (28, 60, 15, 10, 254379.04, 2543790.4);
+INSERT INTO inv_items (id, invoice_id, items_id, qty, price, total) VALUES (29, 65, 29, 5, 752022.62, 3760113.1);
+INSERT INTO inv_items (id, invoice_id, items_id, qty, price, total) VALUES (30, 50, 53, 3, 992273.51, 2976820.53);
+INSERT INTO inv_items (id, invoice_id, items_id, qty, price, total) VALUES (31, 53, 69, 5, 321617.37, 1608086.85);
+INSERT INTO inv_items (id, invoice_id, items_id, qty, price, total) VALUES (32, 60, 93, 7, 754916.68, 5284416.76);
+INSERT INTO inv_items (id, invoice_id, items_id, qty, price, total) VALUES (33, 94, 93, 2, 361024.87, 722049.74);
+INSERT INTO inv_items (id, invoice_id, items_id, qty, price, total) VALUES (34, 14, 99, 1, 818500.39, 818500.39);
+INSERT INTO inv_items (id, invoice_id, items_id, qty, price, total) VALUES (35, 88, 35, 3, 89442.33, 268326.99);
+INSERT INTO inv_items (id, invoice_id, items_id, qty, price, total) VALUES (36, 38, 88, 10, 858398.81, 8583988.1);
+INSERT INTO inv_items (id, invoice_id, items_id, qty, price, total) VALUES (37, 36, 31, 6, 116339.76, 698038.56);
+INSERT INTO inv_items (id, invoice_id, items_id, qty, price, total) VALUES (38, 40, 24, 4, 835197.07, 3340788.28);
+INSERT INTO inv_items (id, invoice_id, items_id, qty, price, total) VALUES (39, 45, 35, 4, 556029.57, 2224118.28);
+INSERT INTO inv_items (id, invoice_id, items_id, qty, price, total) VALUES (40, 82, 32, 8, 529035.82, 4232286.56);
+INSERT INTO inv_items (id, invoice_id, items_id, qty, price, total) VALUES (41, 77, 74, 7, 251027.72, 1757194.04);
+INSERT INTO inv_items (id, invoice_id, items_id, qty, price, total) VALUES (42, 59, 79, 2, 350526.81, 701053.62);
+INSERT INTO inv_items (id, invoice_id, items_id, qty, price, total) VALUES (43, 84, 42, 2, 318293.46, 636586.92);
+INSERT INTO inv_items (id, invoice_id, items_id, qty, price, total) VALUES (44, 29, 98, 4, 228129.51, 912518.04);
+INSERT INTO inv_items (id, invoice_id, items_id, qty, price, total) VALUES (45, 73, 77, 4, 567956.72, 2271826.88);
+INSERT INTO inv_items (id, invoice_id, items_id, qty, price, total) VALUES (46, 82, 78, 7, 727331.69, 5091321.83);
+INSERT INTO inv_items (id, invoice_id, items_id, qty, price, total) VALUES (47, 8, 59, 10, 664875.87, 6648758.7);
+INSERT INTO inv_items (id, invoice_id, items_id, qty, price, total) VALUES (48, 59, 24, 2, 294491.95, 588983.9);
+INSERT INTO inv_items (id, invoice_id, items_id, qty, price, total) VALUES (49, 28, 47, 7, 853876.7, 5977136.9);
+INSERT INTO inv_items (id, invoice_id, items_id, qty, price, total) VALUES (50, 87, 13, 6, 116408.35, 698450.1);
+INSERT INTO inv_items (id, invoice_id, items_id, qty, price, total) VALUES (51, 76, 16, 10, 147042.26, 1470422.6);
+INSERT INTO inv_items (id, invoice_id, items_id, qty, price, total) VALUES (52, 11, 7, 1, 695312.1, 695312.1);
+INSERT INTO inv_items (id, invoice_id, items_id, qty, price, total) VALUES (53, 40, 65, 6, 747885.69, 4487314.14);
+INSERT INTO inv_items (id, invoice_id, items_id, qty, price, total) VALUES (54, 8, 50, 9, 466397.65, 4197578.85);
+INSERT INTO inv_items (id, invoice_id, items_id, qty, price, total) VALUES (55, 31, 74, 5, 464810.31, 2324051.55);
+INSERT INTO inv_items (id, invoice_id, items_id, qty, price, total) VALUES (56, 68, 68, 8, 610120.01, 4880960.08);
+INSERT INTO inv_items (id, invoice_id, items_id, qty, price, total) VALUES (57, 90, 73, 10, 655599.24, 6555992.4);
+INSERT INTO inv_items (id, invoice_id, items_id, qty, price, total) VALUES (58, 73, 45, 5, 308442.95, 1542214.75);
+INSERT INTO inv_items (id, invoice_id, items_id, qty, price, total) VALUES (59, 33, 61, 10, 199660.93, 1996609.3);
+INSERT INTO inv_items (id, invoice_id, items_id, qty, price, total) VALUES (60, 57, 29, 5, 89719.89, 448599.45);
+INSERT INTO inv_items (id, invoice_id, items_id, qty, price, total) VALUES (61, 87, 18, 6, 322163.31, 1932979.86);
+INSERT INTO inv_items (id, invoice_id, items_id, qty, price, total) VALUES (62, 22, 32, 2, 214961.03, 429922.06);
+INSERT INTO inv_items (id, invoice_id, items_id, qty, price, total) VALUES (63, 58, 23, 5, 203761.82, 1018809.1);
+INSERT INTO inv_items (id, invoice_id, items_id, qty, price, total) VALUES (64, 77, 94, 9, 388405.89, 3495653.01);
+INSERT INTO inv_items (id, invoice_id, items_id, qty, price, total) VALUES (65, 77, 45, 5, 219024.54, 1095122.7);
+INSERT INTO inv_items (id, invoice_id, items_id, qty, price, total) VALUES (66, 73, 83, 5, 884326.04, 4421630.2);
+INSERT INTO inv_items (id, invoice_id, items_id, qty, price, total) VALUES (67, 31, 58, 4, 60381.88, 241527.52);
+INSERT INTO inv_items (id, invoice_id, items_id, qty, price, total) VALUES (68, 29, 14, 3, 995721.02, 2987163.06);
+INSERT INTO inv_items (id, invoice_id, items_id, qty, price, total) VALUES (69, 53, 93, 8, 806145.24, 6449161.92);
+INSERT INTO inv_items (id, invoice_id, items_id, qty, price, total) VALUES (70, 49, 49, 5, 277257.94, 1386289.7);
+INSERT INTO inv_items (id, invoice_id, items_id, qty, price, total) VALUES (71, 57, 82, 9, 398863.31, 3589769.79);
+INSERT INTO inv_items (id, invoice_id, items_id, qty, price, total) VALUES (72, 75, 25, 10, 682004.54, 6820045.4);
+INSERT INTO inv_items (id, invoice_id, items_id, qty, price, total) VALUES (73, 20, 44, 4, 472393.79, 1889575.16);
+INSERT INTO inv_items (id, invoice_id, items_id, qty, price, total) VALUES (74, 57, 83, 4, 590907.9, 2363631.6);
+INSERT INTO inv_items (id, invoice_id, items_id, qty, price, total) VALUES (75, 65, 97, 4, 460377.42, 1841509.68);
+INSERT INTO inv_items (id, invoice_id, items_id, qty, price, total) VALUES (76, 27, 47, 7, 263387.65, 1843713.55);
+INSERT INTO inv_items (id, invoice_id, items_id, qty, price, total) VALUES (77, 90, 85, 1, 46361.0, 46361.0);
+INSERT INTO inv_items (id, invoice_id, items_id, qty, price, total) VALUES (78, 41, 15, 8, 331083.15, 2648665.2);
+INSERT INTO inv_items (id, invoice_id, items_id, qty, price, total) VALUES (79, 11, 80, 9, 932923.23, 8396309.07);
+INSERT INTO inv_items (id, invoice_id, items_id, qty, price, total) VALUES (80, 27, 14, 5, 829798.43, 4148992.15);
+INSERT INTO inv_items (id, invoice_id, items_id, qty, price, total) VALUES (81, 38, 100, 8, 870412.22, 6963297.76);
+INSERT INTO inv_items (id, invoice_id, items_id, qty, price, total) VALUES (82, 80, 96, 7, 638917.91, 4472425.37);
+INSERT INTO inv_items (id, invoice_id, items_id, qty, price, total) VALUES (83, 98, 67, 2, 785655.46, 1571310.92);
+INSERT INTO inv_items (id, invoice_id, items_id, qty, price, total) VALUES (84, 87, 18, 4, 536568.43, 2146273.72);
+INSERT INTO inv_items (id, invoice_id, items_id, qty, price, total) VALUES (85, 41, 50, 7, 105743.1, 740201.7);
+INSERT INTO inv_items (id, invoice_id, items_id, qty, price, total) VALUES (86, 74, 41, 5, 445324.01, 2226620.05);
+INSERT INTO inv_items (id, invoice_id, items_id, qty, price, total) VALUES (87, 55, 49, 2, 892749.0, 1785498.0);
+INSERT INTO inv_items (id, invoice_id, items_id, qty, price, total) VALUES (88, 34, 55, 8, 23159.57, 185276.56);
+INSERT INTO inv_items (id, invoice_id, items_id, qty, price, total) VALUES (89, 57, 24, 8, 349153.88, 2793231.04);
+INSERT INTO inv_items (id, invoice_id, items_id, qty, price, total) VALUES (90, 74, 10, 1, 99531.71, 99531.71);
+INSERT INTO inv_items (id, invoice_id, items_id, qty, price, total) VALUES (91, 51, 35, 4, 183308.16, 733232.64);
+INSERT INTO inv_items (id, invoice_id, items_id, qty, price, total) VALUES (92, 71, 89, 2, 52163.9, 104327.8);
+INSERT INTO inv_items (id, invoice_id, items_id, qty, price, total) VALUES (93, 54, 100, 5, 939422.86, 4697114.3);
+INSERT INTO inv_items (id, invoice_id, items_id, qty, price, total) VALUES (94, 92, 26, 1, 403347.09, 403347.09);
+INSERT INTO inv_items (id, invoice_id, items_id, qty, price, total) VALUES (95, 14, 5, 2, 777080.97, 1554161.94);
+INSERT INTO inv_items (id, invoice_id, items_id, qty, price, total) VALUES (96, 41, 82, 2, 503057.87, 1006115.74);
+INSERT INTO inv_items (id, invoice_id, items_id, qty, price, total) VALUES (97, 87, 85, 8, 526137.6, 4209100.8);
+INSERT INTO inv_items (id, invoice_id, items_id, qty, price, total) VALUES (98, 97, 2, 10, 860361.72, 8603617.2);
+INSERT INTO inv_items (id, invoice_id, items_id, qty, price, total) VALUES (99, 40, 73, 4, 139426.88, 557707.52);
+INSERT INTO inv_items (id, invoice_id, items_id, qty, price, total) VALUES (100, 48, 48, 5, 475381.91, 2376909.55);
+INSERT INTO items_customers (id_ic, price, id_items, id_customers) VALUES (1, 561568.82, 54, 92);
+INSERT INTO items_customers (id_ic, price, id_items, id_customers) VALUES (2, 974119.76, 65, 41);
+INSERT INTO items_customers (id_ic, price, id_items, id_customers) VALUES (3, 370353.83, 95, 3);
+INSERT INTO items_customers (id_ic, price, id_items, id_customers) VALUES (4, 499179.34, 63, 73);
+INSERT INTO items_customers (id_ic, price, id_items, id_customers) VALUES (5, 59230.69, 21, 15);
+INSERT INTO items_customers (id_ic, price, id_items, id_customers) VALUES (6, 408998.04, 97, 6);
+INSERT INTO items_customers (id_ic, price, id_items, id_customers) VALUES (7, 398555.4, 66, 4);
+INSERT INTO items_customers (id_ic, price, id_items, id_customers) VALUES (8, 369595.58, 98, 84);
+INSERT INTO items_customers (id_ic, price, id_items, id_customers) VALUES (9, 468580.08, 71, 72);
+INSERT INTO items_customers (id_ic, price, id_items, id_customers) VALUES (10, 211751.76, 38, 48);
+INSERT INTO items_customers (id_ic, price, id_items, id_customers) VALUES (11, 910520.84, 75, 82);
+INSERT INTO items_customers (id_ic, price, id_items, id_customers) VALUES (12, 207734.17, 98, 41);
+INSERT INTO items_customers (id_ic, price, id_items, id_customers) VALUES (13, 737395.49, 85, 6);
+INSERT INTO items_customers (id_ic, price, id_items, id_customers) VALUES (14, 835561.62, 67, 71);
+INSERT INTO items_customers (id_ic, price, id_items, id_customers) VALUES (15, 710329.98, 24, 65);
+INSERT INTO items_customers (id_ic, price, id_items, id_customers) VALUES (16, 269241.53, 31, 19);
+INSERT INTO items_customers (id_ic, price, id_items, id_customers) VALUES (17, 963279.86, 22, 53);
+INSERT INTO items_customers (id_ic, price, id_items, id_customers) VALUES (18, 302053.79, 24, 85);
+INSERT INTO items_customers (id_ic, price, id_items, id_customers) VALUES (19, 614245.45, 46, 41);
+INSERT INTO items_customers (id_ic, price, id_items, id_customers) VALUES (20, 243883.02, 49, 64);
+INSERT INTO items_customers (id_ic, price, id_items, id_customers) VALUES (21, 647362.63, 40, 15);
+INSERT INTO items_customers (id_ic, price, id_items, id_customers) VALUES (22, 621859.78, 92, 41);
+INSERT INTO items_customers (id_ic, price, id_items, id_customers) VALUES (23, 211484.15, 96, 22);
+INSERT INTO items_customers (id_ic, price, id_items, id_customers) VALUES (24, 679553.72, 4, 91);
+INSERT INTO items_customers (id_ic, price, id_items, id_customers) VALUES (25, 475407.35, 71, 13);
+INSERT INTO items_customers (id_ic, price, id_items, id_customers) VALUES (26, 21976.85, 63, 92);
+INSERT INTO items_customers (id_ic, price, id_items, id_customers) VALUES (27, 613902.55, 73, 94);
+INSERT INTO items_customers (id_ic, price, id_items, id_customers) VALUES (28, 742248.98, 72, 67);
+INSERT INTO items_customers (id_ic, price, id_items, id_customers) VALUES (29, 993850.95, 21, 55);
+INSERT INTO items_customers (id_ic, price, id_items, id_customers) VALUES (30, 663655.96, 64, 84);
+INSERT INTO items_customers (id_ic, price, id_items, id_customers) VALUES (31, 499019.72, 22, 11);
+INSERT INTO items_customers (id_ic, price, id_items, id_customers) VALUES (32, 803513.33, 18, 48);
+INSERT INTO items_customers (id_ic, price, id_items, id_customers) VALUES (33, 954335.26, 15, 61);
+INSERT INTO items_customers (id_ic, price, id_items, id_customers) VALUES (34, 847132.54, 56, 79);
+INSERT INTO items_customers (id_ic, price, id_items, id_customers) VALUES (35, 971543.34, 98, 98);
+INSERT INTO items_customers (id_ic, price, id_items, id_customers) VALUES (36, 598596.67, 58, 61);
+INSERT INTO items_customers (id_ic, price, id_items, id_customers) VALUES (37, 705946.84, 24, 3);
+INSERT INTO items_customers (id_ic, price, id_items, id_customers) VALUES (38, 420599.62, 31, 97);
+INSERT INTO items_customers (id_ic, price, id_items, id_customers) VALUES (39, 951343.98, 28, 66);
+INSERT INTO items_customers (id_ic, price, id_items, id_customers) VALUES (40, 441327.14, 33, 63);
+INSERT INTO items_customers (id_ic, price, id_items, id_customers) VALUES (41, 602551.86, 17, 15);
+INSERT INTO items_customers (id_ic, price, id_items, id_customers) VALUES (42, 166561.0, 9, 77);
+INSERT INTO items_customers (id_ic, price, id_items, id_customers) VALUES (43, 605938.96, 57, 2);
+INSERT INTO items_customers (id_ic, price, id_items, id_customers) VALUES (44, 589903.93, 78, 36);
+INSERT INTO items_customers (id_ic, price, id_items, id_customers) VALUES (45, 622258.57, 62, 88);
+INSERT INTO items_customers (id_ic, price, id_items, id_customers) VALUES (46, 208900.9, 29, 76);
+INSERT INTO items_customers (id_ic, price, id_items, id_customers) VALUES (47, 275705.78, 8, 87);
+INSERT INTO items_customers (id_ic, price, id_items, id_customers) VALUES (48, 759508.9, 34, 90);
+INSERT INTO items_customers (id_ic, price, id_items, id_customers) VALUES (49, 251831.19, 27, 99);
+INSERT INTO items_customers (id_ic, price, id_items, id_customers) VALUES (50, 252594.08, 1, 42);
+INSERT INTO items_customers (id_ic, price, id_items, id_customers) VALUES (51, 426460.94, 39, 16);
+INSERT INTO items_customers (id_ic, price, id_items, id_customers) VALUES (52, 627574.83, 93, 97);
+INSERT INTO items_customers (id_ic, price, id_items, id_customers) VALUES (53, 832926.12, 91, 65);
+INSERT INTO items_customers (id_ic, price, id_items, id_customers) VALUES (54, 45642.96, 98, 62);
+INSERT INTO items_customers (id_ic, price, id_items, id_customers) VALUES (55, 442351.7, 10, 7);
+INSERT INTO items_customers (id_ic, price, id_items, id_customers) VALUES (56, 925586.31, 11, 82);
+INSERT INTO items_customers (id_ic, price, id_items, id_customers) VALUES (57, 732125.12, 75, 10);
+INSERT INTO items_customers (id_ic, price, id_items, id_customers) VALUES (58, 372373.95, 6, 66);
+INSERT INTO items_customers (id_ic, price, id_items, id_customers) VALUES (59, 935054.37, 10, 85);
+INSERT INTO items_customers (id_ic, price, id_items, id_customers) VALUES (60, 333013.13, 65, 16);
+INSERT INTO items_customers (id_ic, price, id_items, id_customers) VALUES (61, 194063.06, 63, 18);
+INSERT INTO items_customers (id_ic, price, id_items, id_customers) VALUES (62, 151978.83, 12, 26);
+INSERT INTO items_customers (id_ic, price, id_items, id_customers) VALUES (63, 184523.56, 80, 27);
+INSERT INTO items_customers (id_ic, price, id_items, id_customers) VALUES (64, 163196.0, 62, 9);
+INSERT INTO items_customers (id_ic, price, id_items, id_customers) VALUES (65, 267691.0, 60, 38);
+INSERT INTO items_customers (id_ic, price, id_items, id_customers) VALUES (66, 488816.92, 41, 31);
+INSERT INTO items_customers (id_ic, price, id_items, id_customers) VALUES (67, 495744.09, 41, 56);
+INSERT INTO items_customers (id_ic, price, id_items, id_customers) VALUES (68, 426324.6, 68, 14);
+INSERT INTO items_customers (id_ic, price, id_items, id_customers) VALUES (69, 457494.56, 28, 51);
+INSERT INTO items_customers (id_ic, price, id_items, id_customers) VALUES (70, 633083.79, 88, 14);
+INSERT INTO items_customers (id_ic, price, id_items, id_customers) VALUES (71, 995819.68, 48, 90);
+INSERT INTO items_customers (id_ic, price, id_items, id_customers) VALUES (72, 277508.05, 4, 1);
+INSERT INTO items_customers (id_ic, price, id_items, id_customers) VALUES (73, 571671.66, 61, 41);
+INSERT INTO items_customers (id_ic, price, id_items, id_customers) VALUES (74, 969895.33, 71, 61);
+INSERT INTO items_customers (id_ic, price, id_items, id_customers) VALUES (75, 297992.21, 49, 43);
+INSERT INTO items_customers (id_ic, price, id_items, id_customers) VALUES (76, 22372.09, 98, 53);
+INSERT INTO items_customers (id_ic, price, id_items, id_customers) VALUES (77, 786607.4, 49, 88);
+INSERT INTO items_customers (id_ic, price, id_items, id_customers) VALUES (78, 810139.83, 72, 14);
+INSERT INTO items_customers (id_ic, price, id_items, id_customers) VALUES (79, 553555.16, 66, 4);
+INSERT INTO items_customers (id_ic, price, id_items, id_customers) VALUES (80, 857313.39, 45, 62);
+INSERT INTO items_customers (id_ic, price, id_items, id_customers) VALUES (81, 97601.92, 83, 98);
+INSERT INTO items_customers (id_ic, price, id_items, id_customers) VALUES (82, 446179.99, 21, 13);
+INSERT INTO items_customers (id_ic, price, id_items, id_customers) VALUES (83, 388897.29, 81, 78);
+INSERT INTO items_customers (id_ic, price, id_items, id_customers) VALUES (84, 356436.49, 89, 19);
+INSERT INTO items_customers (id_ic, price, id_items, id_customers) VALUES (85, 480048.75, 55, 47);
+INSERT INTO items_customers (id_ic, price, id_items, id_customers) VALUES (86, 610060.81, 33, 67);
+INSERT INTO items_customers (id_ic, price, id_items, id_customers) VALUES (87, 892489.6, 98, 17);
+INSERT INTO items_customers (id_ic, price, id_items, id_customers) VALUES (88, 106276.44, 99, 56);
+INSERT INTO items_customers (id_ic, price, id_items, id_customers) VALUES (89, 812763.83, 2, 75);
+INSERT INTO items_customers (id_ic, price, id_items, id_customers) VALUES (90, 643853.46, 13, 25);
+INSERT INTO items_customers (id_ic, price, id_items, id_customers) VALUES (91, 955317.01, 98, 44);
+INSERT INTO items_customers (id_ic, price, id_items, id_customers) VALUES (92, 638471.11, 82, 72);
+INSERT INTO items_customers (id_ic, price, id_items, id_customers) VALUES (93, 466989.41, 45, 100);
+INSERT INTO items_customers (id_ic, price, id_items, id_customers) VALUES (94, 985416.9, 99, 100);
+INSERT INTO items_customers (id_ic, price, id_items, id_customers) VALUES (95, 327399.97, 59, 18);
+INSERT INTO items_customers (id_ic, price, id_items, id_customers) VALUES (96, 30580.59, 53, 95);
+INSERT INTO items_customers (id_ic, price, id_items, id_customers) VALUES (97, 874968.8, 79, 17);
+INSERT INTO items_customers (id_ic, price, id_items, id_customers) VALUES (98, 531012.45, 86, 21);
+INSERT INTO items_customers (id_ic, price, id_items, id_customers) VALUES (99, 244143.17, 79, 79);
+INSERT INTO items_customers (id_ic, price, id_items, id_customers) VALUES (100, 580332.55, 33, 72);
+INSERT INTO payments (id_payments, invoice_id, tanggal, nominal, catatan) VALUES (1, 43, '2023-06-30', 599398.37, 'Pembayaran ke-1');
+INSERT INTO payments (id_payments, invoice_id, tanggal, nominal, catatan) VALUES (2, 37, '2024-09-02', 442631.78, 'Pembayaran ke-2');
+INSERT INTO payments (id_payments, invoice_id, tanggal, nominal, catatan) VALUES (3, 93, '2025-07-01', 914326.52, 'Pembayaran ke-3');
+INSERT INTO payments (id_payments, invoice_id, tanggal, nominal, catatan) VALUES (4, 65, '2023-05-12', 606969.63, 'Pembayaran ke-4');
+INSERT INTO payments (id_payments, invoice_id, tanggal, nominal, catatan) VALUES (5, 43, '2025-03-12', 285356.64, 'Pembayaran ke-5');
+INSERT INTO payments (id_payments, invoice_id, tanggal, nominal, catatan) VALUES (6, 18, '2022-06-20', 667411.07, 'Pembayaran ke-6');
+INSERT INTO payments (id_payments, invoice_id, tanggal, nominal, catatan) VALUES (7, 70, '2022-08-13', 294650.92, 'Pembayaran ke-7');
+INSERT INTO payments (id_payments, invoice_id, tanggal, nominal, catatan) VALUES (8, 48, '2022-05-19', 264161.18, 'Pembayaran ke-8');
+INSERT INTO payments (id_payments, invoice_id, tanggal, nominal, catatan) VALUES (9, 99, '2025-08-03', 827372.59, 'Pembayaran ke-9');
+INSERT INTO payments (id_payments, invoice_id, tanggal, nominal, catatan) VALUES (10, 5, '2025-07-26', 347533.2, 'Pembayaran ke-10');
+INSERT INTO payments (id_payments, invoice_id, tanggal, nominal, catatan) VALUES (11, 88, '2024-03-26', 239250.11, 'Pembayaran ke-11');
+INSERT INTO payments (id_payments, invoice_id, tanggal, nominal, catatan) VALUES (12, 87, '2022-11-20', 383240.48, 'Pembayaran ke-12');
+INSERT INTO payments (id_payments, invoice_id, tanggal, nominal, catatan) VALUES (13, 78, '2023-01-01', 898037.67, 'Pembayaran ke-13');
+INSERT INTO payments (id_payments, invoice_id, tanggal, nominal, catatan) VALUES (14, 54, '2023-02-24', 382151.55, 'Pembayaran ke-14');
+INSERT INTO payments (id_payments, invoice_id, tanggal, nominal, catatan) VALUES (15, 70, '2023-06-17', 30848.6, 'Pembayaran ke-15');
+INSERT INTO payments (id_payments, invoice_id, tanggal, nominal, catatan) VALUES (16, 76, '2023-01-14', 173703.24, 'Pembayaran ke-16');
+INSERT INTO payments (id_payments, invoice_id, tanggal, nominal, catatan) VALUES (17, 51, '2023-05-13', 966927.23, 'Pembayaran ke-17');
+INSERT INTO payments (id_payments, invoice_id, tanggal, nominal, catatan) VALUES (18, 73, '2023-03-29', 707974.4, 'Pembayaran ke-18');
+INSERT INTO payments (id_payments, invoice_id, tanggal, nominal, catatan) VALUES (19, 99, '2022-04-02', 974405.9, 'Pembayaran ke-19');
+INSERT INTO payments (id_payments, invoice_id, tanggal, nominal, catatan) VALUES (20, 90, '2023-04-01', 282936.9, 'Pembayaran ke-20');
+INSERT INTO payments (id_payments, invoice_id, tanggal, nominal, catatan) VALUES (21, 15, '2023-08-22', 373509.54, 'Pembayaran ke-21');
+INSERT INTO payments (id_payments, invoice_id, tanggal, nominal, catatan) VALUES (22, 39, '2025-12-08', 840534.5, 'Pembayaran ke-22');
+INSERT INTO payments (id_payments, invoice_id, tanggal, nominal, catatan) VALUES (23, 98, '2022-12-08', 505514.0, 'Pembayaran ke-23');
+INSERT INTO payments (id_payments, invoice_id, tanggal, nominal, catatan) VALUES (24, 10, '2025-06-13', 877634.11, 'Pembayaran ke-24');
+INSERT INTO payments (id_payments, invoice_id, tanggal, nominal, catatan) VALUES (25, 65, '2025-02-06', 935707.14, 'Pembayaran ke-25');
+INSERT INTO payments (id_payments, invoice_id, tanggal, nominal, catatan) VALUES (26, 30, '2024-07-24', 657734.57, 'Pembayaran ke-26');
+INSERT INTO payments (id_payments, invoice_id, tanggal, nominal, catatan) VALUES (27, 21, '2022-06-15', 606116.65, 'Pembayaran ke-27');
+INSERT INTO payments (id_payments, invoice_id, tanggal, nominal, catatan) VALUES (28, 55, '2024-07-10', 711639.43, 'Pembayaran ke-28');
+INSERT INTO payments (id_payments, invoice_id, tanggal, nominal, catatan) VALUES (29, 20, '2022-11-14', 293115.4, 'Pembayaran ke-29');
+INSERT INTO payments (id_payments, invoice_id, tanggal, nominal, catatan) VALUES (30, 58, '2022-10-17', 97067.97, 'Pembayaran ke-30');
+INSERT INTO payments (id_payments, invoice_id, tanggal, nominal, catatan) VALUES (31, 58, '2022-12-10', 316390.1, 'Pembayaran ke-31');
+INSERT INTO payments (id_payments, invoice_id, tanggal, nominal, catatan) VALUES (32, 4, '2023-08-06', 365626.4, 'Pembayaran ke-32');
+INSERT INTO payments (id_payments, invoice_id, tanggal, nominal, catatan) VALUES (33, 14, '2025-05-07', 926589.97, 'Pembayaran ke-33');
+INSERT INTO payments (id_payments, invoice_id, tanggal, nominal, catatan) VALUES (34, 82, '2025-04-24', 923410.2, 'Pembayaran ke-34');
+INSERT INTO payments (id_payments, invoice_id, tanggal, nominal, catatan) VALUES (35, 7, '2022-08-12', 236204.0, 'Pembayaran ke-35');
+INSERT INTO payments (id_payments, invoice_id, tanggal, nominal, catatan) VALUES (36, 73, '2025-05-10', 764440.97, 'Pembayaran ke-36');
+INSERT INTO payments (id_payments, invoice_id, tanggal, nominal, catatan) VALUES (37, 57, '2025-06-19', 870999.22, 'Pembayaran ke-37');
+INSERT INTO payments (id_payments, invoice_id, tanggal, nominal, catatan) VALUES (38, 30, '2022-01-05', 670109.36, 'Pembayaran ke-38');
+INSERT INTO payments (id_payments, invoice_id, tanggal, nominal, catatan) VALUES (39, 32, '2025-03-23', 561934.5, 'Pembayaran ke-39');
+INSERT INTO payments (id_payments, invoice_id, tanggal, nominal, catatan) VALUES (40, 87, '2024-02-17', 43162.45, 'Pembayaran ke-40');
+INSERT INTO payments (id_payments, invoice_id, tanggal, nominal, catatan) VALUES (41, 26, '2022-11-11', 526026.59, 'Pembayaran ke-41');
+INSERT INTO payments (id_payments, invoice_id, tanggal, nominal, catatan) VALUES (42, 92, '2024-11-14', 34520.78, 'Pembayaran ke-42');
+INSERT INTO payments (id_payments, invoice_id, tanggal, nominal, catatan) VALUES (43, 43, '2025-01-30', 643006.54, 'Pembayaran ke-43');
+INSERT INTO payments (id_payments, invoice_id, tanggal, nominal, catatan) VALUES (44, 20, '2022-06-21', 958128.81, 'Pembayaran ke-44');
+INSERT INTO payments (id_payments, invoice_id, tanggal, nominal, catatan) VALUES (45, 56, '2024-10-15', 509929.38, 'Pembayaran ke-45');
+INSERT INTO payments (id_payments, invoice_id, tanggal, nominal, catatan) VALUES (46, 9, '2025-06-14', 939822.2, 'Pembayaran ke-46');
+INSERT INTO payments (id_payments, invoice_id, tanggal, nominal, catatan) VALUES (47, 33, '2024-02-11', 270084.48, 'Pembayaran ke-47');
+INSERT INTO payments (id_payments, invoice_id, tanggal, nominal, catatan) VALUES (48, 20, '2022-10-22', 103754.48, 'Pembayaran ke-48');
+INSERT INTO payments (id_payments, invoice_id, tanggal, nominal, catatan) VALUES (49, 66, '2023-07-21', 12808.38, 'Pembayaran ke-49');
+INSERT INTO payments (id_payments, invoice_id, tanggal, nominal, catatan) VALUES (50, 32, '2023-01-02', 467133.85, 'Pembayaran ke-50');
+INSERT INTO payments (id_payments, invoice_id, tanggal, nominal, catatan) VALUES (51, 53, '2023-02-01', 972757.07, 'Pembayaran ke-51');
+INSERT INTO payments (id_payments, invoice_id, tanggal, nominal, catatan) VALUES (52, 69, '2025-06-14', 594163.61, 'Pembayaran ke-52');
+INSERT INTO payments (id_payments, invoice_id, tanggal, nominal, catatan) VALUES (53, 97, '2025-11-11', 409564.28, 'Pembayaran ke-53');
+INSERT INTO payments (id_payments, invoice_id, tanggal, nominal, catatan) VALUES (54, 88, '2024-09-21', 669625.36, 'Pembayaran ke-54');
+INSERT INTO payments (id_payments, invoice_id, tanggal, nominal, catatan) VALUES (55, 58, '2022-01-08', 129172.22, 'Pembayaran ke-55');
+INSERT INTO payments (id_payments, invoice_id, tanggal, nominal, catatan) VALUES (56, 75, '2022-12-28', 978769.53, 'Pembayaran ke-56');
+INSERT INTO payments (id_payments, invoice_id, tanggal, nominal, catatan) VALUES (57, 54, '2023-04-02', 64324.7, 'Pembayaran ke-57');
+INSERT INTO payments (id_payments, invoice_id, tanggal, nominal, catatan) VALUES (58, 90, '2023-11-18', 402876.54, 'Pembayaran ke-58');
+INSERT INTO payments (id_payments, invoice_id, tanggal, nominal, catatan) VALUES (59, 21, '2025-02-28', 305437.69, 'Pembayaran ke-59');
+INSERT INTO payments (id_payments, invoice_id, tanggal, nominal, catatan) VALUES (60, 15, '2025-02-18', 91315.98, 'Pembayaran ke-60');
+INSERT INTO payments (id_payments, invoice_id, tanggal, nominal, catatan) VALUES (61, 25, '2024-01-31', 127608.56, 'Pembayaran ke-61');
+INSERT INTO payments (id_payments, invoice_id, tanggal, nominal, catatan) VALUES (62, 50, '2025-05-31', 561081.06, 'Pembayaran ke-62');
+INSERT INTO payments (id_payments, invoice_id, tanggal, nominal, catatan) VALUES (63, 70, '2023-01-18', 356086.64, 'Pembayaran ke-63');
+INSERT INTO payments (id_payments, invoice_id, tanggal, nominal, catatan) VALUES (64, 29, '2023-06-27', 367322.07, 'Pembayaran ke-64');
+INSERT INTO payments (id_payments, invoice_id, tanggal, nominal, catatan) VALUES (65, 94, '2023-08-02', 585035.38, 'Pembayaran ke-65');
+INSERT INTO payments (id_payments, invoice_id, tanggal, nominal, catatan) VALUES (66, 96, '2024-03-10', 184896.07, 'Pembayaran ke-66');
+INSERT INTO payments (id_payments, invoice_id, tanggal, nominal, catatan) VALUES (67, 50, '2022-10-11', 168618.27, 'Pembayaran ke-67');
+INSERT INTO payments (id_payments, invoice_id, tanggal, nominal, catatan) VALUES (68, 74, '2024-05-26', 353548.89, 'Pembayaran ke-68');
+INSERT INTO payments (id_payments, invoice_id, tanggal, nominal, catatan) VALUES (69, 78, '2025-08-07', 810741.62, 'Pembayaran ke-69');
+INSERT INTO payments (id_payments, invoice_id, tanggal, nominal, catatan) VALUES (70, 90, '2025-02-01', 578685.61, 'Pembayaran ke-70');
+INSERT INTO payments (id_payments, invoice_id, tanggal, nominal, catatan) VALUES (71, 75, '2023-07-20', 939435.01, 'Pembayaran ke-71');
+INSERT INTO payments (id_payments, invoice_id, tanggal, nominal, catatan) VALUES (72, 66, '2022-05-28', 123002.31, 'Pembayaran ke-72');
+INSERT INTO payments (id_payments, invoice_id, tanggal, nominal, catatan) VALUES (73, 53, '2024-08-09', 151535.59, 'Pembayaran ke-73');
+INSERT INTO payments (id_payments, invoice_id, tanggal, nominal, catatan) VALUES (74, 29, '2022-12-21', 548140.01, 'Pembayaran ke-74');
+INSERT INTO payments (id_payments, invoice_id, tanggal, nominal, catatan) VALUES (75, 33, '2024-07-22', 987670.91, 'Pembayaran ke-75');
+INSERT INTO payments (id_payments, invoice_id, tanggal, nominal, catatan) VALUES (76, 91, '2022-08-25', 123960.41, 'Pembayaran ke-76');
+INSERT INTO payments (id_payments, invoice_id, tanggal, nominal, catatan) VALUES (77, 17, '2025-11-12', 986628.05, 'Pembayaran ke-77');
+INSERT INTO payments (id_payments, invoice_id, tanggal, nominal, catatan) VALUES (78, 22, '2025-01-23', 985278.37, 'Pembayaran ke-78');
+INSERT INTO payments (id_payments, invoice_id, tanggal, nominal, catatan) VALUES (79, 37, '2022-07-08', 286336.64, 'Pembayaran ke-79');
+INSERT INTO payments (id_payments, invoice_id, tanggal, nominal, catatan) VALUES (80, 48, '2025-11-04', 46047.23, 'Pembayaran ke-80');
+INSERT INTO payments (id_payments, invoice_id, tanggal, nominal, catatan) VALUES (81, 55, '2025-11-09', 27675.39, 'Pembayaran ke-81');
+INSERT INTO payments (id_payments, invoice_id, tanggal, nominal, catatan) VALUES (82, 11, '2023-02-07', 931161.08, 'Pembayaran ke-82');
+INSERT INTO payments (id_payments, invoice_id, tanggal, nominal, catatan) VALUES (83, 88, '2025-09-30', 416917.79, 'Pembayaran ke-83');
+INSERT INTO payments (id_payments, invoice_id, tanggal, nominal, catatan) VALUES (84, 46, '2025-07-07', 445427.5, 'Pembayaran ke-84');
+INSERT INTO payments (id_payments, invoice_id, tanggal, nominal, catatan) VALUES (85, 54, '2022-09-20', 285724.66, 'Pembayaran ke-85');
+INSERT INTO payments (id_payments, invoice_id, tanggal, nominal, catatan) VALUES (86, 67, '2022-03-28', 805559.12, 'Pembayaran ke-86');
+INSERT INTO payments (id_payments, invoice_id, tanggal, nominal, catatan) VALUES (87, 21, '2025-11-10', 790207.6, 'Pembayaran ke-87');
+INSERT INTO payments (id_payments, invoice_id, tanggal, nominal, catatan) VALUES (88, 53, '2022-06-15', 851159.41, 'Pembayaran ke-88');
+INSERT INTO payments (id_payments, invoice_id, tanggal, nominal, catatan) VALUES (89, 66, '2024-02-11', 646685.85, 'Pembayaran ke-89');
+INSERT INTO payments (id_payments, invoice_id, tanggal, nominal, catatan) VALUES (90, 41, '2023-09-11', 124627.94, 'Pembayaran ke-90');
+INSERT INTO payments (id_payments, invoice_id, tanggal, nominal, catatan) VALUES (91, 4, '2025-07-14', 316668.33, 'Pembayaran ke-91');
+INSERT INTO payments (id_payments, invoice_id, tanggal, nominal, catatan) VALUES (92, 64, '2022-08-18', 112609.85, 'Pembayaran ke-92');
+INSERT INTO payments (id_payments, invoice_id, tanggal, nominal, catatan) VALUES (93, 10, '2022-11-08', 211537.05, 'Pembayaran ke-93');
+INSERT INTO payments (id_payments, invoice_id, tanggal, nominal, catatan) VALUES (94, 68, '2025-08-27', 869888.6, 'Pembayaran ke-94');
+INSERT INTO payments (id_payments, invoice_id, tanggal, nominal, catatan) VALUES (95, 37, '2025-05-21', 537646.49, 'Pembayaran ke-95');
+INSERT INTO payments (id_payments, invoice_id, tanggal, nominal, catatan) VALUES (96, 81, '2025-09-04', 104757.75, 'Pembayaran ke-96');
+INSERT INTO payments (id_payments, invoice_id, tanggal, nominal, catatan) VALUES (97, 100, '2022-05-10', 846617.4, 'Pembayaran ke-97');
+INSERT INTO payments (id_payments, invoice_id, tanggal, nominal, catatan) VALUES (98, 50, '2023-08-01', 776569.42, 'Pembayaran ke-98');
+INSERT INTO payments (id_payments, invoice_id, tanggal, nominal, catatan) VALUES (99, 19, '2024-06-29', 278511.69, 'Pembayaran ke-99');
+INSERT INTO payments (id_payments, invoice_id, tanggal, nominal, catatan) VALUES (100, 14, '2024-07-29', 877729.73, 'Pembayaran ke-100');
 COMMIT;
-
--- Restore previous charset/collation settings
-/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
-/*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
-/*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
+INSERT INTO pic (id, name, jabatan, email, nomer, status) VALUES (1, 'PIC_1', 'Jabatan_1', 'pic_1@example.com', '086562014786', 'no_use');
+INSERT INTO pic (id, name, jabatan, email, nomer, status) VALUES (2, 'PIC_2', 'Jabatan_2', 'pic_2@example.com', '082067363147', 'no_use');
+INSERT INTO pic (id, name, jabatan, email, nomer, status) VALUES (3, 'PIC_3', 'Jabatan_3', 'pic_3@example.com', '083935629092', 'no_use');
+INSERT INTO pic (id, name, jabatan, email, nomer, status) VALUES (4, 'PIC_4', 'Jabatan_4', 'pic_4@example.com', '080338591979', 'no_use');
+INSERT INTO pic (id, name, jabatan, email, nomer, status) VALUES (5, 'PIC_5', 'Jabatan_0', 'pic_5@example.com', '081643078509', 'no_use');
+INSERT INTO pic (id, name, jabatan, email, nomer, status) VALUES (6, 'PIC_6', 'Jabatan_1', 'pic_6@example.com', '082272507766', 'no_use');
+INSERT INTO pic (id, name, jabatan, email, nomer, status) VALUES (7, 'PIC_7', 'Jabatan_2', 'pic_7@example.com', '087019222944', 'no_use');
+INSERT INTO pic (id, name, jabatan, email, nomer, status) VALUES (8, 'PIC_8', 'Jabatan_3', 'pic_8@example.com', '086268807692', 'no_use');
+INSERT INTO pic (id, name, jabatan, email, nomer, status) VALUES (9, 'PIC_9', 'Jabatan_4', 'pic_9@example.com', '089747646659', 'no_use');
+INSERT INTO pic (id, name, jabatan, email, nomer, status) VALUES (10, 'PIC_10', 'Jabatan_0', 'pic_10@example.com', '084844674913', 'no_use');

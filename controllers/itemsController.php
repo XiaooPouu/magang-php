@@ -20,7 +20,7 @@ $_SESSION['form_data'] = [
 // Tambah item
 if (isset($_POST['add_item'])) {
     // Validasi apakah item sudah ada
-    $existingItem = $itemModel->getByRefNo($ref_no);
+    $existingItem = $itemModel->getByRefNo($ref_no, $id);
     if ($existingItem) {
         $_SESSION['alert'] = [
             'type' => 'danger',
@@ -42,8 +42,17 @@ if (isset($_POST['add_item'])) {
 
 // Update item
 else if (isset($_POST['update_item'])) {
-    // Validasi dan update item
-    if ($id && $ref_no && $name && $price) {
+    // validasi ref_no
+    $existingItem = $itemModel->getByRefNo($ref_no, $id);
+
+    if($existingItem){
+        $_SESSION['alert_update'] = [
+            'type' => 'danger',
+            'message' => 'Ref No sudah ada, silahkan coba lagi!'
+        ];
+    } else {
+        // Validasi dan update item
+     if ($id && $ref_no && $name && $price) {
         $itemModel->update($id, $ref_no, $name, $price);
         $_SESSION['alert_update'] = [
             'type' => 'success',
@@ -59,6 +68,7 @@ else if (isset($_POST['update_item'])) {
         ];
         header('Location:' . $BaseUrl->getUrlFormItems());
         exit();
+    }
     }
 }
 

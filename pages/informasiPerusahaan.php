@@ -7,6 +7,9 @@ include_once BASE_PATH . 'models/company.php';
 
 $company = $companyModel->getCompany();
 $getStatusPIC = $companyModel->getStatusPIC();
+
+$logoPath = $company['logo'] ?? null;
+$ttdPath = $company['tanda_tangan'] ?? null;
 ?>
 
 <!doctype html>
@@ -97,18 +100,14 @@ $getStatusPIC = $companyModel->getStatusPIC();
 
         <div class="content-wrapper">
 
-  <!-- Main content -->
-  <section class="content">
-    
-      <!-- Card Box -->
+ <!-- Main content -->
+<section class="content">
+  <div class="row justify-content-start">
+    <div class="col-md-6">
+      <!-- Card Box 1: Detail Perusahaan -->
       <div class="card">
         <div class="card-header bg-info d-flex justify-content-between align-items-center">
           <h3 class="card-title mb-0">Detail Pengaturan</h3>
-          <div class="ms-auto">
-          <a href="<?= $BaseUrl->getUrlFormPerusahaan($company['id']);?>" class="btn btn-primary btn-sm">
-            <i class="bi bi-pencil-square"></i> Edit Perusahaan
-          </a>
-          </div>
         </div>
         <div class="card-body">
           <table class="table table-borderless">
@@ -149,10 +148,64 @@ $getStatusPIC = $companyModel->getStatusPIC();
               <td><?= $company['email'] ?? '-' ?></td>
             </tr>
           </table>
+          <div class="text-end mt-lg-3">
+            <a href="<?= $BaseUrl->getUrlFormPerusahaan($company['id']);?>" class="btn btn-outline-primary rounded-pill px-4">
+              <i class="bi bi-pencil"></i> Ubah
+            </a>
+          </div>
         </div>
       </div>
-    
-  </section>
+    </div>
+
+    <div class="col-md-6">
+  <!-- Card Box 2: Logo & Tanda Tangan -->
+  <div class="card">
+    <div class="card-header bg-info">
+      <h3 class="card-title mb-0">Logo & Tanda Tangan Dokumen</h3>
+    </div>
+    <div class="card-body">
+      <div class="row mb-3 g-3">
+        <div class="col-6">
+          <label class="form-label">Logo Perusahaan</label>
+          <div class="border border-secondary rounded text-center flex-column d-flex align-items-center justify-content-center bg-white"
+               style="width: 100%; height: 250px; overflow: hidden;">
+            <?php if ($logoPath) :?>
+              <img src="<?= $BaseUrl->getLogoPerusahaan() . htmlspecialchars($logoPath); ?>" alt="Logo Perusahaan"
+                   style="width: 300px; height: 200px; object-fit: contain;">
+            <?php else :?>
+              <div class="small">Belum ada dokumen</div>
+              <div class="small">Maksimal ukuran 20MB JPEG, PNG</div>
+              <div class="small">Rekomendasi ukuran 300x200</div>
+            <?php endif; ?>
+          </div>
+        </div>
+        <div class="col-6">
+          <label class="form-label">Tanda Tangan</label>
+          <div class="border border-secondary rounded d-flex text-center flex-column align-items-center justify-content-center bg-white"
+               style="width: 100%; height: 250px; overflow: hidden;">
+            <?php if($ttdPath) :?>
+              <img src="<?= $BaseUrl->getTandaTanganPerusahaan() . htmlspecialchars($ttdPath); ?>" alt="Logo Perusahaan"
+                   style="width: 300px; height: 200px; object-fit: contain;">
+            <?php else:?>
+              <div class="small">Belum ada dokumen</div>
+              <div class="small">Maksimal ukuran 20MB JPEG, PNG</div>
+              <div class="small">Rekomendasi ukuran 300x200</div>
+            <?php endif ;?>
+          </div>
+        </div>
+      </div>
+      <div class="text-end">
+        <a href="<?= $BaseUrl->getUrlFormPerusahaanLogoTTD($company['id']);?>" class="btn btn-outline-primary rounded-pill px-4">
+          <i class="bi bi-pencil"></i> Ubah
+        </a>
+      </div>
+    </div>
+  </div>
+</div>
+  </div>
+</section>
+
+
 </div>
 
             <!--end::Row-->

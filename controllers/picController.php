@@ -19,7 +19,7 @@ $nomer = $_POST['nomer'] ?? null;
         'nomer' => $nomer
     ];
 
-$emailExist = $picModel->getEmail($email);
+$emailExist = $picModel->getEmail($email, $id);
 
 if(isset($_POST['add_pic'])|| isset($_POST['update_pic'])){
     if($emailExist){

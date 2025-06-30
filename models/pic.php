@@ -13,9 +13,10 @@ class PIC {
         return $this->db->select("pic", "*", []);
     }
 
-    public function getEmail($email){
-        return $this->db->get("pic", "*", [
-            "email" => $email
+    public function getEmail($email, $id){
+        return $this->db->has("pic", [
+            "email" => $email,
+            "id[!]" => $id
         ]);
     }
 

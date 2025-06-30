@@ -60,16 +60,10 @@ class Invoice {
     
 
     // Mendapatkan invoice berdasarkan kode_inv
-    public function getBykode_inv($kode_inv) {
-        return $this->db->get('invoice', [
-            '[>]customers' => ['customers_id' => 'id']
-        ], [
-            'invoice.id_inv',
-            'invoice.kode_inv',
-            'invoice.tgl_inv',
-            'customers.name AS nama_customer'
-        ], [
-            'invoice.kode_inv' => $kode_inv
+    public function getBykode_inv($kode_inv, $id_inv) {
+        return $this->db->has("invoice", [
+            "kode_inv" => $kode_inv,
+            "id_inv[!]" => $id_inv
         ]);
     }
 
@@ -205,7 +199,7 @@ public function getGrandTotal($id_inv) {
     // Ambil data dasar dari invoice + customer + total item
     $data = $this->db->select('invoice', [
         '[>]customers' => ['customers_id' => 'id'],
-        '[<]inv_items' => ['id_inv' => 'invoice_id']
+        '[>]inv_items' => ['id_inv' => 'invoice_id']
     ], [
         'invoice.id_inv',
         'invoice.kode_inv',
@@ -225,12 +219,12 @@ public function getGrandTotal($id_inv) {
     $filtered = [];
     foreach ($data as $inv) {
         $sisa = $this->getSisa($inv['id_inv'])['sisa'] ?? 0;
+        $isKosong = $inv['grand_total'] == 0;
         $isLunas = $sisa <= 0;
 
-        if (
-            ($statusLunas === 'lunas' && $isLunas) ||
-            ($statusLunas === 'belum_lunas' && !$isLunas)
-        ) {
+        if($statusLunas === 'belum_ada_item' && $isKosong){
+            $filtered[] = $inv;
+        } else if(($statusLunas === 'belum_lunas' && !$isLunas) || ($statusLunas === 'lunas' && $isLunas)){
             $filtered[] = $inv;
         }
     }

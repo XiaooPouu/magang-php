@@ -6,6 +6,8 @@ include_once BASE_PATH . 'models/payments.php';
 include_once BASE_PATH . 'models/invoice.php';
 require_once BASE_PATH . 'function/baseurl.php';
 
+$back = $BaseUrl->getBackUrl('data_invoice_items', $BaseUrl->getUrlDataPayments());
+
 $formData = isset($_SESSION['form_data']) ? $_SESSION['form_data'] : [
     'invoice_id' => '',
     'tanggal' => '',
@@ -239,7 +241,7 @@ $sisa = $dataSisa['sisa'];
 
                   <!--begin::Footer-->
                   <div class="card-footer d-flex align-items-center">
-                          <a href="<?= $BaseUrl->getUrlDataPayments();?>" class="btn btn-secondary" style="padding: 8px 16px;">
+                          <a href="<?=$back?>" class="btn btn-secondary" style="padding: 8px 16px;">
                             <i class="bi bi-x-circle me-1"></i> Cancel</a>
                           <button type="submit" class="btn btn-success ms-auto" style="padding: 8px 16px;">
                             <i class="bi bi-check-circle-fill me-1"></i> Submit</button>

@@ -199,13 +199,22 @@ if(isset($_SESSION['search_data'])){
                           <td><?= htmlspecialchars($row['kode_inv'])?></td>
                           <td class="text-end"><?= htmlspecialchars('Rp. ' . number_format($row['nominal'], 0, ',', '.'))?></td>
                           <td class="text-center">
-                          <a href="<?= $BaseUrl->getUrlFormPayments($row['id_payments'], $row['invoice_id'])?>" class="btn btn-sm btn-warning me-1">
-              <i class="bi bi-pencil-square me-1"></i>Edit</a>
-              <a href="<?= $BaseUrl->getPrintKwitansi($row['id_payments']) ?>" class="btn btn-success btn-sm">
-                <i class="bi bi-printer me-1"></i> Print
-                </a>
-              <a href="<?= $BaseUrl->getUrlControllerDeletePayments($row['id_payments']) ?>" class="btn btn-sm btn-danger" onclick="return confirm('Are you sure?')">
-              <i class="bi bi-trash me-1"></i>Delete</a>
+                               <div class="btn-group">
+                              <button
+                                type="button"
+                                class="btn btn-primary dropdown-toggle"
+                                data-bs-toggle="dropdown"
+                                aria-expanded="false"
+                              >
+                                Actions
+                              </button>
+                              <ul class="dropdown-menu">
+                                <li><a class="dropdown-item" href="<?= $BaseUrl->getUrlFormPayments($row['id_payments'], $row['invoice_id'])?>"><i class="bi bi-pencil me-1"></i> Edit</a></li>
+                                <li><a class="dropdown-item" href="<?= $BaseUrl->getUrlControllerDeletePayments($row['id_payments']) ?>" onclick="return confirm('Are you sure?')"><i class="bi bi-trash me-1"></i> Delete</a></li>
+                                <li><hr class="dropdown-divider" /></li>
+                                <li><a class="dropdown-item" href="<?= $BaseUrl->getPrintKwitansi($row['id_payments']) ?>"><i class="bi bi-printer me-1"></i> Print Kwitansi</a></li>
+                              </ul>
+                            </div>
                           </td>
                         </tr>
                        <?php endforeach;?>

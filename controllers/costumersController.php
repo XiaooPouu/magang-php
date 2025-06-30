@@ -21,7 +21,7 @@ $_SESSION['form_data'] = [
     'email' => $email
 ];
 
-$emailSama = $costumerModel->getByEmail($email);
+$emailSama = $costumerModel->getByEmail($email, $id);
 
 if(isset($_POST['add_costumer']) || isset($_POST['update_costumer'])){
     if($emailSama){
@@ -37,7 +37,7 @@ if(isset($_POST['add_costumer']) || isset($_POST['update_costumer'])){
 // Tambah costumer
 if (isset($_POST['add_costumer'])) {
 
-    $existingCostumer = $costumerModel->getByRefNo($ref_no);
+    $existingCostumer = $costumerModel->getByRefNo($ref_no, $id);
 
     // cek apakah ref_no sudah ada
     if($existingCostumer){
@@ -65,9 +65,17 @@ if (isset($_POST['add_costumer'])) {
 
 // Update costumer
 else if (isset($_POST['update_costumer'])) {
-    if($id && $ref_no && $name){
+
+    $existingCostumer = $costumerModel->getByRefNo($ref_no, $id);
+    if($existingCostumer){
+        $_SESSION['alert'] = [
+            'type' => 'danger',
+            'message' => 'Ref No sudah ada, silahkan coba lagi!'  
+        ];
+    } else {
+        if($id && $ref_no && $name){
         $costumerModel->update($id, $ref_no, $name, $alamat, $nomer, $email);
-        $_SESSION['alert_update'] = [
+        $_SESSION['alert'] = [
             'type' => 'success',
             'message' => 'Costumer berhasil diupdate!'
         ];
@@ -75,13 +83,13 @@ else if (isset($_POST['update_costumer'])) {
         header('Location:' . $BaseUrl->getUrlDataCostumer());
         exit();
     } else {
-        $_SESSION['alert_update'] = [
+        $_SESSION['alert'] = [
             'type' => 'danger',
             'message' => 'Data tidak lengkap untuk update costumer!'
         ];
         header('Location:' . $BaseUrl->getUrlFormCostumer());
         exit();
-
+    }
     }
 }
 
@@ -96,7 +104,7 @@ else if (isset($_GET['delete_costumer'])) {
     $id = $_GET['delete_costumer'];
 
      if($costumerModel->isUsedId($id)){
-        $_SESSION['alert_delete'] = [
+        $_SESSION['alert'] = [
             'type' => 'danger',
             'message' => 'Customer tidak dapat dihapus karena masih digunakan di invoice, atau items customers.'
         ];
@@ -106,7 +114,7 @@ else if (isset($_GET['delete_costumer'])) {
     $costumerModel->delete($id);
 
     // simpan alert_delete ke session
-    $_SESSION['alert_delete'] = [
+    $_SESSION['alert'] = [
       'type' => 'success',
       'message' => 'Costumer berhasil dihapus!'  
     ];

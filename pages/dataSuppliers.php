@@ -205,10 +205,20 @@ if(isset($_SESSION['alert_update'])) {
                         <tr class="align-middle">
                           <td><?= htmlspecialchars($sp['ref_no'])?></td>
                           <td><?= htmlspecialchars($sp['name'])?></td>
-                          <td class="text-center"><a href="<?= $BaseUrl->getUrlFormSupplier($sp['id'])?>" class="btn btn-sm btn-warning me-1">
-                            <i class="bi bi-pencil-square me-1"></i>Edit</a>
-                           <a href="<?= $BaseUrl->getUrlControllerDeleteSupplier($sp['id']) ?>" class="btn btn-sm btn-danger" onclick="return confirm('Are you sure?')">
-                            <i class="bi bi-trash me-1"></i>Delete</a>
+                          <td class="text-center"><div class="btn-group">
+                              <button
+                                type="button"
+                                class="btn btn-primary dropdown-toggle"
+                                data-bs-toggle="dropdown"
+                                aria-expanded="false"
+                              >
+                                Actions
+                              </button>
+                              <ul class="dropdown-menu">
+                                <li><a class="dropdown-item" href="<?= $BaseUrl->getUrlFormSupplier($sp['id'])?>"><i class="bi bi-pencil me-1"></i> Edit</a></li>
+                                <li><a class="dropdown-item" href="<?= $BaseUrl->getUrlControllerDeleteSupplier($sp['id']) ?>" onclick="return confirm('Are you sure?')"><i class="bi bi-trash me-1"></i>Delete</a></li>
+                              </ul>
+                            </div>
                           </td>
                         </tr>
                       </tbody>
@@ -219,19 +229,27 @@ if(isset($_SESSION['alert_update'])) {
                     <!-- /.card-body -->
                   <div class="card-footer clearfix">
                     <ul class="pagination pagination-sm m-0 float-end">
-                      <?php if ($page > 1): ?>
-                        <li class="page-item"><a class="page-link" href="?page=<?= $page - 1 ?>">&laquo;</a></li>
-                      <?php endif; ?>
 
-                      <?php for ($i = 1; $i <= $totalPages; $i++): ?>
-                        <li class="page-item <?= $i == $page ? 'active' : '' ?>">
-                          <a class="page-link" href="?page=<?= $i ?>"><?= $i ?></a>
-                        </li>
-                      <?php endfor; ?>
+                      <?php if ($page > 4): ?>
+                      <li class="page-item"><a class="page-link" href="?page=1">1</a></li>
+                      <li class="page-item disabled"><span class="page-link">...</span></li>
+                    <?php endif; ?>
 
-                      <?php if ($page < $totalPages): ?>
-                        <li class="page-item"><a class="page-link" href="?page=<?= $page + 1 ?>">&raquo;</a></li>
-                      <?php endif; ?>
+                    <?php
+                      $startPage = max(1, $page - 2);
+                      $endPage = min($totalPages, $page + 2);
+                      for ($i = $startPage; $i <= $endPage; $i++):
+                    ?>
+                      <li class="page-item <?= ($i == $page) ? 'active' : '' ?>">
+                        <a class="page-link" href="?page=<?= $i ?>"><?= $i ?></a>
+                      </li>
+                    <?php endfor; ?>
+
+                    <?php if ($page < $totalPages - 3): ?>
+                      <li class="page-item disabled"><span class="page-link">...</span></li>
+                      <li class="page-item"><a class="page-link" href="?page=<?= $totalPages ?>"><?= $totalPages ?></a></li>
+                    <?php endif; ?>
+
                     </ul>
                   </div>
                 </div>
