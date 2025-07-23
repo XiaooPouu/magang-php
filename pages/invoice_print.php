@@ -5,6 +5,8 @@ require_once BASE_PATH . 'models/invoice.php';
 require_once BASE_PATH . 'models/invoice_items.php';
 require_once BASE_PATH . 'function/baseurl.php';
 include_once BASE_PATH . 'models/company.php';
+require_once BASE_PATH . 'function/auth.php';
+checkLogin();
 
 $id_inv = $_GET['id_inv'] ?? null;
 if (!$id_inv) {

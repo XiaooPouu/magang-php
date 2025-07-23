@@ -241,6 +241,22 @@ class Baseurl
         return BASE_URL . 'index.php';
     }
 
+    public function getUrlLogin(){
+        return BASE_URL . 'pages/auth/login.php';
+    }
+
+    public function getUrlForgotPassword(){
+        return BASE_URL . 'pages/auth/forgot_password.php';
+    }
+
+    public function getAuthController(){
+        return BASE_URL . 'controllers/authController.php';
+    }
+
+    public function getForgotPasswordController(){
+        return BASE_URL . 'controllers/forgot_passwordController.php';
+    }
+
     public function getUploadsLogo(){
         return BASE_PATH . 'uploads/logo/';
     }
@@ -298,6 +314,7 @@ class Baseurl
            return $default;
        }
     }
+    
 }
 
 

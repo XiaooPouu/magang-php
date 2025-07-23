@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Jun 26, 2025 at 05:01 AM
+-- Generation Time: Jul 11, 2025 at 09:49 AM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -68,7 +68,8 @@ CREATE TABLE `invoice` (
   `tgl_inv` date NOT NULL,
   `customers_id` int(11) NOT NULL,
   `tgl_tempo` date NOT NULL,
-  `note` text DEFAULT NULL
+  `note` text DEFAULT NULL,
+  `terms_conditions` text DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
@@ -153,6 +154,22 @@ CREATE TABLE `suppliers` (
   `name` varchar(100) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `users`
+--
+
+CREATE TABLE `users` (
+  `id` int(11) NOT NULL,
+  `username` varchar(50) NOT NULL,
+  `email` varchar(100) NOT NULL,
+  `password` varchar(255) NOT NULL,
+  `role` enum('admin','user') NOT NULL DEFAULT 'user',
+  `reset_token` varchar(64) DEFAULT NULL,
+  `reset_token_expiry` datetime DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
 --
 -- Indexes for dumped tables
 --
@@ -224,6 +241,14 @@ ALTER TABLE `suppliers`
   ADD UNIQUE KEY `ref_no_unique` (`ref_no`);
 
 --
+-- Indexes for table `users`
+--
+ALTER TABLE `users`
+  ADD PRIMARY KEY (`id`),
+  ADD UNIQUE KEY `email` (`email`),
+  ADD UNIQUE KEY `reset_token` (`reset_token`);
+
+--
 -- AUTO_INCREMENT for dumped tables
 --
 
@@ -279,6 +304,12 @@ ALTER TABLE `pic`
 -- AUTO_INCREMENT for table `suppliers`
 --
 ALTER TABLE `suppliers`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT for table `users`
+--
+ALTER TABLE `users`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --

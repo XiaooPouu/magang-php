@@ -4,7 +4,8 @@ require_once __DIR__ . '/../config/env.php';
 require_once BASE_PATH . 'config/database.php';
 include_once BASE_PATH . 'models/items.php';
 require_once BASE_PATH . 'function/baseurl.php';
-
+require_once BASE_PATH . 'function/auth.php';
+checkLogin();
 
 // Ambil data dari session kalau ada
 $search = $_SESSION['items_data'] ?? [];

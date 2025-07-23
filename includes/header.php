@@ -1,3 +1,9 @@
+<?php
+require_once __DIR__ . '/../config/env.php';
+require_once BASE_PATH . 'function/baseurl.php';
+?>
+
+
 <!-- Navbar -->
 <nav class="app-header navbar navbar-expand bg-body">
   <!--begin::Container-->
@@ -185,7 +191,7 @@
           <!-- Menu Footer-->
           <li class="user-footer">
             <a href="#" class="btn btn-default btn-flat">Profile</a>
-            <a href="#" class="btn btn-default btn-flat float-end">Sign out</a>
+            <a href="<?= $BaseUrl->getUrlLogin();?>" class="btn btn-default btn-flat float-end">Sign out</a>
           </li>
         </ul>
       </li>

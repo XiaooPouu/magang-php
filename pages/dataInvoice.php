@@ -6,6 +6,8 @@ include_once BASE_PATH . 'models/invoice_items.php';
 include BASE_PATH . 'models/costumer.php';
 require_once BASE_PATH . 'config/database.php';
 require_once BASE_PATH . 'function/baseurl.php';
+require_once BASE_PATH . 'function/auth.php';
+checkLogin();
 
 $customers = $costumerModel->getAll();
 

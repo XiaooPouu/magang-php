@@ -4,6 +4,8 @@ require_once __DIR__ . '/../config/env.php';
 require_once BASE_PATH . 'config/database.php';
 include_once BASE_PATH . 'models/payments.php';
 require_once BASE_PATH . 'function/baseurl.php';
+require_once BASE_PATH . 'function/auth.php';
+checkLogin();
 
 $page = isset($_GET['page']) ? $_GET['page'] : 1;
 $perPage = 5;
@@ -231,19 +233,25 @@ if(isset($_SESSION['search_data'])){
                   <!-- footer card -->
                     <div class="card-footer clearfix">
                     <ul class="pagination pagination-sm m-0 float-end">
-                      <?php if ($page > 1): ?>
-                        <li class="page-item"><a class="page-link" href="?page=<?= $page - 1 ?>">&laquo;</a></li>
-                      <?php endif; ?>
+                      <?php if ($page > 4): ?>
+                      <li class="page-item"><a class="page-link" href="?page=1">1</a></li>
+                      <li class="page-item disabled"><span class="page-link">...</span></li>
+                    <?php endif; ?>
 
-                      <?php for ($i = 1; $i <= $totalPages; $i++): ?>
-                        <li class="page-item <?= $i == $page ? 'active' : '' ?>">
-                          <a class="page-link" href="?page=<?= $i ?>"><?= $i ?></a>
-                        </li>
-                      <?php endfor; ?>
+                    <?php
+                      $startPage = max(1, $page - 2);
+                      $endPage = min($totalPages, $page + 2);
+                      for ($i = $startPage; $i <= $endPage; $i++):
+                    ?>
+                      <li class="page-item <?= ($i == $page) ? 'active' : '' ?>">
+                        <a class="page-link" href="?page=<?= $i ?>"><?= $i ?></a>
+                      </li>
+                    <?php endfor; ?>
 
-                      <?php if ($page < $totalPages): ?>
-                        <li class="page-item"><a class="page-link" href="?page=<?= $page + 1 ?>">&raquo;</a></li>
-                      <?php endif; ?>
+                    <?php if ($page < $totalPages - 3): ?>
+                      <li class="page-item disabled"><span class="page-link">...</span></li>
+                      <li class="page-item"><a class="page-link" href="?page=<?= $totalPages ?>"><?= $totalPages ?></a></li>
+                    <?php endif; ?>
                     </ul>
                   </div>
                 <!-- end footer card -->

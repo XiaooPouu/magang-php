@@ -5,6 +5,8 @@ require_once BASE_PATH . 'config/database.php';
 include BASE_PATH . 'models/invoice_items.php';
 include BASE_PATH . 'models/items.php';
 require_once BASE_PATH . 'function/baseurl.php';
+require_once BASE_PATH . 'function/auth.php';
+checkLogin();
 
 $itemModel = new Item($db);
 $items = $itemModel->getAll();

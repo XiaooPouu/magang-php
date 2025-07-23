@@ -122,6 +122,7 @@ require_once BASE_PATH . 'function/baseurl.php';
             <p>Pengaturan Perusahaan</p>
           </a>
         </li>
+
       </ul>
       <!--end::Sidebar Menu-->
     </nav>

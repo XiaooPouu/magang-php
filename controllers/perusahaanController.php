@@ -32,6 +32,20 @@ if(isset($_POST['update_perusahaan'])){
 
 else if(isset($_POST['submit_logo'])){
     $uploadDirLogo = $BaseUrl->getUploadsLogo();
+
+    // validasi MIME type file
+    $allowedMimeTypes = ['image/jpeg', 'image/png', 'image/gif'];
+    $fileMimeType = mime_content_type($logo['tmp_name']);
+
+    if(!in_array($fileMimeType, $allowedMimeTypes)){
+        $_SESSION['alert'] = [
+            'type' => 'danger',
+            'message' => 'Format file logo harus jpg, jpeg, png, atau gif!'  
+        ];
+        header('Location:' . $BaseUrl->getUrlFormPerusahaanLogoTTD($id));
+        exit();
+    }
+
     $logoName = uniqid('logo_') . '.' . pathinfo($logo['name'], PATHINFO_EXTENSION);
 
     $Logo = move_uploaded_file($logo['tmp_name'], $uploadDirLogo . $logoName);
@@ -48,6 +62,20 @@ else if(isset($_POST['submit_logo'])){
     }
 } else if(isset($_POST['submit_ttd'])){
     $uploadDirTTD = $BaseUrl->getUploadsTTD();
+
+    // validasi MIME type file
+    $allowedMimeTypes = ['image/jpeg', 'image/png', 'image/gif'];
+    $fileMimeType = mime_content_type($ttd['tmp_name']);
+
+    if(!in_array($fileMimeType, $allowedMimeTypes)){
+        $_SESSION['alert'] = [
+            'type' => 'danger',
+            'message' => 'Format file logo harus jpg, jpeg, png, atau gif!'  
+        ];
+        header('Location:' . $BaseUrl->getUrlFormPerusahaanLogoTTD($id));
+        exit();
+    }
+
     $tandaTanganName = uniqid('tanda_tangan_') . '.' . pathinfo($ttd['name'], PATHINFO_EXTENSION);
     $TTD = move_uploaded_file($ttd['tmp_name'], $uploadDirTTD . $tandaTanganName);
 

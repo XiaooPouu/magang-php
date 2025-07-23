@@ -4,6 +4,8 @@ require_once __DIR__ . '/../config/env.php';
 require_once BASE_PATH . 'config/database.php';
 require_once BASE_PATH . 'function/baseurl.php';
 include_once BASE_PATH . 'models/bestseller.php';
+require_once BASE_PATH . 'function/auth.php';
+checkLogin();
 
 if(isset($_GET['reset'])){
   unset($_SESSION['search_data']);

@@ -1,8 +1,11 @@
 <?php
+session_start();
 require_once __DIR__ . '/../config/env.php';
 require_once BASE_PATH . 'config/database.php';
 require_once BASE_PATH . 'function/baseurl.php';
 include_once BASE_PATH . 'models/company.php';
+require_once BASE_PATH . 'function/auth.php';
+checkLogin();
 
 $isEdit = false;
 $company = null;
@@ -98,7 +101,13 @@ if(isset($_GET['id'])){
           <div class="row g-4">
       <div class="col-md-12">
 
-
+  <?php if (isset($_SESSION['alert'])): ?>
+    <div class="alert alert-<?= $_SESSION['alert']['type'] ?> alert-dismissible fade show" role="alert">
+        <?= $_SESSION['alert']['message'] ?>
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+    <?php unset($_SESSION['alert']); ?>
+<?php endif; ?>
 
                 <!--begin::Input Suppliers Group-->
                 <div class="card card-success card-outline mb-4">

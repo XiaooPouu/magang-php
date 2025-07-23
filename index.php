@@ -1,11 +1,16 @@
 <?php 
+session_start();
 ini_set('display_errors', 1);
 ini_set('display_startup_errors', 1);
 error_reporting(E_ALL);
 
 
+
 require_once __DIR__ . '/config/env.php';
 require_once BASE_PATH . 'config/database.php';
+require_once BASE_PATH . 'function/auth.php';
+checkLogin();
+
 $database = new Database();
 $db = $database->getConnection();
 
@@ -84,6 +89,13 @@ $totalInvoice = $resultInvoice;
       <main class="app-main">
         <!--begin::App Content Header-->
         <div class="app-content-header">
+          <?php if (isset($_SESSION['alert'])): ?>
+    <div class="alert alert-<?= $_SESSION['alert']['type'] ?> alert-dismissible fade show" role="alert">
+        <?= $_SESSION['alert']['message'] ?>
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+    <?php unset($_SESSION['alert']); ?>
+<?php endif; ?>
           <!--begin::Container-->
           <div class="container-fluid">
             <!-- Small boxes (Stat box) -->

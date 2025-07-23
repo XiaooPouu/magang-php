@@ -9,13 +9,14 @@ class Invoice {
     }
 
     // Membuat invoice baru
-    public function createInvoice($kode_inv, $tgl_inv, $customers_id, $tgl_tempo, $note = null) {
+    public function createInvoice($kode_inv, $tgl_inv, $customers_id, $tgl_tempo, $note = null, $terms_conditions = null) {
         return $this->db->insert('invoice', [
             'kode_inv' => $kode_inv,
             'tgl_inv' => $tgl_inv,
             'customers_id' => $customers_id,
             'tgl_tempo' => $tgl_tempo,
-            'note'=> $note
+            'note'=> $note,
+            'terms_conditions' => $terms_conditions
         ]);
     }
 
@@ -134,6 +135,7 @@ public function getGrandTotal($id_inv) {
         "invoice.kode_inv",
         "invoice.tgl_inv",
         "invoice.note",
+        "invoice.terms_conditions",
         "invoice.customers_id",
         "invoice.tgl_tempo",
         "customers.name(name)",
@@ -146,13 +148,15 @@ public function getGrandTotal($id_inv) {
 }
 
     // Mengupdate invoice
-    public function update($id_inv, $kode_inv, $tgl_inv, $customers_id, $tgl_tempo, $note = null) {
+    public function update($id_inv, $kode_inv, $tgl_inv, $customers_id, $tgl_tempo, $note = null, $terms_conditions = null) {
         return $this->db->update('invoice', [
             'kode_inv' => $kode_inv,
             'tgl_inv' => $tgl_inv,
             'customers_id' => $customers_id,
             'tgl_tempo' => $tgl_tempo,
-            'note' => $note
+            'note' => $note,
+            'terms_conditions' => $terms_conditions
+
         ], [
             'id_inv' => $id_inv
         ]);

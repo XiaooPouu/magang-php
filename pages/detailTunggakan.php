@@ -3,6 +3,8 @@ require_once __DIR__ . '/../config/env.php';
 require_once BASE_PATH . 'config/database.php';
 require_once BASE_PATH . 'function/baseurl.php';
 include_once BASE_PATH . 'models/tunggakan.php';
+require_once BASE_PATH . 'function/auth.php';
+checkLogin();
 
 $id_customer = $_GET['customer_id'];
 

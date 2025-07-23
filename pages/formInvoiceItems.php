@@ -6,6 +6,8 @@ include BASE_PATH . 'models/invoice_items.php';
 include BASE_PATH . 'models/invoice.php';
 include BASE_PATH . 'models/items.php';
 require_once BASE_PATH . 'function/baseurl.php';
+require_once BASE_PATH . 'function/auth.php';
+checkLogin();
 
 $invoice_id = $_GET['id_inv'] ?? null;
 

@@ -8,6 +8,8 @@ include BASE_PATH . 'models/costumer.php';
 include BASE_PATH . 'models/items.php';
 include_once BASE_PATH . 'models/company.php';
 require_once BASE_PATH . 'function/baseurl.php';
+require_once BASE_PATH . 'function/auth.php';
+checkLogin();
 
 $id_inv = $_GET['id_inv'] ?? null;
 $invoiceItemsModel = new InvoiceItems($db);
@@ -339,6 +341,7 @@ $BaseUrl->setBackUrl('data_invoice_items');
           <p><?= $invoice['note']?></p>
           <div class="mt-5">
             <h5>Syarat dan Ketentuan:</h5>
+            <p><?= $invoice['terms_conditions']?></p>
           </div>
         </div>
 

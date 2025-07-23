@@ -6,6 +6,8 @@ include BASE_PATH . 'models/items_costumer.php';
 include BASE_PATH . 'models/items.php';
 include BASE_PATH . 'models/costumer.php';
 require_once BASE_PATH . 'function/baseurl.php';
+require_once BASE_PATH . 'function/auth.php';
+checkLogin();
 
 $itemsCostumerModel = new ItemsCostumer($db);
 

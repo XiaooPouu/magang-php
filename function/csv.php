@@ -34,8 +34,10 @@ if(isset($_GET['export'])){
 }
 else if(isset($_POST['import']) ){
    $fileTmpName = $csv['tmp_name'];
+   $mimes = array('application/vnd.ms-excel', 'text/plain', 'text/csv');
 
-   $file = fopen($fileTmpName, 'r');
+   if(in_array($csv['type'], $mimes)){
+    $file = fopen($fileTmpName, 'r');
    $gagal = 0;
    $count = 0;
 
@@ -73,4 +75,12 @@ else if(isset($_POST['import']) ){
    ];
     header('Location:' . $BaseUrl->getUrlDataCostumer());
     exit();
+   } else {
+       $_SESSION['alert'] = [
+           'type' => 'danger',
+           'message' => 'Format file tidak sesuai'
+       ];
+       header('Location:' . $BaseUrl->getUrlFormImportCSV());
+       exit();
+   }
 }

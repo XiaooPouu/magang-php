@@ -4,6 +4,8 @@ require_once __DIR__ . '/../config/env.php';
 require_once BASE_PATH . 'config/database.php';
 include BASE_PATH . 'models/costumer.php';
 require_once BASE_PATH . 'function/baseurl.php';
+require_once BASE_PATH . 'function/auth.php';
+checkLogin();
 
 $search = $_SESSION['costumers_data'] ?? [];
 

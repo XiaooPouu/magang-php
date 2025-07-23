@@ -5,8 +5,10 @@ require_once BASE_PATH . 'config/database.php';
 include BASE_PATH . 'models/invoice.php';
 include BASE_PATH . 'models/costumer.php';
 require_once BASE_PATH . 'function/baseurl.php';
+require_once BASE_PATH . 'function/auth.php';
+checkLogin();
 
-$formData = isset($_SESSION['form_data']) ? $_SESSION['form_data'] : ['kode_inv' => '', 'tgl_inv' => '', 'customers_id' => '', 'tgl_tempo' => '', 'note' => ''];
+$formData = isset($_SESSION['form_data']) ? $_SESSION['form_data'] : ['kode_inv' => '', 'tgl_inv' => '', 'customers_id' => '', 'tgl_tempo' => '', 'note' => '', 'terms_conditions' => ''];
 $alert = isset($_SESSION['alert']);
 
 $back = $_GET['back'] ?? null;
@@ -168,10 +170,16 @@ if(isset($_GET['id_inv'])){
                         <input type="date" name="tgl_tempo" class="form-control" id="invoice_tempo" required value="<?= htmlspecialchars($formData['tgl_tempo'])?>">
                       </div>
 
-                      <div class="col-md-12">
+                      <div class="col-md-6">
                         <label for="note">Catatan/Note:</label>
-                        <textarea name="note" class="form-control" id="note" value ="<?= htmlspecialchars($formData['note'])?>">
+                        <textarea name="note" class="form-control" id="note" placeholder="Masukkan catatan..."><?= htmlspecialchars($invoice['note'])?>
                         </textarea>
+                      </div>
+
+                      <div class="col-md-6">
+                        <label for="note">Syarat dan Ketentuan:</label>
+                        <label for="terms_conditions">Terms and Conditions</label>
+                        <textarea name="terms_conditions" id="terms_conditions" name="terms_conditions" class="form-control" placeholder="Masukkan syarat dan ketentuan..."><?= htmlspecialchars($invoice['terms_conditions'])?></textarea>
                       </div>
                     </div>
                     <div class="card-footer d-flex align-items-center">

@@ -3,6 +3,8 @@ require_once __DIR__ . '/../config/env.php';
 require_once BASE_PATH . 'config/database.php';
 require_once BASE_PATH . 'function/baseurl.php';
 include_once BASE_PATH . 'models/company.php';
+require_once BASE_PATH . 'function/auth.php';
+checkLogin();
 
 
 $isEdit = false;

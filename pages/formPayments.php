@@ -5,6 +5,8 @@ require_once BASE_PATH . 'config/database.php';
 include_once BASE_PATH . 'models/payments.php';
 include_once BASE_PATH . 'models/invoice.php';
 require_once BASE_PATH . 'function/baseurl.php';
+require_once BASE_PATH . 'function/auth.php';
+checkLogin();
 
 $back = $BaseUrl->getBackUrl('data_invoice_items', $BaseUrl->getUrlDataPayments());
 

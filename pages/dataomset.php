@@ -4,6 +4,8 @@ require_once __DIR__ . '/../config/env.php';
 require_once BASE_PATH . 'config/database.php';
 require_once BASE_PATH . 'controllers/OmsetController.php'; // Panggil controller-nya
 require_once BASE_PATH . 'function/baseurl.php';
+require_once BASE_PATH . 'function/auth.php';
+checkLogin();
 
 $keyword = $_GET['search'] ?? null;
 

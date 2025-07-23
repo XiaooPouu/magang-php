@@ -4,6 +4,8 @@ require_once __DIR__ . '/../config/env.php';
 require_once BASE_PATH . 'config/database.php';
 include_once BASE_PATH . 'models/costumer.php';
 require_once BASE_PATH . 'function/baseurl.php';
+require_once BASE_PATH . 'function/auth.php';
+checkLogin();
 
 $formData = isset($_SESSION['form_data']) ? $_SESSION['form_data'] : ['ref_no' => '', 'name' => '', 'alamat' => '', 'nomer' => '', 'email' => ''];
 $alert = isset($_SESSION['alert']);

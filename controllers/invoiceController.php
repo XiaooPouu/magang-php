@@ -14,6 +14,7 @@ $tgl_inv = $_POST['tgl_inv'] ?? null;
 $tgl_tempo = $_POST['tgl_tempo'] ?? null;
 $customer_id = $_POST['customers_id'] ?? null;
 $note = $_POST['note'] ?? null;
+$terms_conditions = $_POST['terms_conditions'] ?? null;
 
 $back = $_POST['back'] ?? null;
 
@@ -23,7 +24,8 @@ $back = $_POST['back'] ?? null;
         'tgl_inv' => $tgl_inv,
         'customers_id' => $customer_id,
         'tgl_tempo' => $tgl_tempo,
-        'note' => $note
+        'note' => $note,
+        'terms_conditions' => $terms_conditions
     ];
 
 
@@ -51,7 +53,7 @@ if(isset($_POST['save_invoice'])){
         header('Location:' . $BaseUrl->getUrlFormInvoice());
         exit();
     } else {
-        $model->createInvoice($kode_inv, $tgl_inv, $customer_id, $tgl_tempo, $note);
+        $model->createInvoice($kode_inv, $tgl_inv, $customer_id, $tgl_tempo, $note, $terms_conditions);
         $_SESSION['alert'] = [
             'type' => 'success',
             'message' => 'Invoice berhasil disimpan!'
@@ -90,7 +92,7 @@ else if (isset($_POST['update_invoice'])){
         ];
     } else {
         if($id_inv && $kode_inv && $tgl_inv && $customer_id && $tgl_tempo) {
-        $model->update($id_inv, $kode_inv, $tgl_inv, $customer_id, $tgl_tempo, $note);
+        $model->update($id_inv, $kode_inv, $tgl_inv, $customer_id, $tgl_tempo, $note, $terms_conditions);
         $_SESSION['alert'] = [
             'type' => 'success',
             'message' => 'Invoice berhasil diupdate!'
